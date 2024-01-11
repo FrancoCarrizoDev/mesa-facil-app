@@ -20,7 +20,6 @@ importers:
     specifiers:
       '@auth0/nextjs-auth0': ^3.5.0
       '@next/eslint-plugin-next': ^14.0.4
-      '@prisma/client': ^5.6.0
       '@repo/eslint-config': workspace:*
       '@repo/tailwind-config': workspace:*
       '@repo/typescript-config': workspace:*
@@ -31,10 +30,10 @@ importers:
       '@types/react-dom': ^18.2.18
       '@vercel/postgres': ^0.5.1
       autoprefixer: ^10.4.16
+      database: workspace:*
       jose: ^5.1.2
       next: ^14.0.4
       postcss: ^8.4.33
-      prisma: ^5.6.0
       react: ^18.2.0
       react-datepicker: ^4.24.0
       react-dom: ^18.2.0
@@ -46,10 +45,10 @@ importers:
       uuidv4: ^6.2.13
     dependencies:
       '@auth0/nextjs-auth0': 3.5.0_next@14.0.4
-      '@prisma/client': 5.8.0_prisma@5.8.0
       '@repo/ui': link:../../packages/ui
       '@types/react-datepicker': 4.19.5_biqbaboplfbrettd7655fr4n2y
       '@vercel/postgres': 0.5.1
+      database: link:../../packages/database
       jose: 5.2.0
       next: 14.0.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
@@ -69,7 +68,6 @@ importers:
       '@types/react-dom': 18.2.18
       autoprefixer: 10.4.16_postcss@8.4.33
       postcss: 8.4.33
-      prisma: 5.8.0
       tailwindcss: 3.4.1
       typescript: 5.3.3
 
@@ -118,6 +116,15 @@ importers:
 
   packages/config-typescript:
     specifiers: {}
+
+  packages/database:
+    specifiers:
+      '@prisma/client': ^5.6.0
+      prisma: ^5.6.0
+    dependencies:
+      '@prisma/client': 5.8.0_prisma@5.8.0
+    devDependencies:
+      prisma: 5.8.0
 
   packages/tailwind-config:
     specifiers:
