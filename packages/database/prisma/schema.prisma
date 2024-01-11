@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @unique
+  sub         String?      @unique
+  email       String       @unique
+  first_name  String
+  last_name   String?
+  restaurants Restaurant[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Restaurant {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  phone             String
+  address           String
+  attentionSchedule AttentionSchedule[]
+  user              User                @relation(fields: [userId], references: [id])
+  userId            String
+  slug              String?             @unique
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  @@index([slug], name: "slug")
+}
+
+model AttentionSchedule {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  restaurant   Restaurant    @relation(fields: [restaurantId], references: [id])
+  restaurantId String        @db.Uuid
+  dayName      String
+  dayNumber    Int
+  openingHours String
+  endingHours  String
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Diner {
+  id          String        @id @unique
+  sub         String?       @unique
+  first_name  String
+  last_name   String?
+  phone       String?
+  email       String        @unique
+  birthday    String?
+  reservation Reservation[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Reservation {
+  id                  String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  attentionSchedule   AttentionSchedule @relation(fields: [attentionScheduleId], references: [id])
+  attentionScheduleId String            @db.Uuid
+  diner               Diner             @relation(fields: [dinerId], references: [id])
+  dinerId             String
+  date                String
+  peopleQuantity      Int
+  message             String?
+  status              ReservationStatus @relation(fields: [statusId], references: [id])
+  statusId            Int
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+}
+
+model ReservationStatus {
+  id          Int           @id @default(autoincrement())
+  reservation Reservation[]
+  status      String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
