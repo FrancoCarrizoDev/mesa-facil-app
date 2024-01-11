@@ -41,5 +41,7 @@ module.exports = {
   // add rules configurations here
   rules: {
     "import/no-default-export": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off"
   },
 };
