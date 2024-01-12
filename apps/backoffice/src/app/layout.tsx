@@ -16,7 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <html lang="en">
+    <html lang="es">
+      <link href="/favicon.png" rel="icon" />
       <body className={inter.className}>{children}</body>
     </html>
   );

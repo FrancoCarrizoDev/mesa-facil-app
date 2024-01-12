@@ -1,3 +1,11 @@
-export default function Page() {
-  return <main>HOLA MUNDO</main>;
+import { Button, Button2 } from "@components";
+
+export default function Page(): JSX.Element {
+  return (
+    <main>
+      HOLA MUNDO
+      <Button />
+      <Button2 />
+    </main>
+  );
 }
