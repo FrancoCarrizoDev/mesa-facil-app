@@ -1,11 +1,9 @@
-import { Button, Button2 } from "@components";
+import { Button } from "@components";
 
 export default function Page(): JSX.Element {
   return (
-    <main>
-      HOLA MUNDO
+    <main className="min-h-screen">
       <Button />
-      <Button2 />
     </main>
   );
 }
