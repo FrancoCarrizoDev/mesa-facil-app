@@ -1,4 +1,4 @@
-import { type HeaderContainerProps } from "../models/header-container.model";
+import { type HeaderContainerProps } from "./models/header-container.model";
 
 export default function HeaderContainer({
   children,
