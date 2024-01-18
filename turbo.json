@@ -1,10 +1,5 @@
 {
-  "globalEnv": [
-    "AUTH0_JWKS_URI",
-    "AUTH0_AUDIENCE",
-    "AUTH0_ISSUER",
-    "NEXT_PUBLIC_BASE_URL"
-  ],
+  "globalEnv": ["NEXT_PUBLIC_BASE_URL"],
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {

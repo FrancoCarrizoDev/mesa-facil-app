@@ -22,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="es">
       <link href="/favicon.png" rel="icon" />
-
       <body className={inter.className}>
         <HeaderContainer>
           <BrandTitle />

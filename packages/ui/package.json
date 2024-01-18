@@ -7,7 +7,10 @@
   "exports": {
     "./styles.css": "./dist/index.css",
     "./card": "./src/card.tsx",
-    "./brand-title": "./src/brand-title.tsx"
+    "./brand-title": "./src/brand-title.tsx",
+    "./input": "./src/input.tsx",
+    "./checkbox": "./src/checkbox.tsx",
+    "./button": "./src/button.tsx"
   },
   "license": "MIT",
   "scripts": {
