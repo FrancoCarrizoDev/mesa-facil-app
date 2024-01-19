@@ -2,10 +2,6 @@ import "./globals.css";
 import "@repo/ui/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { BrandTitle } from "@repo/ui/brand-title";
-import { Suspense } from "react";
-import Navbar from "src/components/shared/Navbar/navbar";
-import HeaderContainer from "src/components/shared/Header/header-container";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,16 +17,11 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="es">
-      <link href="/favicon.png" rel="icon" />
-      <body className={inter.className}>
-        <HeaderContainer>
-          <BrandTitle />
-          <Suspense fallback={<div>Cargando...</div>}>
-            <Navbar />
-          </Suspense>
-        </HeaderContainer>
-        {children}
-      </body>
+      <head>
+        <link href="/favicon.png" rel="icon" />
+      </head>
+
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

@@ -55,7 +55,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={`ui-block ui-py-2 ui-px-4  ui-font-medium ${sizeClass} ${colorClass} ${variantClass} ${roundedClass}  `}
+      className={`ui-block  ui-font-medium ${sizeClass} ${colorClass} ${variantClass} ${roundedClass}  `}
     >
       {children}
     </button>

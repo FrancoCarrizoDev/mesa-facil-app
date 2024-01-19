@@ -10,7 +10,8 @@
     "./brand-title": "./src/brand-title.tsx",
     "./input": "./src/input.tsx",
     "./checkbox": "./src/checkbox.tsx",
-    "./button": "./src/button.tsx"
+    "./button": "./src/button.tsx",
+    "./avatar": "./src/avatar.tsx"
   },
   "license": "MIT",
   "scripts": {

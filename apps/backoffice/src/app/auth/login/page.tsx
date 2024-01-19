@@ -57,8 +57,8 @@ export default function Page(): JSX.Element {
             value={values.password}
           />
         </div>
-        <div className=" mx-auto">
-          <Button type="submit" size="sm">
+        <div className="flex">
+          <Button type="submit" size="md" rounded="lg">
             Ingresar
           </Button>
         </div>

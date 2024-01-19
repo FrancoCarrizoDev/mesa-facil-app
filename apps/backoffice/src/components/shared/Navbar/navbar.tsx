@@ -1,6 +1,21 @@
+import { authOptions } from "src/app/api/auth/[...nextauth]/route";
 import Link from "../Link/link";
+import { getServerSession } from "next-auth/next";
+import Avatar from "@repo/ui/avatar";
+import { getAvatarLabel } from "../../../utils/avatar-label";
+import SignOutButton from "../SignOutButton/SignOutButton";
+export default async function Navbar(): Promise<JSX.Element> {
+  const session = await getServerSession(authOptions);
 
-export default function Navbar(): JSX.Element {
+  if (session?.user?.name) {
+    return (
+      <nav className="flex gap-3">
+        <Avatar label={getAvatarLabel(session.user.name)} />
+        <SignOutButton />
+      </nav>
+    );
+  }
+
   return (
     <nav>
       <ul className="flex items-center gap-3">

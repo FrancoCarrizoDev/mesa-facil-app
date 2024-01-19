@@ -2,7 +2,8 @@ import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import prisma from "database";
 import { comparePasswords } from "src/utils/bcrypt";
-const authOptions = {
+
+export const authOptions = {
   providers: [
     CredentialProvider({
       name: "credentials",
@@ -48,6 +49,7 @@ const authOptions = {
   ],
   pages: {
     signIn: "/auth/login",
+    signOut: "/auth/signout",
   },
   secret: process.env.NEXT_PUBLIC_SECRET,
 };
