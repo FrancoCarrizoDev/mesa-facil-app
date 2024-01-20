@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 
 export default function SignOutButton() {
   return (
-    <Button size="sm" rounded="lg" variant="outlined" onClick={signOut}>
+    <Button size="sm" onClick={signOut}>
       Cerrar sessión
     </Button>
   );

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -53,9 +53,9 @@ export default function Button({
 
   return (
     <button
-      type={type}
-      onClick={onClick}
       className={`ui-block  ui-font-medium ${sizeClass} ${colorClass} ${variantClass} ${roundedClass}  `}
+      onClick={onClick}
+      type={type}
     >
       {children}
     </button>

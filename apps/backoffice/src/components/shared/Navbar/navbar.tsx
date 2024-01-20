@@ -1,9 +1,9 @@
-import { authOptions } from "src/app/api/auth/[...nextauth]/route";
 import Link from "../Link/link";
 import { getServerSession } from "next-auth/next";
 import Avatar from "@repo/ui/avatar";
 import { getAvatarLabel } from "../../../utils/avatar-label";
 import SignOutButton from "../SignOutButton/SignOutButton";
+import { authOptions } from "src/utils/auth-options";
 export default async function Navbar(): Promise<JSX.Element> {
   const session = await getServerSession(authOptions);
 
