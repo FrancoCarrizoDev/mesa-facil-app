@@ -9,7 +9,7 @@ export default async function Navbar(): Promise<JSX.Element> {
 
   if (session?.user?.name) {
     return (
-      <nav className="flex gap-3">
+      <nav className="flex items-baseline gap-3">
         <Avatar label={getAvatarLabel(session.user.name)} />
         <SignOutButton />
       </nav>
