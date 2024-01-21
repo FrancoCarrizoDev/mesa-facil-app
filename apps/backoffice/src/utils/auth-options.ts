@@ -1,5 +1,6 @@
 import { NextAuthOptions, Session } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import prisma from "database";
 import { comparePasswords } from "./bcrypt";
 
@@ -46,10 +47,17 @@ export const authOptions: NextAuthOptions = {
         throw new Error("Invalid password");
       },
     }),
+    GoogleProvider({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_S || "",
+    }),
   ],
   pages: {
     signIn: "/auth/login",
     signOut: "/auth/signout",
+  },
+  session: {
+    strategy: "jwt",
   },
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
@@ -59,6 +67,12 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.sub || "";
       }
       return session;
+    },
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
     },
   },
 };

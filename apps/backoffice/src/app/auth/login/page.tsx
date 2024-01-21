@@ -2,10 +2,12 @@
 import { useForm } from "@hooks";
 import Button from "@repo/ui/button";
 import Input from "@repo/ui/input";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page(): JSX.Element {
+  const { data } = useSession();
   const router = useRouter();
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
@@ -27,6 +29,12 @@ export default function Page(): JSX.Element {
       console.log(res);
     },
   });
+
+  useEffect(() => {
+    if (data?.user) {
+      router.push("/private");
+    }
+  }, [data]);
 
   return (
     <div className="grid place-content-center">
@@ -60,6 +68,16 @@ export default function Page(): JSX.Element {
         </div>
         <Button type="submit" size="sm">
           Ingresar
+        </Button>
+        <Button
+          size="sm"
+          onClick={() =>
+            signIn("google", {
+              callbackUrl: "http://localhost:3000/private",
+            })
+          }
+        >
+          Ingresar con google
         </Button>
       </form>
     </div>

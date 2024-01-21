@@ -22,7 +22,6 @@ export default function Page(): JSX.Element {
         lastName: formValues.lastName,
         password: formValues.password,
       });
-      console.log({ newUser });
     },
   });
 

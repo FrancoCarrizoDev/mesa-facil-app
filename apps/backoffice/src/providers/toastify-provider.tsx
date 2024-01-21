@@ -10,7 +10,6 @@ export default function ToastifyProvider({
 }): JSX.Element {
   return (
     <div>
-      {children}
       <ToastContainer
         autoClose={5000}
         closeOnClick
@@ -22,6 +21,7 @@ export default function ToastifyProvider({
         position="top-right"
         rtl={false}
       />
+      {children}
     </div>
   );
 }
