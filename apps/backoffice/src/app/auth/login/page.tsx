@@ -21,6 +21,7 @@ export default function Page(): JSX.Element {
 
       if (res?.ok) {
         router.push("/private");
+        router.refresh();
       }
 
       console.log(res);

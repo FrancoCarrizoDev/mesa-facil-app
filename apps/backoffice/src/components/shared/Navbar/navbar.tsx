@@ -4,13 +4,16 @@ import Avatar from "@repo/ui/avatar";
 import { getAvatarLabel } from "../../../utils/avatar-label";
 import SignOutButton from "../SignOutButton/SignOutButton";
 import { authOptions } from "src/utils/auth-options";
+
 export default async function Navbar(): Promise<JSX.Element> {
   const session = await getServerSession(authOptions);
 
-  if (session?.user?.name) {
+  if (session) {
     return (
       <nav className="flex items-baseline gap-3">
-        <Avatar label={getAvatarLabel(session.user.name)} />
+        {session.user?.name && (
+          <Avatar label={getAvatarLabel(session.user.name)} />
+        )}
         <SignOutButton />
       </nav>
     );
