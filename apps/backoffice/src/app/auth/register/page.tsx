@@ -4,8 +4,13 @@ import { useForm } from "@hooks";
 import Button from "@repo/ui/button";
 import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Page(): JSX.Element {
+  const { data } = useSession();
+  const router = useRouter();
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
       name: "",
@@ -24,6 +29,12 @@ export default function Page(): JSX.Element {
       });
     },
   });
+
+  useEffect(() => {
+    if (data?.user) {
+      router.push("/private");
+    }
+  }, [data]);
 
   return (
     <div className="grid place-content-center">
@@ -111,6 +122,17 @@ export default function Page(): JSX.Element {
         </div>
         <div className=" mx-auto">
           <Button type="submit">Registrarse</Button>
+        </div>
+        <div className=" mx-auto mt-3">
+          <Button
+            onClick={() =>
+              signIn("google", {
+                callbackUrl: "http://localhost:3000/auth/register",
+              })
+            }
+          >
+            Registrarme con google
+          </Button>
         </div>
       </form>
     </div>
