@@ -6,7 +6,7 @@ import SignOutButton from "../SignOutButton/SignOutButton";
 import { authOptions } from "src/utils/auth-options";
 
 export default async function Navbar(): Promise<JSX.Element> {
-  const session = await getServerSession(authOptions);
+  const session: any = await getServerSession(authOptions);
 
   if (session) {
     return (

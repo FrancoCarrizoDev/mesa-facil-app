@@ -1,7 +1,8 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, Session } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import prisma from "database";
 import { comparePasswords } from "./bcrypt";
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialProvider({
@@ -51,4 +52,13 @@ export const authOptions: NextAuthOptions = {
     signOut: "/auth/signout",
   },
   secret: process.env.NEXT_PUBLIC_SECRET,
+  callbacks: {
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        // @ts-expect-error id is not in the user object
+        session.user.id = token.sub || "";
+      }
+      return session;
+    },
+  },
 };
