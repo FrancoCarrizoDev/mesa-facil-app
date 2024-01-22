@@ -17,15 +17,15 @@ const SIZES = {
 };
 
 const COLORS = {
-  primary: "ui-bg-blue-600 ui-text-white",
+  primary: "ui-bg-yellow-600 ui-text-white",
   secondary: "ui-bg-gray-600 ui-text-white",
-  tertiary: "ui-bg-transparent ui-text-blue-600",
+  tertiary: "ui-bg-transparent ui-text-yellow-600",
 };
 
 const VARIANTS = {
-  contained: "ui-bg-blue-600 ui-text-white",
-  outlined: "ui-border ui-border-blue-600 ui-text-blue-600",
-  text: "ui-text-blue-600",
+  contained: "ui-bg-yellow-600 ui-text-white",
+  outlined: "ui-border ui-border-yellow-600 ui-text-yellow-600",
+  text: "ui-text-yellow-600",
 };
 
 const ROUNDED = {

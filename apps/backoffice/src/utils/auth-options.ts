@@ -80,13 +80,13 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
-      console.log({
-        jwt: {
-          token,
-          user,
-          account,
-        },
-      });
+      // console.log({
+      //   jwt: {
+      //     token,
+      //     user,
+      //     account,
+      //   },
+      // });
 
       if (user) {
         token.id = user.id;
@@ -94,12 +94,12 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log({
-        session: {
-          session,
-          token,
-        },
-      });
+      // console.log({
+      //   session: {
+      //     session,
+      //     token,
+      //   },
+      // });
 
       if (session.user) {
         session.user.id = token.id;

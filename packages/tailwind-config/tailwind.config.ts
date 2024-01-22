@@ -67,11 +67,5 @@ const config: Omit<Config, "content"> = {
   },
 
   plugins: [],
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/ui/**/*.{js,ts,jsx,tsx}",
-  ],
 };
 export default config;

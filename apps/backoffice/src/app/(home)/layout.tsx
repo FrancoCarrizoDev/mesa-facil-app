@@ -16,7 +16,7 @@ export default async function Layout({
           <Navbar />
         </Suspense>
       </HeaderContainer>
-      {children}
+      <div className="p-5">{children}</div>
     </div>
   );
 }

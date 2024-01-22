@@ -4,7 +4,7 @@ export default function HeaderContainer({
   children,
 }: HeaderContainerProps): JSX.Element {
   return (
-    <div className="border-b flex justify-between items-center p-3">
+    <div className="bg-yellow-100 border-b border-b-yellow-200 flex justify-between items-center p-3">
       {children}
     </div>
   );

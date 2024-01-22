@@ -11,7 +11,8 @@
     "./input": "./src/input.tsx",
     "./checkbox": "./src/checkbox.tsx",
     "./button": "./src/button.tsx",
-    "./avatar": "./src/avatar.tsx"
+    "./avatar": "./src/avatar.tsx",
+    "./section": "./src/section.tsx"
   },
   "license": "MIT",
   "scripts": {
