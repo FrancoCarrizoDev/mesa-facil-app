@@ -5,11 +5,9 @@ import Button from "@repo/ui/button";
 import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
 import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Page(): JSX.Element {
-  const { data } = useSession();
   const router = useRouter();
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
@@ -27,14 +25,17 @@ export default function Page(): JSX.Element {
         lastName: formValues.lastName,
         password: formValues.password,
       });
+
+      if (newUser) {
+        await signIn("credentials", {
+          email: formValues.email,
+          password: formValues.password,
+          redirect: false,
+        });
+        router.push("/private");
+      }
     },
   });
-
-  useEffect(() => {
-    if (data?.user) {
-      router.push("/private");
-    }
-  }, [data]);
 
   return (
     <div className="grid place-content-center">

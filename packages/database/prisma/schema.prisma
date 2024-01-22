@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id          String       @id @unique
-  sub         String?      @unique
+  provider    String       @unique
   email       String       @unique
   password    String?
   first_name  String

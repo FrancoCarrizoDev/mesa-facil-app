@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import prisma from "database";
 import { comparePasswords } from "./bcrypt";
 import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -28,10 +29,13 @@ export const authOptions: NextAuthOptions = {
             email: credentials.email,
           },
         });
-
         if (!existsUser) throw new Error("User not found");
 
-        if (!existsUser.password) return null;
+        if (existsUser.provider === "google" || !existsUser.password) {
+          throw new Error(
+            "El usuario se registro con Google, por favor inicie sesión con Google"
+          );
+        }
 
         const isValidPassword = await comparePasswords(
           credentials.password,
@@ -67,6 +71,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
+    maxAge: 60,
   },
   jwt: {
     maxAge: 60,
@@ -74,36 +79,42 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
-      // Initial sign in
-      if (account && user) {
-        return {
-          accessToken: account.access_token,
-          // @ts-expect-error id is not in the user object
-          accessTokenExpires: Date.now() + account.expires_at * 1000,
-          refreshToken: account.refresh_token,
+      console.log({
+        jwt: {
+          token,
           user,
-        };
-      }
+          account,
+        },
+      });
 
-      // Return previous token if the access token has not expired yet
-      // @ts-expect-error id is not in the user object
-      if (Date.now() < token.accessTokenExpires) {
-        return token;
+      if (user) {
+        token.id = user.id;
       }
-
-      // Access token has expired, try to update it
-      return refreshAccessToken(token);
+      return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      if (token) {
-        session.user = token.user;
-        session.accessToken = token.accessToken;
-        session.error = token.error;
+      console.log({
+        session: {
+          session,
+          token,
+        },
+      });
+
+      if (session.user) {
+        session.user.id = token.id;
       }
 
       return session;
     },
     async signIn({ user, account, profile }) {
+      // console.log({
+      //   signIn: {
+      //     user,
+      //     account,
+      //     profile,
+      //   },
+      // });
+
       if (account?.provider === "credentials") return true;
 
       const iprofile = profile as {
@@ -127,8 +138,8 @@ export const authOptions: NextAuthOptions = {
             first_name: iprofile?.given_name || "",
             last_name: iprofile?.family_name || null,
             password: null,
-            id: uuidv4(),
-            sub: iprofile.sub || null,
+            id: iprofile.sub!,
+            provider: "google",
           },
         });
         return true;
@@ -146,45 +157,3 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
-
-async function refreshAccessToken(token: any) {
-  try {
-    console.log("ejecting refresh token");
-    const url =
-      "https://oauth2.googleapis.com/token?" +
-      new URLSearchParams({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-        client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_S!,
-        grant_type: "refresh_token",
-        refresh_token: token.refreshToken,
-      });
-
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      method: "POST",
-    });
-
-    const refreshedTokens = await response.json();
-
-    if (!response.ok) {
-      throw refreshedTokens;
-    }
-
-    const obj = {
-      ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
-    };
-    return obj;
-  } catch (error) {
-    console.log(error);
-
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
-  }
-}

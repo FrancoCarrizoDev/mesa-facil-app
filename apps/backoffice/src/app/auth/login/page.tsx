@@ -2,13 +2,14 @@
 import { useForm } from "@hooks";
 import Button from "@repo/ui/button";
 import Input from "@repo/ui/input";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useState } from "react";
+import Link from "src/components/shared/Link/link";
 
-export default function Page(): JSX.Element {
-  const { data } = useSession();
+export default function Page(params: any): JSX.Element {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
       email: "",
@@ -23,18 +24,13 @@ export default function Page(): JSX.Element {
 
       if (res?.ok) {
         router.push("/private");
-        router.refresh();
       }
 
-      console.log(res);
+      if (res?.error) {
+        setError(res.error);
+      }
     },
   });
-
-  useEffect(() => {
-    if (data?.user) {
-      router.push("/private");
-    }
-  }, [data]);
 
   return (
     <div className="grid place-content-center">
@@ -54,7 +50,7 @@ export default function Page(): JSX.Element {
             value={values.email}
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-2">
           <Input
             label="Contraseña"
             onChange={(e) => {
@@ -66,19 +62,26 @@ export default function Page(): JSX.Element {
             value={values.password}
           />
         </div>
-        <Button type="submit" size="sm">
-          Ingresar
-        </Button>
-        <Button
-          size="sm"
-          onClick={() =>
-            signIn("google", {
-              callbackUrl: "http://localhost:3000/private",
-            })
-          }
-        >
-          Ingresar con google
-        </Button>
+        <p className="mb-6 text-sm">
+          ¿No tienes cuenta? <Link href="/auth/register">Regístrate</Link>
+        </p>
+        {error && <div className="text-red-500 text-sm mb-6 ">{error}</div>}
+        <div className="flex flex-col gap-3">
+          <Button type="submit" size="md">
+            Ingresar
+          </Button>
+          <Button
+            size="md"
+            color="secondary"
+            onClick={() =>
+              signIn("google", {
+                callbackUrl: "http://localhost:3000/private",
+              })
+            }
+          >
+            Ingresar con google
+          </Button>
+        </div>
       </form>
     </div>
   );

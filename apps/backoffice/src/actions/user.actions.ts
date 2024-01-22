@@ -23,6 +23,7 @@ export async function createUser(user: CreateUserDTO) {
         password: await hashPassword(user.password),
         first_name: user.firstName,
         last_name: user.lastName,
+        provider: "credentials",
       },
     });
 
