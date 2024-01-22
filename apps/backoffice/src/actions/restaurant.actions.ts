@@ -4,6 +4,7 @@ import { authOptions } from "src/utils/auth-options";
 
 export async function getRestaurantsNameByUser() {
   const session = await getServerSession(authOptions);
+
   if (!session) return [];
 
   const { id } = session.user;

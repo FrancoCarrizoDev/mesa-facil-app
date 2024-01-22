@@ -12,6 +12,8 @@
     "./checkbox": "./src/checkbox.tsx",
     "./button": "./src/button.tsx",
     "./avatar": "./src/avatar.tsx",
+    "./section-title": "./src/section-title.tsx",
+    "./section-body": "./src/section-body.tsx",
     "./section": "./src/section.tsx"
   },
   "license": "MIT",
