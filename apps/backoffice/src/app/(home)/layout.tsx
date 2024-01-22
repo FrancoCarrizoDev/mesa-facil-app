@@ -1,7 +1,7 @@
+import Navbar from "@/components/Navbar/navbar";
+import HeaderContainer from "@/components/Header/header-container";
 import { BrandTitle } from "@repo/ui/brand-title";
 import { Suspense, type ReactNode } from "react";
-import HeaderContainer from "src/components/shared/Header/header-container";
-import Navbar from "src/components/shared/Navbar/navbar";
 
 export default async function Layout({
   children,

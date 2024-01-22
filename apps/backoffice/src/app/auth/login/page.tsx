@@ -1,13 +1,13 @@
 "use client";
-import { useForm } from "@hooks";
-import Button from "@repo/ui/button";
-import Input from "@repo/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Link from "src/components/shared/Link/link";
+import Button from "@repo/ui/button";
+import Input from "@repo/ui/input";
+import Link from "@/components/Link/link";
+import useForm from "@/hooks/use-form";
 
-export default function Page(params: any): JSX.Element {
+export default function Page(): JSX.Element {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const { values, handleChange, handleSubmit } = useForm({

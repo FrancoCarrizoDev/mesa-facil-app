@@ -1,9 +1,9 @@
-import Link from "../Link/link";
+import { authOptions } from "src/utils/auth-options";
+import { getAvatarLabel } from "@/utils/avatar-label";
 import { getServerSession } from "next-auth/next";
 import Avatar from "@repo/ui/avatar";
-import { getAvatarLabel } from "../../../utils/avatar-label";
-import SignOutButton from "../SignOutButton/SignOutButton";
-import { authOptions } from "src/utils/auth-options";
+import Link from "../Link/link";
+import SignOutButton from "@/components/SignOutButton/SignOutButton";
 
 export default async function Navbar(): Promise<JSX.Element> {
   const session: any = await getServerSession(authOptions);

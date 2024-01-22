@@ -2,7 +2,6 @@ import "./globals.css";
 import "@repo/ui/styles.css";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
 import ComposeProviders from "src/providers/compose-providers";
 import { authOptions } from "src/utils/auth-options";

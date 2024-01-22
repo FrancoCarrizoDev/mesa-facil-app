@@ -1,4 +1,4 @@
-import Link from "src/components/shared/Link/link";
+import Link from "src/components/Link/link";
 
 interface RestaurantListProps {
   restaurants: {

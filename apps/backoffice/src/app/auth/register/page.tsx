@@ -1,11 +1,11 @@
 "use client";
-import { createUser } from "src/actions/user.actions";
-import { useForm } from "@hooks";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Button from "@repo/ui/button";
 import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import useForm from "@/hooks/use-form";
+import { createUser } from "@/actions/user.actions";
 
 export default function Page(): JSX.Element {
   const router = useRouter();

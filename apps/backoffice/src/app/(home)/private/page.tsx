@@ -1,7 +1,7 @@
 import Section from "@repo/ui/section";
 import { getRestaurantsNameByUser } from "src/actions/restaurant.actions";
 
-import SectionTitle from "../../../../../../packages/ui/src/section-title";
+import SectionTitle from "@repo/ui/section-title";
 import SectionBody from "@repo/ui/section-body";
 import RestaurantList from "./components/restaurant-list";
 import ReserveList from "./components/reserve-list";
