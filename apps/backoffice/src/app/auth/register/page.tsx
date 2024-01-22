@@ -131,6 +131,7 @@ export default function Page(): JSX.Element {
                 callbackUrl: "http://localhost:3000/auth/register",
               })
             }
+            color="secondary"
           >
             Registrarme con google
           </Button>
