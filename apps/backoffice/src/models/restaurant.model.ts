@@ -1,4 +1,4 @@
-import { User } from "./user.model";
+import { type User } from "./user.model";
 
 export interface Restaurant {
   id: string;
@@ -26,19 +26,19 @@ export interface AttentionSchedule {
 }
 
 export interface RestaurantDTO {
-  readonly name: string;
   readonly address: string;
-  readonly id: string;
-  readonly slug: string | null;
-  readonly phone: string;
   readonly attentionSchedule: AttentionScheduleDTO[];
+  readonly id: string;
+  readonly name: string;
+  readonly phone: string;
+  readonly slug: string | null;
 }
 
 export interface AttentionScheduleDTO {
-  readonly id: string;
+  readonly id?: string;
   readonly day_name: string;
   readonly day_number: number;
   readonly opening_hours: string;
   readonly ending_hours: string;
-  readonly restaurant_id: string;
+  readonly restaurant_id?: string;
 }

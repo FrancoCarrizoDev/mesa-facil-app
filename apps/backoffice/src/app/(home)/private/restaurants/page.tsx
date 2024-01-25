@@ -5,7 +5,7 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import RestaurantCard from "./components/RestaurantCard";
+import RestaurantCard from "./components/restaurant-card";
 
 export default async function RestauranstPage(): Promise<JSX.Element> {
   const restaurants = await getRestaurantsByUser();

@@ -1,4 +1,4 @@
-import { Restaurant } from "./restaurant.model";
+import { type Restaurant } from "./restaurant.model";
 
 export interface CreateUserDTO {
   email: string;

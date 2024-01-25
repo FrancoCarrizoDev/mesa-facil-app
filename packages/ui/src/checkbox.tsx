@@ -10,7 +10,7 @@ export default function Checkbox({
   onChange,
 }: CheckboxProps): JSX.Element {
   return (
-    <div className="flex items-center">
+    <div className="ui-flex ui-items-center">
       <input
         id="link-checkbox"
         type="checkbox"

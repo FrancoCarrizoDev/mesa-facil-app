@@ -15,7 +15,8 @@
     "./section-title": "./src/section-title.tsx",
     "./section-body": "./src/section-body.tsx",
     "./section": "./src/section.tsx",
-    "./grid-list-container": "./src/grid-list-container.tsx"
+    "./grid-list-container": "./src/grid-list-container.tsx",
+    "./select": "./src/select.tsx"
   },
   "license": "MIT",
   "scripts": {

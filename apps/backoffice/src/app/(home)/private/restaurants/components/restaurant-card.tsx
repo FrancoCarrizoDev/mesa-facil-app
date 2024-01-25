@@ -1,6 +1,5 @@
 import Link from "@/components/Link/link";
-import React from "react";
-import { RestaurantDTO } from "src/models/restaurant.model";
+import { type RestaurantDTO } from "src/models/restaurant.model";
 
 export default function RestaurantCard({
   name,
@@ -14,13 +13,13 @@ export default function RestaurantCard({
     <div className="max-w-sm p-6 rounded-lg shadow bg-gray-800 border-gray-700 h-full flex flex-col">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-1 ">
-          <a href="#">
+          <a href="/#">
             <h5 className="text-md font-semibold tracking-tight text-gray-900 dark:text-white">
               {name}
             </h5>
           </a>
         </div>
-        <Link href={`/private/restaurants/${id}`} color="secondary">
+        <Link color="secondary" href={`/private/restaurants/${id}`}>
           Editar
         </Link>
       </div>
@@ -31,11 +30,11 @@ export default function RestaurantCard({
         {!attentionSchedule.length && (
           <p>No hay horario de atención registrado</p>
         )}
-        {attentionSchedule?.map((schedule) => {
+        {attentionSchedule.map((schedule) => {
           return (
             <div
-              key={schedule.id}
               className="flex justify-between items-center"
+              key={schedule.id}
             >
               <p>{schedule.day_name}:</p>
               <p>

@@ -13,7 +13,7 @@ export default function GridListContainer({
 }: Props): JSX.Element {
   return (
     <ul
-      className={`grid grid-cols-[repeat(auto-fill,minmax(${minValue},${maxValue}))] gap-4`}
+      className={`ui-grid ui-grid-cols-[repeat(auto-fill,minmax(${minValue},${maxValue}))] ui-gap-4`}
     >
       {children}
     </ul>
