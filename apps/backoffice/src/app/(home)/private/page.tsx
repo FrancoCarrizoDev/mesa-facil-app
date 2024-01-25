@@ -9,14 +9,18 @@ import ReviewList from "./components/review-list";
 
 export default async function Page(): Promise<JSX.Element> {
   const restaurants = await getRestaurantsNameByUser();
-  console.log({ restaurants });
+
   return (
     <Section>
-      <SectionTitle>Bienvenido</SectionTitle>
+      <div className="mb-6">
+        <SectionTitle>Bienvenido</SectionTitle>
+      </div>
       <SectionBody>
-        <RestaurantList restaurants={restaurants} />
-        <ReserveList />
-        <ReviewList />
+        <div className="flex gap-3 itesm-center justify-between">
+          <RestaurantList restaurants={restaurants} />
+          <ReserveList />
+          <ReviewList />
+        </div>
       </SectionBody>
     </Section>
   );

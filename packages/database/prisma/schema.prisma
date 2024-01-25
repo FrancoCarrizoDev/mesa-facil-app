@@ -41,7 +41,7 @@ model AttentionSchedule {
   restaurant_id String        @db.Uuid
   day_name      String
   day_number    Int
-  opnenig_hours String
+  opening_hours String
   ending_hours  String
   reservations  Reservation[]
   created_at    DateTime      @default(now())

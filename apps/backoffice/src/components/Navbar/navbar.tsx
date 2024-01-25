@@ -12,6 +12,7 @@ export default async function Navbar(): Promise<JSX.Element> {
     return (
       <nav className="flex items-baseline gap-3">
         <Link href="/private">Mi cuenta</Link>
+        <Link href="/private/restaurants">Mis Restaurantes</Link>
         {session.user?.name && (
           <Avatar label={getAvatarLabel(session.user.name)} />
         )}

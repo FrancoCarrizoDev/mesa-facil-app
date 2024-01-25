@@ -24,3 +24,21 @@ export interface AttentionSchedule {
   created_at: string;
   updated_at: string;
 }
+
+export interface RestaurantDTO {
+  readonly name: string;
+  readonly address: string;
+  readonly id: string;
+  readonly slug: string | null;
+  readonly phone: string;
+  readonly attentionSchedule: AttentionScheduleDTO[];
+}
+
+export interface AttentionScheduleDTO {
+  readonly id: string;
+  readonly day_name: string;
+  readonly day_number: number;
+  readonly opening_hours: string;
+  readonly ending_hours: string;
+  readonly restaurant_id: string;
+}
