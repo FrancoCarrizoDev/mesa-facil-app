@@ -10,6 +10,7 @@ type Props = {
     readonly value: string | number;
     readonly label: string;
   }[];
+  readonly disabled?: boolean;
 };
 
 export default function Select({
@@ -19,6 +20,7 @@ export default function Select({
   required = false,
   options,
   size = "small",
+  disabled = false,
 }: Props) {
   const sizeClasses = {
     small: "text-sm",
@@ -30,7 +32,7 @@ export default function Select({
     <div>
       <label
         htmlFor={label}
-        className="ui-block ui-py-2 ui-text-sm ui-font-medium ui-text-gray-900 "
+        className="ui-block ui-pb-2 ui-text-sm ui-font-medium ui-text-gray-900 "
       >
         {label}
       </label>
@@ -40,6 +42,7 @@ export default function Select({
         required={required}
         onChange={onChange}
         value={value}
+        disabled={disabled}
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

@@ -71,6 +71,7 @@ export default function AttentionSchedules({
           onChange={(e) => {
             setWeekDayId(Number(e.target.value));
           }}
+          disabled={repeatForOtherDays}
         />
       </div>
 
@@ -98,7 +99,7 @@ export default function AttentionSchedules({
               setRepeatForOtherDays(e.target.checked);
             }}
           >
-            Repetir para todos los días
+            Repetir este horario para todos los días
           </Checkbox>
         </div>
       </div>
