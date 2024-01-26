@@ -44,7 +44,7 @@ export default function RestaurantCard({
           );
         })}
       </div>
-      <div className=" text-xs text-gray-500 dark:text-gray-400">
+      <div className="mb-3 text-xs text-gray-500 dark:text-gray-400">
         <p>
           <span className="font-bold">Dirección:</span> {address}
         </p>
@@ -52,7 +52,10 @@ export default function RestaurantCard({
           <span className="font-bold">Teléfono:</span> {phone}
         </p>
       </div>
-      <div className="mt-auto mx-auto">
+      <div className="mt-auto flex justify-around">
+        <Link color="secondary" href={`/reserve/${slug}`}>
+          Gestionar
+        </Link>
         <Link color="secondary" href={`/reserve/${slug}`}>
           Ver sitio
         </Link>

@@ -5,6 +5,7 @@ import prisma from "database";
 import { comparePasswords } from "./bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
+import { ROLES } from "@/constants/roles";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -55,13 +56,6 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_S || "",
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
     }),
   ],
   pages: {
@@ -141,6 +135,7 @@ export const authOptions: NextAuthOptions = {
             password: null,
             id: iprofile.sub!,
             provider: "google",
+            user_role: ROLES.ADMIN.ID,
           },
         });
         return true;
