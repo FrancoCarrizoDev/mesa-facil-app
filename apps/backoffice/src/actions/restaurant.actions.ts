@@ -101,3 +101,47 @@ export async function createRestaurant(restaurant: RestaurantDTO) {
     throw new Error(error.message);
   }
 }
+
+export async function getRestaurantById(
+  id: string
+): Promise<RestaurantDTO | null> {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("User not loggqged in");
+  }
+
+  try {
+    const restaurant = await prisma.restaurant.findUnique({
+      where: {
+        id: id,
+        user_id: session.user.id,
+      },
+      include: {
+        attention_schedule: true,
+      },
+    });
+
+    if (restaurant)
+      return {
+        id: restaurant.id,
+        name: restaurant.name,
+        address: restaurant.address,
+        slug: restaurant.slug,
+        phone: restaurant.phone,
+        attentionSchedule: restaurant.attention_schedule.map((schedule) => ({
+          id: schedule.id,
+          dayName: schedule.day_name,
+          dayNumber: schedule.day_number,
+          openingHours: schedule.opening_hours,
+          endingHours: schedule.ending_hours,
+          restaurantId: schedule.restaurant_id,
+        })),
+      };
+
+    return null;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+}

@@ -21,7 +21,7 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
       <SectionBody>
         <GridListContainer>
           {restaurants.map((restaurant) => (
-            <li key={restaurant.id}>
+            <li key={restaurant.id} className="h-full">
               <RestaurantCard {...restaurant} />
             </li>
           ))}

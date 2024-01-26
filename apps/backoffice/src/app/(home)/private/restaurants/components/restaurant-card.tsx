@@ -10,7 +10,7 @@ export default function RestaurantCard({
   phone,
 }: RestaurantDTO) {
   return (
-    <div className="max-w-sm p-6 rounded-lg shadow bg-gray-800 border-gray-700 h-full flex flex-col">
+    <div className="max-w-sm p-6 rounded-lg shadow bg-gray-800 border-gray-700 h-full flex flex-col  ">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-1 ">
           <a href="/#">
@@ -23,7 +23,7 @@ export default function RestaurantCard({
           Editar
         </Link>
       </div>
-      <div className="mb-3 font-normal text-xs text-gray-500 dark:text-gray-400">
+      <div className="min-h-[150px] mb-3 font-normal text-xs text-gray-500 dark:text-gray-400">
         <p className="mb-1">
           <span className="font-bold">Horario de atención</span>
         </p>
@@ -43,17 +43,16 @@ export default function RestaurantCard({
             </div>
           );
         })}
-
-        <div className="mt-3">
-          <p>
-            <span className="font-bold">Dirección:</span> {address}
-          </p>
-          <p>
-            <span className="font-bold">Teléfono:</span> {phone}
-          </p>
-        </div>
       </div>
-      <div className="mx-auto">
+      <div className=" text-xs text-gray-500 dark:text-gray-400">
+        <p>
+          <span className="font-bold">Dirección:</span> {address}
+        </p>
+        <p>
+          <span className="font-bold">Teléfono:</span> {phone}
+        </p>
+      </div>
+      <div className="mt-auto mx-auto">
         <Link color="secondary" href={`/reserve/${slug}`}>
           Ver sitio
         </Link>
