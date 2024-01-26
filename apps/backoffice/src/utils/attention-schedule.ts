@@ -4,9 +4,9 @@ export const checkIfClosingTimeIsBeforeOpeningTime = (
   attentionSchedule: AttentionScheduleDTO
 ) => {
   const [openingTimeHour, openingTimeMinutes] =
-    attentionSchedule.opening_hours.split(":");
+    attentionSchedule.openingHours.split(":");
   const [closingTimeHour, closeTimeMinutes] =
-    attentionSchedule.ending_hours.split(":");
+    attentionSchedule.endingHours.split(":");
 
   if (parseInt(openingTimeHour) > parseInt(closingTimeHour)) {
     return true;

@@ -1,8 +1,11 @@
+"use server";
 import getSession from "@/utils/get-session";
 import prisma from "database";
 import { getServerSession } from "next-auth";
 import { RestaurantDTO } from "src/models/restaurant.model";
 import { authOptions } from "src/utils/auth-options";
+import { v4 as uuidv4 } from "uuid";
+import slugify from "slugify";
 
 export async function getRestaurantsNameByUser() {
   const session = await getServerSession(authOptions);
@@ -27,7 +30,7 @@ export async function getRestaurantsNameByUser() {
 export async function getRestaurantsByUser(): Promise<RestaurantDTO[]> {
   const session = await getSession();
 
-  if (!session) return [];
+  if (!session) throw new Error("User not loggqged in");
 
   const { id } = session.user;
 
@@ -48,11 +51,53 @@ export async function getRestaurantsByUser(): Promise<RestaurantDTO[]> {
     phone: restaurant.phone,
     attentionSchedule: restaurant.attention_schedule.map((schedule) => ({
       id: schedule.id,
-      day_name: schedule.day_name,
-      day_number: schedule.day_number,
-      opening_hours: schedule.opening_hours,
-      ending_hours: schedule.ending_hours,
-      restaurant_id: schedule.restaurant_id,
+      dayName: schedule.day_name,
+      dayNumber: schedule.day_number,
+      openingHours: schedule.opening_hours,
+      endingHours: schedule.ending_hours,
+      restaurantId: schedule.restaurant_id,
     })),
   }));
+}
+
+export async function createRestaurant(restaurant: RestaurantDTO) {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("User not loggqged in");
+  }
+
+  try {
+    const newRestaurantId = uuidv4();
+    await prisma.restaurant.create({
+      data: {
+        id: newRestaurantId,
+        name: restaurant.name,
+        slug: slugify(restaurant.name, {
+          lower: true,
+          remove: /[*+~.()'"!:@]/g,
+        }),
+        address: restaurant.address,
+        phone: restaurant.phone,
+        user_id: session.user.id,
+        attention_schedule: {},
+      },
+    });
+
+    for (const schedule of restaurant.attentionSchedule) {
+      await prisma.attentionSchedule.create({
+        data: {
+          id: uuidv4(),
+          opening_hours: schedule.openingHours,
+          ending_hours: schedule.endingHours,
+          day_name: schedule.dayName,
+          day_number: schedule.dayNumber,
+          restaurant_id: newRestaurantId,
+        },
+      });
+    }
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
 }

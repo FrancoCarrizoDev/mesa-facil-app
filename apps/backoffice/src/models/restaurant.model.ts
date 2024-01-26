@@ -36,9 +36,9 @@ export interface RestaurantDTO {
 
 export interface AttentionScheduleDTO {
   readonly id?: string;
-  readonly day_name: string;
-  readonly day_number: number;
-  readonly opening_hours: string;
-  readonly ending_hours: string;
-  readonly restaurant_id?: string;
+  readonly dayName: string;
+  readonly dayNumber: number;
+  readonly openingHours: string;
+  readonly endingHours: string;
+  readonly restaurantId?: string;
 }

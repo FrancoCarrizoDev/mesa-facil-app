@@ -31,7 +31,7 @@ export default function Input({
       </label>
       <input
         autoComplete={autoComplete}
-        className="ui-block ui-w-full  ui-py-1 ui-px-2  ui-text-gray-900  ui-border  ui-border-gray-300  ui-rounded-lg  ui-bg-gray-50  ui-sm:text-xs  ui-focus:ring-blue-500  ui-focus:border-blue-500"
+        className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-yellow-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400"
         disabled={disabled}
         id={label}
         name={label}

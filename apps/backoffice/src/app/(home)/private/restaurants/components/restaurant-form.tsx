@@ -3,14 +3,16 @@ import {
   AttentionScheduleDTO,
   type RestaurantDTO,
 } from "@/models/restaurant.model";
-import { useRouter } from "next/navigation";
-import Button from "@repo/ui/button";
-import useForm from "@/hooks/use-form";
-import AttentionSchedules from "./attention-schedules";
 import { checkIfClosingTimeIsBeforeOpeningTime } from "@/utils/attention-schedule";
+import { toast } from "react-toastify";
 import { useMemo, useState } from "react";
-import Input from "@repo/ui/input";
+import { useRouter } from "next/navigation";
 import { WEEK_DAYS } from "@/constants/week-days";
+import AttentionSchedules from "./attention-schedules";
+import Button from "@repo/ui/button";
+import Input from "@repo/ui/input";
+import useForm from "@/hooks/use-form";
+import { createRestaurant } from "@/actions/restaurant.actions";
 
 const INITIAL_VALUES: RestaurantDTO = {
   id: "1",
@@ -28,8 +30,14 @@ export default function RestaurantForm({
 }): JSX.Element {
   const { handleChange, handleSubmit, values } = useForm<RestaurantDTO>({
     initialValues: restaurant || INITIAL_VALUES,
-    onSubmit: (formValues) => {
-      console.log(formValues);
+    onSubmit: async (formValues) => {
+      try {
+        await createRestaurant(formValues);
+        toast("Restaurante creado con éxito", { type: "success" });
+        router.push("/private/restaurants");
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
   const [attentionScheduleToEdit, setAttentionScheduleToEdit] = useState<
@@ -39,19 +47,19 @@ export default function RestaurantForm({
 
   const checkIfAttentionScheduleIsColliding = (
     attentionSchedule: AttentionScheduleDTO
-  ) => {
-    const weekDay = attentionSchedule.day_name;
+  ): boolean => {
+    const weekDay = attentionSchedule.dayName;
     const filteredAttentionScheduleByWeekDay = values.attentionSchedule.filter(
-      (schedule) => schedule.day_name === weekDay
+      (schedule) => schedule.dayName === weekDay
     );
     return filteredAttentionScheduleByWeekDay.some((schedule) => {
-      const openingTime = parseInt(schedule.opening_hours.split(":")[0]);
-      const closingTime = parseInt(schedule.ending_hours.split(":")[0]);
+      const openingTime = parseInt(schedule.openingHours.split(":")[0]);
+      const closingTime = parseInt(schedule.endingHours.split(":")[0]);
       const newOpeningTime = parseInt(
-        attentionSchedule.opening_hours.split(":")[0]
+        attentionSchedule.openingHours.split(":")[0]
       );
       const newClosingTime = parseInt(
-        attentionSchedule.ending_hours.split(":")[0]
+        attentionSchedule.endingHours.split(":")[0]
       );
       if (newOpeningTime >= openingTime && newOpeningTime <= closingTime) {
         return true;
@@ -65,7 +73,7 @@ export default function RestaurantForm({
 
   const onAddAttentionSchedule = (
     attentionSchedule: AttentionScheduleDTO | AttentionScheduleDTO[]
-  ) => {
+  ): void => {
     if (Array.isArray(attentionSchedule)) {
       const isOpeningTimeBeforeClosingTime = attentionSchedule.some(
         (schedule) => {
@@ -74,14 +82,14 @@ export default function RestaurantForm({
       );
 
       if (isOpeningTimeBeforeClosingTime) {
-        alert("El horario de cierre debe ser mayor al de apertura.");
+        toast("El horario de cierre debe ser mayor al de apertura.");
         return;
       }
       const isCollided = attentionSchedule.some((schedule) => {
         return checkIfAttentionScheduleIsColliding(schedule);
       });
       if (isCollided) {
-        alert("El horario ingresado se superpone con otro.");
+        toast("El horario ingresado se superpone con otro.");
         return;
       }
       handleChange({
@@ -94,14 +102,14 @@ export default function RestaurantForm({
       checkIfClosingTimeIsBeforeOpeningTime(attentionSchedule);
 
     if (isOpeningTimeBeforeClosingTime) {
-      alert("El horario de cierre debe ser mayor al de apertura.");
+      toast("El horario de cierre debe ser mayor al de apertura.");
       return;
     }
 
     const isCollided = checkIfAttentionScheduleIsColliding(attentionSchedule);
 
     if (isCollided) {
-      alert("El horario ingresado se superpone con otro.");
+      toast("El horario ingresado se superpone con otro.");
       return;
     }
 
@@ -112,32 +120,34 @@ export default function RestaurantForm({
 
   const filterAttentionSchedule = (
     attentionSchedule: AttentionScheduleDTO[],
-    { day_name, opening_hours, ending_hours }: AttentionScheduleDTO
+    { dayName, openingHours, endingHours }: AttentionScheduleDTO
   ) => {
     return attentionSchedule.filter((schedule) => {
-      if (schedule.day_name !== day_name) {
+      if (schedule.dayName !== dayName) {
         return true;
       }
 
       return (
-        schedule.opening_hours !== opening_hours &&
-        schedule.ending_hours !== ending_hours
+        schedule.openingHours !== openingHours &&
+        schedule.endingHours !== endingHours
       );
     });
   };
 
   const sortAttentionScheduleByWeekDayAndOpeningTime = useMemo(() => {
     return values.attentionSchedule.sort((a, b) => {
-      const weekDayA = WEEK_DAYS.find((day) => day.weekDay === a.day_name)!.id;
-      const weekDayB = WEEK_DAYS.find((day) => day.weekDay === b.day_name)!.id;
+      const weekDayA =
+        WEEK_DAYS.find((day) => day.weekDay === a.dayName)?.id || 0;
+      const weekDayB =
+        WEEK_DAYS.find((day) => day.weekDay === b.dayName)?.id || 0;
       if (weekDayA > weekDayB) {
         return 1;
       }
       if (weekDayA < weekDayB) {
         return -1;
       }
-      const openingTimeA = parseInt(a.opening_hours.split(":")[0]);
-      const openingTimeB = parseInt(b.ending_hours.split(":")[0]);
+      const openingTimeA = parseInt(a.openingHours.split(":")[0]);
+      const openingTimeB = parseInt(b.endingHours.split(":")[0]);
       if (openingTimeA > openingTimeB) {
         return 1;
       }
@@ -156,45 +166,49 @@ export default function RestaurantForm({
       <div className="grid gap-6 mb-6 md:grid-cols-2">
         <div className="flex flex-col">
           <AttentionSchedules
-            onChange={onAddAttentionSchedule}
             initialAttentionSchedule={attentionScheduleToEdit}
+            onChange={onAddAttentionSchedule}
           />
         </div>
         <div>
+          <div className="mb-6">
+            <Input
+              label="Nombre"
+              onChange={(e) => {
+                handleChange({
+                  name: e.target.value,
+                });
+              }}
+              placeholder="Delicattesen"
+              value={values.name}
+            />
+          </div>
+          <div className="mb-6">
+            <Input
+              label="Dirección"
+              onChange={(e) => {
+                handleChange({
+                  address: e.target.value,
+                });
+              }}
+              placeholder="Av. Siempre Viva 123"
+              value={values.address}
+            />
+          </div>
           <Input
-            label={"Nombre"}
-            onChange={(e) =>
-              handleChange({
-                name: e.target.value,
-              })
-            }
-            value={values.name}
-            placeholder="Delicattesen"
-          />
-          <Input
-            value={values.address}
-            label={"Dirección"}
-            onChange={(e) =>
-              handleChange({
-                address: e.target.value,
-              })
-            }
-            placeholder="Av. Siempre Viva 123"
-          />
-          <Input
-            value={values.phone}
-            label={"Teléfono de reservas"}
-            onChange={(e) =>
+            label="Teléfono de reservas"
+            onChange={(e) => {
               handleChange({
                 phone: e.target.value,
-              })
-            }
+              });
+            }}
             placeholder="123-45-678"
+            value={values.phone}
           />
         </div>
       </div>
 
-      <div className="pe-6">
+      <div className="pe-6 mb-6">
         <div className="w-1/2 border border-lemon-500 rounded-md p-3">
           <div className="max-w-fit">
             <h3 className="font-bold ">Horarios de reserva cargados</h3>
@@ -202,14 +216,14 @@ export default function RestaurantForm({
           </div>
           {values.attentionSchedule.length > 0 ? (
             sortAttentionScheduleByWeekDayAndOpeningTime.map(
-              ({ day_name, ending_hours, opening_hours }) => (
+              ({ dayName, endingHours, openingHours }) => (
                 <div
-                  key={day_name + opening_hours}
+                  key={dayName + openingHours}
                   className="flex justify-between items-center pt-1"
                 >
                   <div className="w-full flex items-center justify-between pe-3">
-                    <p className="text-xs font-medium">{day_name}</p>
-                    <p className="text-xs font-medium">{`${opening_hours}hs - ${ending_hours}hs`}</p>
+                    <p className="text-xs font-medium">{dayName}</p>
+                    <p className="text-xs font-medium">{`${openingHours}hs - ${endingHours}hs`}</p>
                   </div>
                   <div className="flex gap-3">
                     <Button
@@ -217,22 +231,22 @@ export default function RestaurantForm({
                       size="sm"
                       onClick={() => {
                         setAttentionScheduleToEdit({
-                          day_name: day_name,
-                          opening_hours: opening_hours,
-                          ending_hours: ending_hours,
-                          day_number: WEEK_DAYS.find(
-                            (weekDay) => weekDay.weekDay === day_name
+                          dayName: dayName,
+                          openingHours: openingHours,
+                          endingHours: endingHours,
+                          dayNumber: WEEK_DAYS.find(
+                            (weekDay) => weekDay.weekDay === dayName
                           )!.id,
                         });
                         handleChange({
                           attentionSchedule: filterAttentionSchedule(
                             values.attentionSchedule,
                             {
-                              day_name: day_name,
-                              opening_hours: opening_hours,
-                              ending_hours: ending_hours,
-                              day_number: WEEK_DAYS.find(
-                                (weekDay) => weekDay.weekDay === day_name
+                              dayName,
+                              openingHours,
+                              endingHours,
+                              dayNumber: WEEK_DAYS.find(
+                                (weekDay) => weekDay.weekDay === dayName
                               )!.id,
                             }
                           ),
@@ -249,11 +263,11 @@ export default function RestaurantForm({
                           attentionSchedule: filterAttentionSchedule(
                             values.attentionSchedule,
                             {
-                              day_name: day_name,
-                              opening_hours: opening_hours,
-                              ending_hours: ending_hours,
-                              day_number: WEEK_DAYS.find(
-                                (weekDay) => weekDay.weekDay === day_name
+                              dayName,
+                              openingHours,
+                              endingHours,
+                              dayNumber: WEEK_DAYS.find(
+                                (weekDay) => weekDay.weekDay === dayName
                               )!.id,
                             }
                           ),

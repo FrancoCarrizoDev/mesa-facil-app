@@ -8,17 +8,17 @@ import Input from "@repo/ui/input";
 import Checkbox from "@repo/ui/checkbox";
 import Button from "@repo/ui/button";
 
-type AttentionScheduleProps = {
+interface AttentionScheduleProps {
   readonly onChange: (e: AttentionScheduleDTO | AttentionScheduleDTO[]) => void;
   readonly initialAttentionSchedule?: AttentionScheduleDTO;
-};
+}
 
 export default function AttentionSchedules({
   onChange,
   initialAttentionSchedule,
 }: AttentionScheduleProps): JSX.Element {
   const [closingTime, setClosingTime] = useState<string>("22:00");
-  const [openingTime, setOpeningTime] = useState<string>("08:00");
+  const [openingTime, setOpeningTime] = useState<string>("20:00");
   const [repeatForOtherDays, setRepeatForOtherDays] = useState<boolean>(false);
   const [weekDayId, setWeekDayId] = useState<number>(1);
 
@@ -26,21 +26,20 @@ export default function AttentionSchedules({
     if (!initialAttentionSchedule) return;
 
     setWeekDayId(
-      WEEK_DAYS.find(
-        (day) => day.weekDay === initialAttentionSchedule.day_name
-      )!.id
+      WEEK_DAYS.find((day) => day.weekDay === initialAttentionSchedule.dayName)
+        ?.id || 1
     );
-    setOpeningTime(initialAttentionSchedule.opening_hours);
-    setClosingTime(initialAttentionSchedule.ending_hours);
+    setOpeningTime(initialAttentionSchedule.openingHours);
+    setClosingTime(initialAttentionSchedule.endingHours);
   }, [initialAttentionSchedule]);
 
-  const handleAddAttentionSchedule = () => {
+  const handleAddAttentionSchedule = (): void => {
     if (repeatForOtherDays) {
       const mapDays: AttentionScheduleDTO[] = WEEK_DAYS.map((day) => ({
-        day_name: day.weekDay,
-        opening_hours: openingTime,
-        ending_hours: closingTime,
-        day_number: day.id,
+        dayName: day.weekDay,
+        openingHours: openingTime,
+        endingHours: closingTime,
+        dayNumber: day.id,
       }));
 
       onChange(mapDays);
@@ -49,10 +48,10 @@ export default function AttentionSchedules({
     }
 
     const attentionSchedule: AttentionScheduleDTO = {
-      day_name: WEEK_DAYS.find((day) => day.id === weekDayId)!.weekDay,
-      opening_hours: openingTime,
-      ending_hours: closingTime,
-      day_number: weekDayId,
+      dayName: WEEK_DAYS.find((day) => day.id === weekDayId)?.weekDay || "",
+      openingHours: openingTime,
+      endingHours: closingTime,
+      dayNumber: weekDayId,
     };
 
     onChange(attentionSchedule);
@@ -62,35 +61,35 @@ export default function AttentionSchedules({
     <>
       <div className="mb-6">
         <Select
-          value={weekDayId}
+          disabled={repeatForOtherDays}
           label="Horarios de reserva"
+          onChange={(e) => {
+            setWeekDayId(Number(e.target.value));
+          }}
           options={WEEK_DAYS.map((day) => ({
             value: day.id,
             label: day.weekDay,
           }))}
-          onChange={(e) => {
-            setWeekDayId(Number(e.target.value));
-          }}
-          disabled={repeatForOtherDays}
+          value={weekDayId}
         />
       </div>
 
       <div className="flex items-baseline gap-2 mb-6">
         <Input
           label="Desde"
-          type="time"
-          value={openingTime}
           onChange={(e) => {
             setOpeningTime(e.target.value);
           }}
+          type="time"
+          value={openingTime}
         />
         <Input
           label="Hasta"
-          type="time"
-          value={closingTime}
           onChange={(e) => {
             setClosingTime(e.target.value);
           }}
+          type="time"
+          value={closingTime}
         />
         <div className="flex items-center mt-auto pb-2">
           <Checkbox
@@ -104,8 +103,8 @@ export default function AttentionSchedules({
         </div>
       </div>
       <div className=" flex">
-        <Button size="sm" type="button" onClick={handleAddAttentionSchedule}>
-          AGREGAR
+        <Button onClick={handleAddAttentionSchedule} size="sm" type="button">
+          AGREGAR HORARIO
         </Button>
       </div>
     </>

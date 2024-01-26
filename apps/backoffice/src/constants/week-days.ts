@@ -1,4 +1,4 @@
-type WeekDay = {
+interface WeekDay {
   weekDay:
     | "Lunes"
     | "Martes"
@@ -8,7 +8,7 @@ type WeekDay = {
     | "Sábado"
     | "Domingo";
   id: number;
-};
+}
 
 export const WEEK_DAYS: WeekDay[] = [
   { weekDay: "Domingo", id: 0 },

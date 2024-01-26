@@ -36,9 +36,9 @@ export default function RestaurantCard({
               className="flex justify-between items-center"
               key={schedule.id}
             >
-              <p>{schedule.day_name}:</p>
+              <p>{schedule.dayName}:</p>
               <p>
-                {schedule.opening_hours} - {schedule.ending_hours}
+                {schedule.openingHours} - {schedule.endingHours}
               </p>
             </div>
           );
