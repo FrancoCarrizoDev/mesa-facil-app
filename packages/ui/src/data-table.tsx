@@ -14,34 +14,36 @@ interface DataTableProps {
 
 export default function DataTable({ columns, data }: DataTableProps) {
   return (
-    <div className="ui-w-full ui-relative ui-overflow-x-auto ui-shadow-md ui-sm:rounded-lg">
-      <table className="ui-w-full ui-text-sm ui-text-left ui-rtl:text-right ui-text-gray-500 ">
-        <thead className="ui-text-xs ui-text-gray-700 ui-uppercase ui-bg-gray-50">
-          <tr>
-            {columns.map((column) => (
-              <th key={column.key} scope="col" className="ui-px-6 ui-py-3">
-                {column.header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              className="ui-bg-white ui-border-b hover:ui-bg-gray-50"
-            >
+    <div className="w-full ui-bg-white ui-pb-3 ui-shadow-md ui-sm:rounded-lg ">
+      <div className=" ui-w-full ui-relative ui-overflow-x-auto  ">
+        <table className="ui-w-full ui-text-sm ui-text-left rtl:ui-text-right ui-text-gray-500 ">
+          <thead className="ui-text-xs ui-text-gray-700 ui-uppercase ui-bg-gray-50">
+            <tr>
               {columns.map((column) => (
-                <td key={column.key} className="ui-px-6 ui-py-4">
-                  {row[column.key]}
-                </td>
+                <th key={column.key} scope="col" className="ui-px-6 ui-py-3">
+                  {column.header}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className="ui-bg-white ui-border-b hover:ui-bg-gray-50"
+              >
+                {columns.map((column) => (
+                  <td key={column.key} className="ui-px-6 ui-py-4">
+                    {row[column.key]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <nav
-        className="ui-flex ui-items-center ui-flex-column ui-flex-wrap md:ui-flex-row ui-justify-between ui-pt-4"
+        className="ui-flex ui-items-center ui-flex-column ui-flex-wrap md:ui-flex-row ui-justify-between ui-pt-4 ui-px-3"
         aria-label="Table navigation"
       >
         <span className="ui-text-sm ui-font-normal ui-text-gray-500  ui-mb-4 md:ui-mb-0 ui-block ui-w-full md:ui-inline md:ui-w-auto">

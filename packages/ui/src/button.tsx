@@ -4,7 +4,7 @@ export interface ButtonProps {
   children: ReactNode;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
-  color?: "primary" | "secondary" | "tertiary";
+  color?: "primary" | "secondary" | "tertiary" | "danger";
   variant?: "contained" | "outlined" | "text";
   rounded?: "none" | "sm" | "md" | "lg" | "full" | "pill";
   size?: "sm" | "md" | "lg";
@@ -16,16 +16,17 @@ const SIZES = {
   lg: "ui-py-3 ui-px-6 ui-text-lg",
 };
 
-const COLORS = {
-  primary: "ui-bg-yellow-600 ui-text-white",
-  secondary: "ui-bg-gray-600 ui-text-white",
-  tertiary: "ui-bg-transparent ui-text-yellow-600",
-};
-
 const VARIANTS = {
   contained: "ui-bg-yellow-600 ui-text-white",
   outlined: "ui-border ui-border-yellow-600 ui-text-yellow-600",
   text: "ui-text-yellow-600",
+};
+
+const COLORS = {
+  primary: "ui-bg-yellow-600 ui-text-white",
+  secondary: "ui-bg-gray-600 ui-text-white",
+  tertiary: "ui-bg-transparent ui-text-yellow-600",
+  danger: "ui-text-red-600",
 };
 
 const ROUNDED = {
@@ -53,7 +54,7 @@ export default function Button({
 
   return (
     <button
-      className={`ui-block  ui-font-medium ${sizeClass} ${colorClass} ${variantClass} ${roundedClass}  `}
+      className={`ui-block ui-font-medium ${sizeClass} ${variantClass} ${colorClass}  ${roundedClass}  `}
       onClick={onClick}
       type={type}
     >
