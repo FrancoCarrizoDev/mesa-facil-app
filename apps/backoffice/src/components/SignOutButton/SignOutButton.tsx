@@ -5,7 +5,14 @@ import { signOut } from "next-auth/react";
 
 export default function SignOutButton() {
   return (
-    <Button size="sm" onClick={signOut}>
+    <Button
+      size="sm"
+      onClick={() =>
+        signOut({
+          callbackUrl: "http://localhost:3000/auth/login",
+        })
+      }
+    >
       Cerrar sessión
     </Button>
   );

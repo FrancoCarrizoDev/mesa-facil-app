@@ -9,6 +9,7 @@ import Select from "@repo/ui/select";
 import { Restaurant } from "../../../../../../models/restaurant.model";
 import { createUser } from "@/actions/user.actions";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface CreateUserFormValues {
   name: string;
@@ -28,6 +29,7 @@ export default function UserForm({
     name: string;
   }[];
 }) {
+  const router = useRouter();
   const { values, handleChange, handleSubmit } = useForm<CreateUserFormValues>({
     initialValues: {
       name: "",
@@ -49,6 +51,7 @@ export default function UserForm({
           restaurantIds: formValues.restaurantIds,
         });
         toast.success("Usuario creado correctamente");
+        router.push("/private/users");
       } catch (error) {
         toast.error("Error al crear el usuario");
         console.log(error);
@@ -175,9 +178,6 @@ export default function UserForm({
         <Button type="submit">Cancelar</Button>
         <Button type="submit">Crear usuario</Button>
       </div>
-      <pre>
-        <code>{JSON.stringify(values, null, 2)}</code>
-      </pre>
     </form>
   );
 }

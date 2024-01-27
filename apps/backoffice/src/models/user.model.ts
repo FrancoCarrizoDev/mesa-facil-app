@@ -22,3 +22,20 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserDTO {
+  id: string;
+  provider: string;
+  email: string;
+  firsName: string;
+  lastName: string | null;
+  restaurants: UserRestaurantDTO[];
+  createdAt: string;
+  updatedAt: string;
+  userRole: string;
+}
+
+export interface UserRestaurantDTO {
+  id: string;
+  name: string;
+}

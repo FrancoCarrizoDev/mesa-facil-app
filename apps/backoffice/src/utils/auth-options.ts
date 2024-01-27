@@ -49,6 +49,7 @@ export const authOptions: NextAuthOptions = {
             name: existsUser.first_name,
             email: existsUser.email,
             role: existsUser.user_role,
+            user_root_id: existsUser.user_root_id,
           };
 
         throw new Error("Invalid password");
@@ -93,6 +94,7 @@ export const authOptions: NextAuthOptions = {
         if (!userDB) return {};
         token.id = userDB.id;
         token.role = userDB.user_role;
+        token.user_root_id = userDB.user_root_id;
       }
       return token;
     },
@@ -107,6 +109,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.user_root_id = token.user_root_id;
       }
 
       return session;

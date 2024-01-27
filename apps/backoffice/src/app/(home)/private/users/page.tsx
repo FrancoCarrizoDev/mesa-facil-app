@@ -1,6 +1,8 @@
+import { getUserList } from "@/actions/user.actions";
 import Link from "@/components/Link/link";
 import { ROLES } from "@/constants/roles";
 import getSession from "@/utils/get-session";
+import { hasManageUsersPermission } from "@/utils/permissions";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
@@ -8,9 +10,12 @@ import SectionTitle from "@repo/ui/section-title";
 export default async function UsersPage() {
   const session = await getSession();
 
-  if (session?.user?.role !== ROLES.ADMIN.ID) {
+  const hasPermission = hasManageUsersPermission(session?.user?.role || "USER");
+  if (!hasPermission) {
     return <div>Ups, no tienes permisos para ver esta página...</div>;
   }
+
+  const userList = await getUserList();
 
   return (
     <Section>
@@ -22,6 +27,9 @@ export default async function UsersPage() {
       </div>
       <SectionBody>
         <div>usuarios</div>
+        <pre>
+          <code>{JSON.stringify(userList, null, 2)}</code>
+        </pre>
       </SectionBody>
     </Section>
   );
