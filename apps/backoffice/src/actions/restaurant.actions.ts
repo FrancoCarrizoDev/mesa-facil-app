@@ -6,6 +6,7 @@ import { RestaurantDTO } from "src/models/restaurant.model";
 import { authOptions } from "src/utils/auth-options";
 import { v4 as uuidv4 } from "uuid";
 import slugify from "slugify";
+import { revalidatePath } from "next/cache";
 
 export async function getRestaurantsNameByUser() {
   const session = await getServerSession(authOptions);
@@ -96,6 +97,8 @@ export async function createRestaurant(restaurant: RestaurantDTO) {
         },
       });
     }
+
+    revalidatePath("/private/restaurants");
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message);

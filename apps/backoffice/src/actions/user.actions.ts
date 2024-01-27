@@ -4,6 +4,7 @@ import { CreateUserDTO } from "src/models/user.model";
 import prisma from "database";
 import { hashPassword } from "src/utils/bcrypt";
 import { v4 as uuidv4 } from "uuid";
+import { ROLES } from "@/constants/roles";
 export async function createUser(user: CreateUserDTO) {
   try {
     const alreadyExists = await prisma.user.findUnique({
@@ -24,6 +25,7 @@ export async function createUser(user: CreateUserDTO) {
         first_name: user.firstName,
         last_name: user.lastName,
         provider: "credentials",
+        user_role: ROLES.ADMIN.ID,
       },
     });
 

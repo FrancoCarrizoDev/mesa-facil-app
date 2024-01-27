@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next";
 import Avatar from "@repo/ui/avatar";
 import Link from "../Link/link";
 import SignOutButton from "@/components/SignOutButton/SignOutButton";
+import { ROLES } from "@/constants/roles";
 
 export default async function Navbar(): Promise<JSX.Element> {
   const session: any = await getServerSession(authOptions);
@@ -11,8 +12,11 @@ export default async function Navbar(): Promise<JSX.Element> {
   if (session) {
     return (
       <nav className="flex items-baseline gap-3">
-        <Link href="/private">Mi cuenta</Link>
+        <Link href="/private">Inicio</Link>
         <Link href="/private/restaurants">Mis Restaurantes</Link>
+        {session.user.role === ROLES.ADMIN.ID && (
+          <Link href="/private/users">Mis Usuarios</Link>
+        )}
         {session.user?.name && (
           <Avatar label={getAvatarLabel(session.user.name)} />
         )}

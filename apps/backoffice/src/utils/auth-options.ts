@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
             id: existsUser.id,
             name: existsUser.first_name,
             email: existsUser.email,
+            role: existsUser.user_role,
           };
 
         throw new Error("Invalid password");
@@ -83,7 +84,15 @@ export const authOptions: NextAuthOptions = {
       // });
 
       if (user) {
-        token.id = user.id;
+        const userDB = await prisma.user.findUnique({
+          where: {
+            id: user.id,
+          },
+        });
+
+        if (!userDB) return {};
+        token.id = userDB.id;
+        token.role = userDB.user_role;
       }
       return token;
     },
@@ -97,6 +106,7 @@ export const authOptions: NextAuthOptions = {
 
       if (session.user) {
         session.user.id = token.id;
+        session.user.role = token.role;
       }
 
       return session;
