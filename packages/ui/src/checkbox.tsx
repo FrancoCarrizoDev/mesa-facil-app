@@ -17,7 +17,7 @@ export default function Checkbox({
         id={id}
         type="checkbox"
         checked={checked}
-        className="ui-w-4 ui-h-4 ui-text-blue-600 ui-bg-gray-100 ui-border-gray-300 ui-rounded ui-focus:ring-blue-500 "
+        className="ui-w-4 ui-h-4 ui-text-blue-600 ui-bg-gray-100 ui-border-gray-300 ui-rounded focus:ui-ring-blue-500"
         onChange={onChange}
       />
       <label
