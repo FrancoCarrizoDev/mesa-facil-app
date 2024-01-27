@@ -1,3 +1,4 @@
+import { ROLES } from "@/constants/roles";
 import { type Restaurant } from "./restaurant.model";
 
 export interface CreateUserDTO {
@@ -5,6 +6,9 @@ export interface CreateUserDTO {
   password: string;
   firstName: string;
   lastName: string;
+  role?: string;
+  restaurantIds?: string[];
+  root_user_id?: string;
 }
 
 export interface User {

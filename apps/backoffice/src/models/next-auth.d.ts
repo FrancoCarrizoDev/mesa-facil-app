@@ -1,3 +1,4 @@
+import { ROLES } from "@/constants/roles";
 import NextAuth, { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
@@ -8,7 +9,7 @@ declare module "next-auth" {
     user: {
       /** The user's postal address. */
       id: string;
-      role: string;
+      role: keyof typeof ROLES;
     } & DefaultSession["user"];
   }
 }

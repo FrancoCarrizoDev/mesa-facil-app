@@ -17,7 +17,11 @@ export async function getRestaurantsNameByUser() {
 
   const restaurants = await prisma.restaurant.findMany({
     where: {
-      user_id: id,
+      users: {
+        some: {
+          id: id,
+        },
+      },
     },
     select: {
       id: true,
@@ -37,7 +41,11 @@ export async function getRestaurantsByUser(): Promise<RestaurantDTO[]> {
 
   const restaurants = await prisma.restaurant.findMany({
     where: {
-      user_id: id,
+      users: {
+        some: {
+          id: id,
+        },
+      },
     },
     include: {
       attention_schedule: true,
@@ -80,23 +88,24 @@ export async function createRestaurant(restaurant: RestaurantDTO) {
         }),
         address: restaurant.address,
         phone: restaurant.phone,
-        user_id: session.user.id,
-        attention_schedule: {},
+        attention_schedule: {
+          createMany: {
+            data: restaurant.attentionSchedule.map((schedule) => ({
+              id: uuidv4(),
+              opening_hours: schedule.openingHours,
+              ending_hours: schedule.endingHours,
+              day_name: schedule.dayName,
+              day_number: schedule.dayNumber,
+            })),
+          },
+        },
+        users: {
+          connect: {
+            id: session.user.id,
+          },
+        },
       },
     });
-
-    for (const schedule of restaurant.attentionSchedule) {
-      await prisma.attentionSchedule.create({
-        data: {
-          id: uuidv4(),
-          opening_hours: schedule.openingHours,
-          ending_hours: schedule.endingHours,
-          day_name: schedule.dayName,
-          day_number: schedule.dayNumber,
-          restaurant_id: newRestaurantId,
-        },
-      });
-    }
 
     revalidatePath("/private/restaurants");
   } catch (error: any) {
@@ -118,7 +127,11 @@ export async function getRestaurantById(
     const restaurant = await prisma.restaurant.findUnique({
       where: {
         id: id,
-        user_id: session.user.id,
+        users: {
+          some: {
+            id: id,
+          },
+        },
       },
       include: {
         attention_schedule: true,
@@ -143,6 +156,43 @@ export async function getRestaurantById(
       };
 
     return null;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+}
+
+export async function getRestaurantListToUserAssing(): Promise<
+  {
+    id: string;
+    name: string;
+  }[]
+> {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("User not loggqged in");
+  }
+
+  try {
+    const restaurants = await prisma.restaurant.findMany({
+      where: {
+        users: {
+          some: {
+            id: session.user.id,
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    return restaurants.map((restaurant) => ({
+      id: restaurant.id,
+      name: restaurant.name,
+    }));
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message);

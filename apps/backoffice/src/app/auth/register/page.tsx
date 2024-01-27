@@ -5,7 +5,7 @@ import Button from "@repo/ui/button";
 import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
 import useForm from "@/hooks/use-form";
-import { createUser } from "@/actions/user.actions";
+import { createRootUser } from "@/actions/user.actions";
 
 export default function Page(): JSX.Element {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function Page(): JSX.Element {
       acceptTerms: false,
     },
     onSubmit: async (formValues) => {
-      const newUser = await createUser({
+      const newUser = await createRootUser({
         email: formValues.email,
         firstName: formValues.name,
         lastName: formValues.lastName,

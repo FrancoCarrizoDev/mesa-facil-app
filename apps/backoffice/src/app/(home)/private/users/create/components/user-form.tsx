@@ -3,8 +3,12 @@
 import { ROLES } from "@/constants/roles";
 import useForm from "@/hooks/use-form";
 import Button from "@repo/ui/button";
+import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
+import { Restaurant } from "../../../../../../models/restaurant.model";
+import { createUser } from "@/actions/user.actions";
+import { toast } from "react-toastify";
 
 interface CreateUserFormValues {
   name: string;
@@ -16,7 +20,14 @@ interface CreateUserFormValues {
   restaurantIds: string[];
 }
 
-export default function UserForm() {
+export default function UserForm({
+  restaurantList,
+}: {
+  restaurantList: {
+    id: string;
+    name: string;
+  }[];
+}) {
   const { values, handleChange, handleSubmit } = useForm<CreateUserFormValues>({
     initialValues: {
       name: "",
@@ -28,7 +39,20 @@ export default function UserForm() {
       restaurantIds: [],
     },
     onSubmit: async (formValues) => {
-      console.log(formValues);
+      try {
+        await createUser({
+          email: formValues.email,
+          firstName: formValues.name,
+          lastName: formValues.lastName,
+          password: formValues.password,
+          role: formValues.role,
+          restaurantIds: formValues.restaurantIds,
+        });
+        toast.success("Usuario creado correctamente");
+      } catch (error) {
+        toast.error("Error al crear el usuario");
+        console.log(error);
+      }
     },
   });
 
@@ -115,12 +139,45 @@ export default function UserForm() {
               value={values.role}
             />
           </div>
+          <div className="mb-6 flex flex-col">
+            <h6 className="ui-block ui-mb-2 ui-text-sm ui-font-medium ui-text-gray-900 ">
+              Permisos para restaurantes
+            </h6>
+            <div className="flex gap-3 py-1">
+              {restaurantList.map(({ id, name }) => (
+                <Checkbox
+                  key={id}
+                  id={id}
+                  checked={values.restaurantIds.includes(id)}
+                  onChange={(e) => {
+                    const isChecked = e.target.checked;
+                    if (isChecked) {
+                      handleChange({
+                        restaurantIds: [...values.restaurantIds, id],
+                      });
+                    } else {
+                      handleChange({
+                        restaurantIds: values.restaurantIds.filter(
+                          (restaurantId) => restaurantId !== id
+                        ),
+                      });
+                    }
+                  }}
+                >
+                  {name}
+                </Checkbox>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex justify-center gap-6">
         <Button type="submit">Cancelar</Button>
         <Button type="submit">Crear usuario</Button>
       </div>
+      <pre>
+        <code>{JSON.stringify(values, null, 2)}</code>
+      </pre>
     </form>
   );
 }

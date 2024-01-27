@@ -5,16 +5,22 @@ import Avatar from "@repo/ui/avatar";
 import Link from "../Link/link";
 import SignOutButton from "@/components/SignOutButton/SignOutButton";
 import { ROLES } from "@/constants/roles";
+import { hasManageUsersPermission } from "@/utils/permissions";
+import getSession from "@/utils/get-session";
 
 export default async function Navbar(): Promise<JSX.Element> {
-  const session: any = await getServerSession(authOptions);
+  const session = await getSession();
+
+  const canShowUsersMenuLink = hasManageUsersPermission(
+    session?.user.role || "USER"
+  );
 
   if (session) {
     return (
       <nav className="flex items-baseline gap-3">
         <Link href="/private">Inicio</Link>
         <Link href="/private/restaurants">Mis Restaurantes</Link>
-        {session.user.role === ROLES.ADMIN.ID && (
+        {canShowUsersMenuLink && (
           <Link href="/private/users">Mis Usuarios</Link>
         )}
         {session.user?.name && (

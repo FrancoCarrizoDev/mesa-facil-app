@@ -9,16 +9,17 @@ datasource db {
 }
 
 model User {
-  id          String       @id @unique
-  provider    String       @unique
-  email       String       @unique
-  password    String?
-  first_name  String
-  last_name   String?
-  restaurants Restaurant[]
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  user_role   String       @default("EMPLOYEE")
+  id           String       @id @unique
+  provider     String       @unique
+  email        String       @unique
+  password     String?
+  first_name   String
+  last_name    String?
+  restaurants  Restaurant[]
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+  user_role    String       @default("EMPLOYEE")
+  user_root_id String?      @map("userRootId")
 }
 
 model Restaurant {
@@ -27,8 +28,7 @@ model Restaurant {
   phone              String
   address            String
   attention_schedule AttentionSchedule[]
-  user               User                @relation(fields: [user_id], references: [id])
-  user_id            String              @map("userId")
+  users              User[]
   slug               String?             @unique
   created_at         DateTime            @default(now())
   updated_at         DateTime            @updatedAt

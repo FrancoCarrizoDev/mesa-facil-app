@@ -3,15 +3,29 @@ import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import UserForm from "./components/user-form";
+import getSession from "@/utils/get-session";
+import { hasManageUsersPermission } from "@/utils/permissions";
+import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";
 
-export default function Create() {
+export default async function Create() {
+  const session = await getSession();
+  const hasPermissionInPage = hasManageUsersPermission(
+    session?.user.role || "USER"
+  );
+
+  if (!hasPermissionInPage) {
+    return <h1>Acceso denegado - No tienes permisos</h1>;
+  }
+
+  const restaurantList = await getRestaurantListToUserAssing();
+
   return (
     <Section>
       <div className="mb-6">
         <SectionTitle>Crear Usuario</SectionTitle>
       </div>
       <SectionBody>
-        <UserForm />
+        <UserForm restaurantList={restaurantList} />
       </SectionBody>
     </Section>
   );
