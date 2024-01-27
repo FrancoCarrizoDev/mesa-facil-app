@@ -27,8 +27,8 @@ export interface UserDTO {
   id: string;
   provider: string;
   email: string;
-  firsName: string;
-  lastName: string | null;
+  firstName: string;
+  lastName: string;
   restaurants: UserRestaurantDTO[];
   createdAt: string;
   updatedAt: string;
