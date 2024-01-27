@@ -38,6 +38,12 @@ export const authOptions: NextAuthOptions = {
           );
         }
 
+        if (!existsUser.active) {
+          throw new Error(
+            "El usuario se encuentra inactivo, por favor contacte al administrador"
+          );
+        }
+
         const isValidPassword = await comparePasswords(
           credentials.password,
           existsUser.password
@@ -158,6 +164,14 @@ export const authOptions: NextAuthOptions = {
         throw new Error(
           encodeURI(
             "El usuario ya existe, pero se registro con usuario y contraseña, por favor inicie sesión con su usuario y contraseña."
+          )
+        );
+      }
+
+      if (!userDB.active) {
+        throw new Error(
+          encodeURI(
+            "El usuario ya existe, pero se encuentra inactivo, por favor contacte al administrador."
           )
         );
       }

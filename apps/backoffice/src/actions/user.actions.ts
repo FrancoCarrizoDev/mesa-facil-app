@@ -86,7 +86,7 @@ export async function createUser(user: CreateUserDTO) {
         first_name: user.firstName,
         last_name: user.lastName,
         provider: "credentials",
-        user_role: ROLES.ADMIN.ID,
+        user_role: user.role,
         user_root_id: session.user.id,
         restaurants: {
           connect: restaurants.map((restaurant) => ({
