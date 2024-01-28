@@ -31,7 +31,7 @@ const getInitialValues = (user?: UserDTO): CreateEdutUserFormValues => {
       email: "",
       password: "",
       password2: "",
-      role: ROLES.USER.ID,
+      role: ROLES.EMPLOYEE.ID,
       restaurantIds: [],
     };
   }

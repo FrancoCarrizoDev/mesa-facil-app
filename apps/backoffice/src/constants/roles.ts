@@ -1,11 +1,11 @@
-type Role = {
+interface Role {
   ID: string;
   DISPLAY_NAME: string;
-};
+}
 
 interface Roles {
   ADMIN: Role;
-  USER: Role;
+  EMPLOYEE: Role;
   MANAGER: Role;
 }
 
@@ -14,12 +14,12 @@ export const ROLES: Roles = {
     ID: "ADMIN",
     DISPLAY_NAME: "Administrador",
   },
-  USER: {
-    ID: "EMPLOYEE",
-    DISPLAY_NAME: "Empleado",
-  },
   MANAGER: {
     ID: "MANAGER",
     DISPLAY_NAME: "Gerente/Encargado",
+  },
+  EMPLOYEE: {
+    ID: "EMPLOYEE",
+    DISPLAY_NAME: "Empleado",
   },
 };

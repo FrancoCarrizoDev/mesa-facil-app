@@ -14,9 +14,9 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
     <Section>
       <div className="mb-6 flex justify-between">
         <SectionTitle>Mis Restaurantes</SectionTitle>
-        <div className="underline">
-          <Link href="/private/restaurants/create">Crear Restaurante</Link>
-        </div>
+        <Link underline="hover" href="/private/restaurants/create">
+          Crear Restaurante
+        </Link>
       </div>
       <SectionBody>
         <GridListContainer>

@@ -1,6 +1,7 @@
 "use client";
 import {
   AttentionScheduleDTO,
+  RestaurantDTOValidateFields,
   type RestaurantDTO,
 } from "@/models/restaurant.model";
 import { checkIfClosingTimeIsBeforeOpeningTime } from "@/utils/attention-schedule";
@@ -12,7 +13,15 @@ import AttentionSchedules from "./attention-schedules";
 import Button from "@repo/ui/button";
 import Input from "@repo/ui/input";
 import useForm from "@/hooks/use-form";
-import { createRestaurant } from "@/actions/restaurant.actions";
+import {
+  createRestaurant,
+  updateRestaurant,
+} from "@/actions/restaurant.actions";
+import {
+  validateRestaurantAddress,
+  validateRestaurantName,
+  validateRestaurantPhone,
+} from "@/utils/validations";
 
 const INITIAL_VALUES: RestaurantDTO = {
   id: "1",
@@ -28,18 +37,39 @@ export default function RestaurantForm({
 }: {
   restaurant?: RestaurantDTO;
 }): JSX.Element {
-  const { handleChange, handleSubmit, values } = useForm<RestaurantDTO>({
-    initialValues: restaurant || INITIAL_VALUES,
-    onSubmit: async (formValues) => {
-      try {
-        await createRestaurant(formValues);
-        toast("Restaurante creado con éxito", { type: "success" });
-        router.push("/private/restaurants");
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
+  const { handleChange, handleSubmit, values, errors } = useForm<RestaurantDTO>(
+    {
+      initialValues: restaurant || INITIAL_VALUES,
+      onSubmit: async (formValues) => {
+        try {
+          if (restaurant) {
+            await updateRestaurant(formValues);
+          } else {
+            await createRestaurant(formValues);
+          }
+          toast("Restaurante creado con éxito", { type: "success" });
+          router.push("/private/restaurants");
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      validationSchema: () => {
+        const errors: {
+          [K in keyof RestaurantDTOValidateFields]?: string;
+        } = {};
+        if (validateRestaurantName(values.name)) {
+          errors.name = "El nombre es requerido";
+        }
+        if (validateRestaurantAddress(values.address)) {
+          errors.address = "La dirección es requerida";
+        }
+        if (validateRestaurantPhone(values.phone)) {
+          errors.phone = "El teléfono es requerido";
+        }
+        return errors;
+      },
+    }
+  );
   const [attentionScheduleToEdit, setAttentionScheduleToEdit] = useState<
     AttentionScheduleDTO | undefined
   >();
@@ -174,18 +204,24 @@ export default function RestaurantForm({
           <div className="mb-6">
             <Input
               label="Nombre"
+              error={Boolean(errors.name)}
+              errorText={errors.name}
               onChange={(e) => {
                 handleChange({
                   name: e.target.value,
                 });
               }}
               placeholder="Delicattesen"
+              required
               value={values.name}
             />
           </div>
           <div className="mb-6">
             <Input
               label="Dirección"
+              error={Boolean(errors.address)}
+              errorText={errors.address}
+              required
               onChange={(e) => {
                 handleChange({
                   address: e.target.value,
@@ -197,6 +233,9 @@ export default function RestaurantForm({
           </div>
           <Input
             label="Teléfono de reservas"
+            error={Boolean(errors.phone)}
+            errorText={errors.phone}
+            required
             onChange={(e) => {
               handleChange({
                 phone: e.target.value,
@@ -295,7 +334,7 @@ export default function RestaurantForm({
         >
           Volver
         </Button>
-        <Button type="submit">CREAR</Button>
+        <Button type="submit">{restaurant ? "Editar" : "Crear"}</Button>
       </div>
     </form>
   );

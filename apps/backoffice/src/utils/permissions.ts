@@ -11,7 +11,7 @@ export function hasEditUserPermission(
     return true;
   }
 
-  if (userLoggedRole === ROLES.MANAGER.ID && userRole === ROLES.USER.ID) {
+  if (userLoggedRole === ROLES.MANAGER.ID && userRole === ROLES.EMPLOYEE.ID) {
     return true;
   }
 

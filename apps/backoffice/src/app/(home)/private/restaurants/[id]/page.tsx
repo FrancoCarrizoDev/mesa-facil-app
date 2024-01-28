@@ -22,7 +22,7 @@ export default async function RestaurantPage({
   return (
     <Section>
       <div className="mb-6">
-        <SectionTitle>Crear restaurante</SectionTitle>
+        <SectionTitle>Editar restaurante</SectionTitle>
       </div>
       <SectionBody>
         <RestaurantForm restaurant={restaurant} />

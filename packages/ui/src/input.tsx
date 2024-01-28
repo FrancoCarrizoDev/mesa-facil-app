@@ -5,6 +5,7 @@ interface InputProps {
   errorText?: string;
   label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
   placeholder?: string;
   type?: "text" | "email" | "password" | "time";
   value: string;
@@ -20,14 +21,21 @@ export default function Input({
   label,
   placeholder = "",
   type = "text",
+  required = false,
 }: InputProps): JSX.Element {
   return (
-    <div>
+    <div className="">
       <label
         className="ui-block ui-mb-2 ui-text-sm ui-font-medium ui-text-gray-900 "
         htmlFor={label}
       >
         {label}
+        {required && <span className="ui-text-red-600 ui-ms-1">*</span>}
+        {Boolean(error) && (
+          <span className=" ui-text-sm  ui-text-red-600 ui-font-medium">
+            {errorText}
+          </span>
+        )}
       </label>
       <input
         autoComplete={autoComplete}
@@ -40,12 +48,6 @@ export default function Input({
         type={type}
         value={value}
       />
-      {Boolean(error) && (
-        <p className="ui-mt-2 ui-text-sm ui-text-red-600">
-          <span className="ui-font-medium">{errorText}</span> Some error
-          message.
-        </p>
-      )}
     </div>
   );
 }
