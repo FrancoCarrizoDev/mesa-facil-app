@@ -114,6 +114,44 @@ export async function createRestaurant(restaurant: RestaurantDTO) {
   }
 }
 
+export async function updateRestaurant(restaurant: RestaurantDTO) {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("User not loggqged in");
+  }
+
+  try {
+    await prisma.restaurant.update({
+      where: {
+        id: restaurant.id,
+      },
+      data: {
+        name: restaurant.name,
+        address: restaurant.address,
+        phone: restaurant.phone,
+        attention_schedule: {
+          deleteMany: {},
+          createMany: {
+            data: restaurant.attentionSchedule.map((schedule) => ({
+              id: uuidv4(),
+              opening_hours: schedule.openingHours,
+              ending_hours: schedule.endingHours,
+              day_name: schedule.dayName,
+              day_number: schedule.dayNumber,
+            })),
+          },
+        },
+      },
+    });
+
+    revalidatePath("/private/restaurants");
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+}
+
 export async function getRestaurantById(
   id: string
 ): Promise<RestaurantDTO | null> {
@@ -129,7 +167,7 @@ export async function getRestaurantById(
         id: id,
         users: {
           some: {
-            id: id,
+            id: session.user.id,
           },
         },
       },
