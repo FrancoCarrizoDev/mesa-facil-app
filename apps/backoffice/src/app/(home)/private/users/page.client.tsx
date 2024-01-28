@@ -1,7 +1,7 @@
 "use client";
 import Link from "@/components/Link/link";
 import { ROLES } from "@/constants/roles";
-import { UserDTO } from "@/models/user.model";
+import { USER_STATUS, UserDTO } from "@/models/user.model";
 import Button from "@repo/ui/button";
 import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import { Tooltip } from "react-tooltip";
@@ -20,6 +20,7 @@ export default function UsersClientPage({
     { key: "lastName", header: "Apellido" },
     { key: "email", header: "Email" },
     { key: "userRole", header: "Rol" },
+    { key: "status", header: "Estado de acceso" },
     { key: "createdAt", header: "Fecha Creación" },
     { key: "updatedAt", header: "Fecha Actualización" },
     { key: "restaurants", header: "Restaurantes" },
@@ -47,6 +48,17 @@ export default function UsersClientPage({
       userRole: user.userRole,
       createdAt: new Date(user.createdAt).toLocaleString("es-ES"),
       updatedAt: new Date(user.updatedAt).toLocaleString("es-ES"),
+      status: (
+        <p
+          className={`font-medium ${
+            user.status === USER_STATUS.ACTIVE
+              ? "text-green-600"
+              : "text-red-600"
+          }`}
+        >
+          {user.status}
+        </p>
+      ),
       restaurants: user.restaurants
         .map((restaurant) => restaurant.name)
         .join(", "),

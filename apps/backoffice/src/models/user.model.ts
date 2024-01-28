@@ -28,6 +28,7 @@ export interface UserDTO {
   provider: string;
   email: string;
   firstName: string;
+  status: string;
   lastName: string;
   restaurants: UserRestaurantDTO[];
   createdAt: string;
@@ -39,3 +40,8 @@ export interface UserRestaurantDTO {
   id: string;
   name: string;
 }
+
+export const USER_STATUS = {
+  ACTIVE: "Activo",
+  INACTIVE: "Inactivo",
+};

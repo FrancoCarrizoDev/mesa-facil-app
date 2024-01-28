@@ -1,6 +1,11 @@
 "use server";
 
-import { CreateUserDTO, User, UserDTO } from "src/models/user.model";
+import {
+  CreateUserDTO,
+  USER_STATUS,
+  User,
+  UserDTO,
+} from "src/models/user.model";
 import prisma from "database";
 import { hashPassword } from "src/utils/bcrypt";
 import { v4 as uuidv4 } from "uuid";
@@ -133,6 +138,7 @@ export async function getUserList(): Promise<UserDTO[]> {
           created_at: true,
           updated_at: true,
           user_role: true,
+          active: true,
           restaurants: {
             select: {
               id: true,
@@ -149,6 +155,7 @@ export async function getUserList(): Promise<UserDTO[]> {
         firstName: user.first_name,
         lastName: user.last_name || "SIN DATOS",
         restaurants: user.restaurants,
+        status: user.active ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE,
         createdAt: user.created_at.toISOString(),
         updatedAt: user.updated_at.toISOString(),
         userRole: user.user_role,
@@ -187,6 +194,7 @@ export async function getUserList(): Promise<UserDTO[]> {
         created_at: true,
         updated_at: true,
         user_role: true,
+        active: true,
         restaurants: {
           select: {
             id: true,
@@ -203,6 +211,7 @@ export async function getUserList(): Promise<UserDTO[]> {
       firstName: user.first_name,
       lastName: user.last_name || "SIN DATOS",
       restaurants: user.restaurants,
+      status: user.active ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE,
       createdAt: user.created_at.toISOString(),
       updatedAt: user.updated_at.toISOString(),
       userRole: user.user_role,
