@@ -14,6 +14,7 @@ export default function useForm<T>({
   validationSchema,
 }: UseFormProps<T>): {
   values: T;
+  setErrors: (errors: { [key in keyof T]?: string }) => void;
   handleChange: (newValues: {
     [key in keyof T]?: T[key];
   }) => void;
@@ -48,5 +49,6 @@ export default function useForm<T>({
     handleChange,
     handleSubmit,
     errors,
+    setErrors,
   };
 }

@@ -9,6 +9,7 @@ interface InputProps {
   placeholder?: string;
   type?: "text" | "email" | "password" | "time";
   value: string;
+  onBlur?: () => void;
 }
 
 export default function Input({
@@ -22,6 +23,7 @@ export default function Input({
   placeholder = "",
   type = "text",
   required = false,
+  onBlur,
 }: InputProps): JSX.Element {
   return (
     <div className="">
@@ -47,6 +49,9 @@ export default function Input({
         placeholder={placeholder}
         type={type}
         value={value}
+        onBlur={(e) => {
+          if (onBlur) onBlur();
+        }}
       />
     </div>
   );

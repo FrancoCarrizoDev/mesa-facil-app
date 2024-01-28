@@ -37,8 +37,8 @@ export default function RestaurantForm({
 }: {
   restaurant?: RestaurantDTO;
 }): JSX.Element {
-  const { handleChange, handleSubmit, values, errors } = useForm<RestaurantDTO>(
-    {
+  const { handleChange, handleSubmit, values, errors, setErrors } =
+    useForm<RestaurantDTO>({
       initialValues: restaurant || INITIAL_VALUES,
       onSubmit: async (formValues) => {
         try {
@@ -57,19 +57,24 @@ export default function RestaurantForm({
         const errors: {
           [K in keyof RestaurantDTOValidateFields]?: string;
         } = {};
-        if (validateRestaurantName(values.name)) {
-          errors.name = "El nombre es requerido";
+
+        const validateName = validateRestaurantName(values.name);
+        if (validateName) {
+          errors.name = validateName;
         }
-        if (validateRestaurantAddress(values.address)) {
-          errors.address = "La dirección es requerida";
+
+        const validateAddress = validateRestaurantAddress(values.address);
+        if (validateAddress) {
+          errors.address = validateAddress;
         }
-        if (validateRestaurantPhone(values.phone)) {
-          errors.phone = "El teléfono es requerido";
+
+        const validatePhone = validateRestaurantPhone(values.phone);
+        if (validatePhone) {
+          errors.phone = validatePhone;
         }
         return errors;
       },
-    }
-  );
+    });
   const [attentionScheduleToEdit, setAttentionScheduleToEdit] = useState<
     AttentionScheduleDTO | undefined
   >();
@@ -214,6 +219,14 @@ export default function RestaurantForm({
               placeholder="Delicattesen"
               required
               value={values.name}
+              onBlur={() => {
+                const validateName = validateRestaurantName(values.name);
+                if (validateName) {
+                  setErrors({ name: validateName });
+                } else {
+                  setErrors({ name: "" });
+                }
+              }}
             />
           </div>
           <div className="mb-6">
@@ -226,6 +239,16 @@ export default function RestaurantForm({
                 handleChange({
                   address: e.target.value,
                 });
+              }}
+              onBlur={() => {
+                const validateAddress = validateRestaurantAddress(
+                  values.address
+                );
+                if (validateAddress) {
+                  setErrors({ address: validateAddress });
+                } else {
+                  setErrors({ address: "" });
+                }
               }}
               placeholder="Av. Siempre Viva 123"
               value={values.address}
@@ -240,6 +263,14 @@ export default function RestaurantForm({
               handleChange({
                 phone: e.target.value,
               });
+            }}
+            onBlur={() => {
+              const validatePhone = validateRestaurantPhone(values.phone);
+              if (validatePhone) {
+                setErrors({ phone: validatePhone });
+              } else {
+                setErrors({ phone: "" });
+              }
             }}
             placeholder="123-45-678"
             value={values.phone}
