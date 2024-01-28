@@ -3,4 +3,5 @@ export interface LinkProps {
   children: React.ReactNode;
   color?: "primary" | "secondary";
   underline?: "hover" | "none" | "always";
+  disabled?: boolean;
 }

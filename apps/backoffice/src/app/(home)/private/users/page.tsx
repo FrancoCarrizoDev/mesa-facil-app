@@ -10,6 +10,10 @@ import UsersClientPage from "./page.client";
 export default async function UsersPage() {
   const session = await getSession();
 
+  if (!session) {
+    return <div>Ups, no tienes permisos para ver esta página...</div>;
+  }
+
   const hasPermission = hasManageUsersPermission(session?.user?.role || "USER");
   if (!hasPermission) {
     return <div>Ups, no tienes permisos para ver esta página...</div>;
@@ -26,7 +30,10 @@ export default async function UsersPage() {
         </Link>
       </div>
       <SectionBody>
-        <UsersClientPage userList={userList} />
+        <UsersClientPage
+          userList={userList}
+          userLoggedRole={session?.user.role}
+        />
       </SectionBody>
     </Section>
   );

@@ -3,6 +3,7 @@ import HeaderContainer from "@/components/Header/header-container";
 import { BrandTitle } from "@repo/ui/brand-title";
 import { Suspense, type ReactNode } from "react";
 import ToastifyProvider from "@/providers/toastify-provider";
+import "react-tooltip/dist/react-tooltip.css";
 
 export default async function Layout({
   children,

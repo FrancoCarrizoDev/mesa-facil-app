@@ -24,6 +24,7 @@ export default function Page(): JSX.Element {
 
       if (res?.ok) {
         router.push("/private");
+        router.refresh();
       }
 
       if (res?.error) {
@@ -75,7 +76,7 @@ export default function Page(): JSX.Element {
             color="secondary"
             onClick={() =>
               signIn("google", {
-                callbackUrl: "http://localhost:3000/private",
+                callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/private",
               })
             }
           >

@@ -3,8 +3,6 @@ import CredentialProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "database";
 import { comparePasswords } from "./bcrypt";
-import { v4 as uuidv4 } from "uuid";
-import jwt from "jsonwebtoken";
 import { ROLES } from "@/constants/roles";
 
 export const authOptions: NextAuthOptions = {

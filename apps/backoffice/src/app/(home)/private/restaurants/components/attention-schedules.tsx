@@ -93,6 +93,7 @@ export default function AttentionSchedules({
         />
         <div className="flex items-center mt-auto pb-2">
           <Checkbox
+            id="repeatForOtherDays"
             checked={repeatForOtherDays}
             onChange={(e) => {
               setRepeatForOtherDays(e.target.checked);

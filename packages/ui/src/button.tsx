@@ -17,15 +17,15 @@ const SIZES = {
 };
 
 const VARIANTS = {
-  contained: "ui-bg-yellow-600 ui-text-white",
-  outlined: "ui-border ui-border-yellow-600 ui-text-yellow-600",
-  text: "ui-text-yellow-600",
+  contained: "ui-bg-yellow-600",
+  outlined: "ui-bg-transparent ui-border ui-border-yellow-600",
+  text: "ui-bg-transparent",
 };
 
 const COLORS = {
-  primary: "ui-bg-yellow-600 ui-text-white",
-  secondary: "ui-bg-gray-600 ui-text-white",
-  tertiary: "ui-bg-transparent ui-text-yellow-600",
+  primary: "ui-text-white",
+  secondary: "ui-text-white",
+  tertiary: "ui-text-yellow-600",
   danger: "ui-text-red-600",
 };
 

@@ -7,9 +7,11 @@ export default function SignOutButton() {
   return (
     <Button
       size="sm"
+      variant="text"
+      color="tertiary"
       onClick={() =>
         signOut({
-          callbackUrl: "http://localhost:3000/auth/login",
+          callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/auth/login",
         })
       }
     >

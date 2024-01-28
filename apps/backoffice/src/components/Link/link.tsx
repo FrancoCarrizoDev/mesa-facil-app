@@ -6,6 +6,7 @@ export default function Link({
   children,
   color = "primary",
   underline = "none",
+  disabled = false,
 }: LinkProps): JSX.Element {
   const colors = {
     primary: "text-gray-700 hover:text-primary-800",
@@ -20,7 +21,9 @@ export default function Link({
 
   return (
     <NextLink
-      className={`text-sm font-semibold ${colors[color]} ${underlineClasses[underline]} `}
+      className={`text-sm font-semibold ${colors[color]} ${
+        underlineClasses[underline]
+      } ${disabled ? "pointer-events-none text-gray-300" : ""} `}
       href={href}
     >
       {children}

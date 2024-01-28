@@ -107,6 +107,7 @@ export default function Page(): JSX.Element {
         </div>
         <div className="mb-6">
           <Checkbox
+            id="acceptTerms"
             checked={values.acceptTerms}
             onChange={(e) => {
               handleChange({
@@ -128,7 +129,7 @@ export default function Page(): JSX.Element {
           <Button
             onClick={() =>
               signIn("google", {
-                callbackUrl: "http://localhost:3000/auth/register",
+                callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/register",
               })
             }
             color="secondary"
