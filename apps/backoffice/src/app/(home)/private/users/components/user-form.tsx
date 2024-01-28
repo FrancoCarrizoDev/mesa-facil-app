@@ -6,12 +6,14 @@ import Button from "@repo/ui/button";
 import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
-import { Restaurant } from "../../../../../../models/restaurant.model";
-import { createUser } from "@/actions/user.actions";
+import { createUser, editUser } from "@/actions/user.actions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { UserDTO } from "@/models/user.model";
+import { useState } from "react";
 
-interface CreateUserFormValues {
+interface CreateEdutUserFormValues {
+  id?: string;
   name: string;
   lastName: string;
   email: string;
@@ -21,43 +23,77 @@ interface CreateUserFormValues {
   restaurantIds: string[];
 }
 
-export default function UserForm({
-  restaurantList,
-}: {
-  restaurantList: {
-    id: string;
-    name: string;
-  }[];
-}) {
-  const router = useRouter();
-  const { values, handleChange, handleSubmit } = useForm<CreateUserFormValues>({
-    initialValues: {
+const getInitialValues = (user?: UserDTO): CreateEdutUserFormValues => {
+  if (!user) {
+    return {
       name: "",
       lastName: "",
       email: "",
       password: "",
       password2: "",
-      role: ROLES.ADMIN.ID,
+      role: ROLES.USER.ID,
       restaurantIds: [],
-    },
-    onSubmit: async (formValues) => {
-      try {
-        await createUser({
-          email: formValues.email,
-          firstName: formValues.name,
-          lastName: formValues.lastName,
-          password: formValues.password,
-          role: formValues.role,
-          restaurantIds: formValues.restaurantIds,
-        });
-        toast.success("Usuario creado correctamente");
-        router.push("/private/users");
-      } catch (error) {
-        toast.error("Error al crear el usuario");
-        console.log(error);
-      }
-    },
-  });
+    };
+  }
+
+  return {
+    id: user.id,
+    name: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    password: "",
+    password2: "",
+    role: user.userRole,
+    restaurantIds: user.restaurants.map(({ id }) => id),
+  };
+};
+
+export default function UserForm({
+  restaurantList,
+  user,
+}: {
+  restaurantList: {
+    id: string;
+    name: string;
+  }[];
+  user?: UserDTO;
+}) {
+  const router = useRouter();
+  const { values, handleChange, handleSubmit } =
+    useForm<CreateEdutUserFormValues>({
+      initialValues: getInitialValues(user),
+      onSubmit: async (formValues) => {
+        try {
+          if (!user) {
+            await createUser({
+              email: formValues.email,
+              firstName: formValues.name,
+              lastName: formValues.lastName,
+              password: formValues.password,
+              role: formValues.role,
+              restaurantIds: formValues.restaurantIds,
+            });
+          } else {
+            await editUser({
+              id: user.id,
+              email: formValues.email,
+              firstName: formValues.name,
+              lastName: formValues.lastName,
+              password: formValues.password,
+              role: formValues.role,
+              restaurantIds: formValues.restaurantIds,
+              changePassword: formValues.password !== "",
+            });
+          }
+          toast.success("Usuario creado correctamente");
+          router.push("/private/users");
+        } catch (error) {
+          toast.error("Error al crear el usuario");
+          console.log(error);
+        }
+      },
+    });
+  const [changePassword, setChangePassword] = useState(false);
 
   return (
     <form className="w-full " onSubmit={handleSubmit}>
@@ -103,6 +139,7 @@ export default function UserForm({
           <div className="mb-6">
             <Input
               autoComplete="new-password"
+              disabled={!!user && !changePassword}
               label="Contraseña"
               onChange={(e) => {
                 handleChange({
@@ -115,6 +152,8 @@ export default function UserForm({
           </div>
           <div className="mb-6">
             <Input
+              autoComplete="new-password"
+              disabled={!!user && !changePassword}
               label="Repita la contraseña"
               onChange={(e) => {
                 handleChange({
@@ -125,6 +164,19 @@ export default function UserForm({
               value={values.password2}
             />
           </div>
+          {user && (
+            <div className="mb-6">
+              <Checkbox
+                id="passwordChange"
+                checked={changePassword}
+                onChange={(e) => {
+                  setChangePassword(e.target.checked);
+                }}
+              >
+                Cambiar contraseña
+              </Checkbox>
+            </div>
+          )}
         </div>
         <div className="w-full">
           <div className="mb-6">
@@ -175,8 +227,15 @@ export default function UserForm({
         </div>
       </div>
       <div className="flex justify-center gap-6">
-        <Button type="submit">Cancelar</Button>
-        <Button type="submit">Crear usuario</Button>
+        <Button
+          type="button"
+          onClick={() => {
+            router.push("/private/users");
+          }}
+        >
+          Cancelar
+        </Button>
+        <Button type="submit">{user ? "Editar" : "Crear"} usuario</Button>
       </div>
     </form>
   );

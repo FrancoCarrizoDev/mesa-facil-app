@@ -2,10 +2,10 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import UserForm from "./components/user-form";
 import getSession from "@/utils/get-session";
 import { hasManageUsersPermission } from "@/utils/permissions";
 import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";
+import UserForm from "../components/user-form";
 
 export default async function Create() {
   const session = await getSession();

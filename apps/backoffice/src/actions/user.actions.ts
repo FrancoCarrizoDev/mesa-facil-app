@@ -3,8 +3,10 @@
 import {
   CreateUserDTO,
   USER_STATUS,
+  UpdateUserDTO,
   User,
   UserDTO,
+  UserStatus,
 } from "src/models/user.model";
 import prisma from "database";
 import { hashPassword } from "src/utils/bcrypt";
@@ -146,6 +148,9 @@ export async function getUserList(): Promise<UserDTO[]> {
             },
           },
         },
+        orderBy: {
+          updated_at: "desc",
+        },
       });
 
       return users.map((user) => ({
@@ -202,6 +207,9 @@ export async function getUserList(): Promise<UserDTO[]> {
           },
         },
       },
+      orderBy: {
+        updated_at: "desc",
+      },
     });
 
     return users.map((user) => ({
@@ -216,6 +224,172 @@ export async function getUserList(): Promise<UserDTO[]> {
       updatedAt: user.updated_at.toISOString(),
       userRole: user.user_role,
     }));
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+}
+
+export async function editUserStatus({
+  id,
+  status,
+}: {
+  id: string;
+  status: (typeof USER_STATUS)[keyof typeof USER_STATUS];
+}) {
+  try {
+    const session = await getSession();
+    if (!session) throw new Error("User not logged in");
+
+    const hasPermission = hasManageUsersPermission(session.user.role);
+    if (!hasPermission) throw new Error("User not authorized");
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        active: status === USER_STATUS.ACTIVE,
+      },
+    });
+
+    revalidatePath("/private/users");
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+}
+
+export async function getUserById(id: string): Promise<UserDTO> {
+  try {
+    const session = await getSession();
+    if (!session) throw new Error("User not logged in");
+
+    const hasPermission = hasManageUsersPermission(session.user.role);
+    if (!hasPermission) throw new Error("User not authorized");
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        provider: true,
+        email: true,
+        first_name: true,
+        last_name: true,
+        created_at: true,
+        updated_at: true,
+        user_role: true,
+        active: true,
+        restaurants: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    return {
+      id: user.id,
+      provider: user.provider,
+      email: user.email,
+      firstName: user.first_name,
+      lastName: user.last_name || "SIN DATOS",
+      restaurants: user.restaurants,
+      status: user.active ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE,
+      createdAt: user.created_at.toISOString(),
+      updatedAt: user.updated_at.toISOString(),
+      userRole: user.user_role,
+    };
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error.message);
+  }
+}
+
+export async function editUser(user: UpdateUserDTO) {
+  try {
+    const session = await getSession();
+    if (!session) throw new Error("User not logged in");
+
+    const hasPermission = hasManageUsersPermission(session.user.role);
+    if (!hasPermission) throw new Error("User not authorized");
+
+    const userToUpdate = await prisma.user.findUnique({
+      where: {
+        id: user.id,
+      },
+    });
+
+    if (!userToUpdate) throw new Error("User not found");
+
+    const restaurants = await prisma.restaurant.findMany({
+      where: {
+        users: {
+          some: {
+            id: session.user.id,
+          },
+        },
+        id: {
+          in: user.restaurantIds,
+        },
+      },
+    });
+
+    if (restaurants.length !== user.restaurantIds.length) {
+      throw new Error("Restaurant not found");
+    }
+
+    if (user.changePassword) {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          email: user.email,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          user_role: user.role,
+          password: await hashPassword(user.password),
+          restaurants: {
+            connect: restaurants.map((restaurant) => ({
+              id: restaurant.id,
+            })),
+          },
+        },
+      });
+    } else {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          email: user.email,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          user_role: user.role,
+          restaurants: {
+            connect: restaurants.map((restaurant) => ({
+              id: restaurant.id,
+            })),
+          },
+        },
+      });
+    }
+
+    revalidatePath("/private/users");
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message);

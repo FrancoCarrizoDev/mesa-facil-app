@@ -2,3 +2,18 @@ import { ROLES } from "@/constants/roles";
 
 export const hasManageUsersPermission = (role: keyof typeof ROLES) =>
   role === ROLES.ADMIN.ID || role === ROLES.MANAGER.ID;
+
+export function hasEditUserPermission(
+  userLoggedRole: string,
+  userRole: string
+) {
+  if (userLoggedRole === ROLES.ADMIN.ID) {
+    return true;
+  }
+
+  if (userLoggedRole === ROLES.MANAGER.ID && userRole === ROLES.USER.ID) {
+    return true;
+  }
+
+  return false;
+}

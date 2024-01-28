@@ -6,6 +6,7 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import UsersClientPage from "./page.client";
+import { Suspense } from "react";
 
 export default async function UsersPage() {
   const session = await getSession();

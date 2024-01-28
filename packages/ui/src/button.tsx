@@ -4,10 +4,11 @@ export interface ButtonProps {
   children: ReactNode;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
-  color?: "primary" | "secondary" | "tertiary" | "danger";
+  color?: "primary" | "secondary" | "tertiary" | "danger" | "disabled";
   variant?: "contained" | "outlined" | "text";
   rounded?: "none" | "sm" | "md" | "lg" | "full" | "pill";
   size?: "sm" | "md" | "lg";
+  disabled?: boolean;
 }
 
 const SIZES = {
@@ -27,6 +28,7 @@ const COLORS = {
   secondary: "ui-text-white",
   tertiary: "ui-text-yellow-600",
   danger: "ui-text-red-600",
+  disabled: "ui-text-gray-300",
 };
 
 const ROUNDED = {
@@ -46,6 +48,7 @@ export default function Button({
   variant = "contained",
   rounded = "md",
   size = "md",
+  disabled = false,
 }: ButtonProps): JSX.Element {
   const sizeClass = SIZES[size];
   const colorClass = COLORS[color];
@@ -57,6 +60,7 @@ export default function Button({
       className={`ui-block ui-font-medium ${sizeClass} ${variantClass} ${colorClass}  ${roundedClass}  `}
       onClick={onClick}
       type={type}
+      disabled={disabled}
     >
       {children}
     </button>

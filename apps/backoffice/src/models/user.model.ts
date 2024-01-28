@@ -7,8 +7,13 @@ export interface CreateUserDTO {
   firstName: string;
   lastName: string;
   role?: string;
-  restaurantIds?: string[];
+  restaurantIds: string[];
   root_user_id?: string;
+}
+
+export interface UpdateUserDTO extends CreateUserDTO {
+  id: string;
+  changePassword: boolean;
 }
 
 export interface User {
@@ -41,7 +46,12 @@ export interface UserRestaurantDTO {
   name: string;
 }
 
-export const USER_STATUS = {
+export interface UserStatus {
+  ACTIVE: string;
+  INACTIVE: string;
+}
+
+export const USER_STATUS: UserStatus = {
   ACTIVE: "Activo",
   INACTIVE: "Inactivo",
 };

@@ -7,6 +7,9 @@ import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import { Tooltip } from "react-tooltip";
 
 import React from "react";
+import { editUserStatus } from "@/actions/user.actions";
+import { toast } from "react-toastify";
+import { hasEditUserPermission } from "@/utils/permissions";
 
 export default function UsersClientPage({
   userList,
@@ -26,18 +29,6 @@ export default function UsersClientPage({
     { key: "restaurants", header: "Restaurantes" },
     { key: "action", header: "Action" },
   ];
-
-  const hasEditUserPermission = (userLoggedRole: string, userRole: string) => {
-    if (userLoggedRole === ROLES.ADMIN.ID) {
-      return true;
-    }
-
-    if (userLoggedRole === ROLES.MANAGER.ID && userRole === ROLES.USER.ID) {
-      return true;
-    }
-
-    return false;
-  };
 
   const data: TableData[] = userList.map((user) => {
     const cantEditUser = !hasEditUserPermission(userLoggedRole, user.userRole);
@@ -72,13 +63,44 @@ export default function UsersClientPage({
             >
               Editar
             </Link>
-            {cantEditUser && <p id="my-anchor-element">❔</p>}
           </div>
-          {user.userRole !== ROLES.ADMIN.ID && (
-            <Button variant="text" color="danger" onClick={() => {}}>
+
+          {user.status === USER_STATUS.ACTIVE ? (
+            <Button
+              variant="text"
+              color={cantEditUser ? "disabled" : "danger"}
+              onClick={async () => {
+                await editUserStatus({
+                  id: user.id,
+                  status: USER_STATUS.INACTIVE,
+                });
+                setTimeout(() => {
+                  toast.success("Usuario bloqueado con éxito");
+                }, 0);
+              }}
+              disabled={cantEditUser}
+            >
               Bloquear
             </Button>
+          ) : (
+            <Button
+              variant="text"
+              color={cantEditUser ? "disabled" : "tertiary"}
+              onClick={async () => {
+                await editUserStatus({
+                  id: user.id,
+                  status: USER_STATUS.ACTIVE,
+                });
+                setTimeout(() => {
+                  toast.success("Usuario desbloqueado con éxito");
+                }, 0);
+              }}
+              disabled={cantEditUser}
+            >
+              Desbloquear
+            </Button>
           )}
+          {cantEditUser && <p id="my-anchor-element">❔</p>}
         </div>
       ),
     };
