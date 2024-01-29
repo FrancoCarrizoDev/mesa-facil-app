@@ -6,6 +6,8 @@ import Button from "@repo/ui/button";
 import Input from "@repo/ui/input";
 import Link from "@/components/Link/link";
 import useForm from "@/hooks/use-form";
+import Image from "next/image";
+import styles from "./styles.module.css";
 
 export default function Page(): JSX.Element {
   const router = useRouter();
@@ -34,56 +36,74 @@ export default function Page(): JSX.Element {
   });
 
   return (
-    <div className="grid place-content-center">
-      <div className="pt-10 mb-6">
-        <h1 className="text-2xl font-bold text-center">Ingresar</h1>
+    <div className="h-screen grid grid-cols-2">
+      <div className="flex flex-col px-20 pb-12 justify-center bg-white shadow-md">
+        <div className=" mb-6">
+          <h1 className="text-2xl font-bold">Ingresar</h1>
+        </div>
+        <form className="flex flex-col " onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <Input
+              label="Email"
+              onChange={(e) => {
+                handleChange({
+                  email: e.target.value,
+                });
+              }}
+              type="email"
+              value={values.email}
+            />
+          </div>
+          <div className="mb-2">
+            <Input
+              label="Contraseña"
+              onChange={(e) => {
+                handleChange({
+                  password: e.target.value,
+                });
+              }}
+              type="password"
+              value={values.password}
+            />
+          </div>
+          <p className="mb-1 text-sm">
+            ¿No tienes cuenta? <Link href="/auth/register">Regístrate</Link>
+          </p>
+          <p className="mb-6 text-sm">
+            ¿Olvidaste tu contraseña?{" "}
+            <Link href="/auth/register">Haz clic aqui</Link>
+          </p>
+          {error && <div className="text-red-500 text-sm mb-6 ">{error}</div>}
+          <div className="flex flex-col gap-3">
+            <Button type="submit" size="md">
+              Ingresar
+            </Button>
+            <Button
+              size="md"
+              color="tertiary"
+              variant="outlined"
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/private",
+                })
+              }
+            >
+              <div className="flex justify-center items-center gap-3">
+                Ingresar con google{" "}
+                <Image
+                  src="/google-icon.png"
+                  width={30}
+                  height={30}
+                  alt="google-icon"
+                />
+              </div>
+            </Button>
+          </div>
+        </form>
       </div>
-      <form className="flex flex-col " onSubmit={handleSubmit}>
-        <div className="mb-6">
-          <Input
-            label="Email"
-            onChange={(e) => {
-              handleChange({
-                email: e.target.value,
-              });
-            }}
-            type="email"
-            value={values.email}
-          />
-        </div>
-        <div className="mb-2">
-          <Input
-            label="Contraseña"
-            onChange={(e) => {
-              handleChange({
-                password: e.target.value,
-              });
-            }}
-            type="password"
-            value={values.password}
-          />
-        </div>
-        <p className="mb-6 text-sm">
-          ¿No tienes cuenta? <Link href="/auth/register">Regístrate</Link>
-        </p>
-        {error && <div className="text-red-500 text-sm mb-6 ">{error}</div>}
-        <div className="flex flex-col gap-3">
-          <Button type="submit" size="md">
-            Ingresar
-          </Button>
-          <Button
-            size="md"
-            color="secondary"
-            onClick={() =>
-              signIn("google", {
-                callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/private",
-              })
-            }
-          >
-            Ingresar con google
-          </Button>
-        </div>
-      </form>
+      <div className={styles["image-container"]}>
+        <Image fill src="/mesa_facil.jpg" alt="logo" />
+      </div>
     </div>
   );
 }
