@@ -6,6 +6,11 @@ import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
 import useForm from "@/hooks/use-form";
 import { createRootUser } from "@/actions/user.actions";
+import Section from "@repo/ui/section";
+import SectionTitle from "@repo/ui/section-title";
+import SectionBody from "@repo/ui/section-body";
+import Image from "next/image";
+import Link from "@/components/Link/link";
 
 export default function Page(): JSX.Element {
   const router = useRouter();
@@ -24,6 +29,7 @@ export default function Page(): JSX.Element {
         firstName: formValues.name,
         lastName: formValues.lastName,
         password: formValues.password,
+        restaurantIds: [],
       });
 
       if (newUser) {
@@ -38,106 +44,127 @@ export default function Page(): JSX.Element {
   });
 
   return (
-    <div className="grid place-content-center">
-      <div className="pt-10 mb-6">
-        <h1 className="text-2xl font-bold text-center">Registrarse</h1>
-      </div>
-      <form className="flex flex-col " onSubmit={handleSubmit}>
-        <div className="mb-6">
-          <Input
-            label="Nombre"
-            onChange={(e) => {
-              handleChange({
-                name: e.target.value,
-              });
-            }}
-            type="text"
-            value={values.name}
-          />
+    <div className="grid place-content-center min-h-screen">
+      <Section>
+        <div className="text-center">
+          <SectionTitle>Registrarse</SectionTitle>
         </div>
-        <div className="mb-6">
-          <Input
-            label="Apellido"
-            onChange={(e) => {
-              handleChange({
-                lastName: e.target.value,
-              });
-            }}
-            type="text"
-            value={values.lastName}
-          />
-        </div>
-        <div className="mb-6">
-          <Input
-            autoComplete="new-password"
-            label="Email"
-            onChange={(e) => {
-              handleChange({
-                email: e.target.value,
-              });
-            }}
-            type="email"
-            value={values.email}
-          />
-        </div>
-        <div className="mb-6">
-          <Input
-            autoComplete="new-password"
-            label="Contraseña"
-            onChange={(e) => {
-              handleChange({
-                password: e.target.value,
-              });
-            }}
-            type="password"
-            value={values.password}
-          />
-        </div>
-        <div className="mb-6">
-          <Input
-            label="Repita la contraseña"
-            onChange={(e) => {
-              handleChange({
-                password2: e.target.value,
-              });
-            }}
-            type="password"
-            value={values.password2}
-          />
-        </div>
-        <div className="mb-6">
-          <Checkbox
-            id="acceptTerms"
-            checked={values.acceptTerms}
-            onChange={(e) => {
-              handleChange({
-                acceptTerms: e.target.checked,
-              });
-            }}
-          >
-            I agree with the{" "}
-            <a href="#" className="text-blue-600 ">
-              terms and conditions
-            </a>
-            .
-          </Checkbox>
-        </div>
-        <div className=" mx-auto">
-          <Button type="submit">Registrarse</Button>
-        </div>
-        <div className=" mx-auto mt-3">
-          <Button
-            onClick={() =>
-              signIn("google", {
-                callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/register",
-              })
-            }
-            color="secondary"
-          >
-            Registrarme con google
-          </Button>
-        </div>
-      </form>
+        <SectionBody>
+          <div className="w-full flex flex-col items-center">
+            <form className="flex flex-col " onSubmit={handleSubmit}>
+              <div className="mb-6">
+                <Input
+                  label="Nombre"
+                  onChange={(e) => {
+                    handleChange({
+                      name: e.target.value,
+                    });
+                  }}
+                  type="text"
+                  value={values.name}
+                />
+              </div>
+              <div className="mb-6">
+                <Input
+                  label="Apellido"
+                  onChange={(e) => {
+                    handleChange({
+                      lastName: e.target.value,
+                    });
+                  }}
+                  type="text"
+                  value={values.lastName}
+                />
+              </div>
+              <div className="mb-6">
+                <Input
+                  autoComplete="new-password"
+                  label="Email"
+                  onChange={(e) => {
+                    handleChange({
+                      email: e.target.value,
+                    });
+                  }}
+                  type="email"
+                  value={values.email}
+                />
+              </div>
+              <div className="mb-6">
+                <Input
+                  autoComplete="new-password"
+                  label="Contraseña"
+                  onChange={(e) => {
+                    handleChange({
+                      password: e.target.value,
+                    });
+                  }}
+                  type="password"
+                  value={values.password}
+                />
+              </div>
+              <div className="mb-6">
+                <Input
+                  label="Repita la contraseña"
+                  onChange={(e) => {
+                    handleChange({
+                      password2: e.target.value,
+                    });
+                  }}
+                  type="password"
+                  value={values.password2}
+                />
+              </div>
+              <div className="mb-6">
+                <Checkbox
+                  id="acceptTerms"
+                  checked={values.acceptTerms}
+                  onChange={(e) => {
+                    handleChange({
+                      acceptTerms: e.target.checked,
+                    });
+                  }}
+                >
+                  I agree with the{" "}
+                  <a href="#" className="text-blue-600 ">
+                    terms and conditions
+                  </a>
+                  .
+                </Checkbox>
+              </div>
+              <p className="mb-6 text-sm">
+                ¿Ya tienes cuenta? <Link href="/auth/login">Ingresar</Link>
+              </p>
+              <div className=" mx-auto">
+                <Button type="submit" size="sm">
+                  Registrarse
+                </Button>
+              </div>
+              <div className=" mx-auto mt-3">
+                <Button
+                  onClick={() =>
+                    signIn("google", {
+                      callbackUrl:
+                        process.env.NEXT_PUBLIC_BASE_URL + "/register",
+                    })
+                  }
+                  color="secondary"
+                  size="sm"
+                >
+                  <div className="flex justify-center items-center gap-3">
+                    Registrarme con google
+                    <Image
+                      src="/google-icon.png"
+                      width={30}
+                      height={30}
+                      alt="google-icon"
+                    />
+                  </div>
+                </Button>
+              </div>
+            </form>
+          </div>
+        </SectionBody>
+      </Section>
     </div>
   );
 }
