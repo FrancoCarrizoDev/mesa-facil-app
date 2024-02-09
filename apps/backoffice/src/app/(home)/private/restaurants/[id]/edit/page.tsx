@@ -3,8 +3,8 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import RestaurantForm from "../components/restaurant-form";
 import { notFound } from "next/navigation";
+import RestaurantForm from "../../components/restaurant-form";
 
 interface Props {
   readonly params: {
@@ -22,9 +22,11 @@ export default async function RestaurantPage({
   return (
     <Section>
       <div className="mb-6">
-        <SectionTitle>{restaurant.name}</SectionTitle>
+        <SectionTitle>Editar restaurante</SectionTitle>
       </div>
-      <SectionBody>Restaurant Section</SectionBody>
+      <SectionBody>
+        <RestaurantForm restaurant={restaurant} />
+      </SectionBody>
     </Section>
   );
 }

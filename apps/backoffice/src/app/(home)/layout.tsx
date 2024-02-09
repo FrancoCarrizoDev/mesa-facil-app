@@ -4,6 +4,7 @@ import { BrandTitle } from "@repo/ui/brand-title";
 import { Suspense, type ReactNode } from "react";
 import ToastifyProvider from "@/providers/toastify-provider";
 import "react-tooltip/dist/react-tooltip.css";
+import Breadcrums from "@/components/Breadcrums/breadcrums";
 
 export default async function Layout({
   children,
@@ -19,7 +20,12 @@ export default async function Layout({
             <Navbar />
           </Suspense>
         </HeaderContainer>
-        <div className="p-5">{children}</div>
+        <div className="p-5">
+          <div className="mb-1">
+            <Breadcrums />
+          </div>
+          {children}
+        </div>
       </ToastifyProvider>
     </div>
   );

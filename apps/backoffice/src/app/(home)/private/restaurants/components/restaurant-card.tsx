@@ -19,7 +19,7 @@ export default function RestaurantCard({
             </h5>
           </a>
         </div>
-        <Link color="secondary" href={`/private/restaurants/${id}`}>
+        <Link color="secondary" href={`/private/restaurants/${id}/edit`}>
           Editar
         </Link>
       </div>
@@ -53,7 +53,7 @@ export default function RestaurantCard({
         </p>
       </div>
       <div className="mt-auto flex justify-around">
-        <Link color="secondary" href={`/reserve/${slug}`}>
+        <Link color="secondary" href={`/private/restaurants/${id}`}>
           Gestionar
         </Link>
         <Link color="secondary" href={`/reserve/${slug}`}>
