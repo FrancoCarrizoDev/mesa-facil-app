@@ -6,18 +6,24 @@ import restaurantList from "../../components/restaurant-list";
 import UserForm from "../components/user-form";
 import { hasEditUserPermission } from "@/utils/permissions";
 import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";
-import { getUserById } from "@/actions/user.actions";
+import { getUserByEmail } from "@/actions/user.actions";
 import { notFound } from "next/navigation";
 import getSession from "@/utils/get-session";
 
-export default async function UserPage({ params }: { params: { id: string } }) {
+export default async function UserPage({
+  params,
+}: {
+  params: { email: string };
+}) {
   const session = await getSession();
 
   if (!session) {
     return <div>Ups, no tienes permisos para ver esta página...</div>;
   }
 
-  const userToEdit = await getUserById(params.id);
+  console.log({ params });
+
+  const userToEdit = await getUserByEmail(decodeURIComponent(params.email));
 
   if (!userToEdit) {
     return notFound();

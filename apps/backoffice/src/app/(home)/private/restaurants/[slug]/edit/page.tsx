@@ -1,4 +1,4 @@
-import { getRestaurantById } from "@/actions/restaurant.actions";
+import { getRestaurantBySlug } from "@/actions/restaurant.actions";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
@@ -8,14 +8,14 @@ import RestaurantForm from "../../components/restaurant-form";
 
 interface Props {
   readonly params: {
-    id: string;
+    slug: string;
   };
 }
 
 export default async function RestaurantPage({
   params,
 }: Props): Promise<JSX.Element> {
-  const restaurant = await getRestaurantById(params.id);
+  const restaurant = await getRestaurantBySlug(params.slug);
 
   if (!restaurant) return notFound();
 

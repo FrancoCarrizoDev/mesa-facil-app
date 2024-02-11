@@ -268,7 +268,7 @@ export async function editUserStatus({
   }
 }
 
-export async function getUserById(id: string): Promise<UserDTO> {
+export async function getUserByEmail(email: string): Promise<UserDTO> {
   try {
     const session = await getSession();
     if (!session) throw new Error("User not logged in");
@@ -278,7 +278,7 @@ export async function getUserById(id: string): Promise<UserDTO> {
 
     const user = await prisma.user.findUnique({
       where: {
-        id,
+        email: email,
       },
       select: {
         id: true,

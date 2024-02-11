@@ -23,6 +23,7 @@ model User {
   active       Boolean      @default(true)
 
   @@index([user_root_id], name: "user_root_id")
+  @@index([email], name: "user_email")
 }
 
 model Restaurant {

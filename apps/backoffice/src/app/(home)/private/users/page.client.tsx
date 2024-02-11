@@ -59,7 +59,7 @@ export default function UsersClientPage({
             <Link
               disabled={cantEditUser}
               underline="hover"
-              href={`/private/users/${user.id}`}
+              href={`/private/users/${user.email}`}
             >
               Editar
             </Link>

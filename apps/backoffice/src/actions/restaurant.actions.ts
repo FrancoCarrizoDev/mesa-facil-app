@@ -152,8 +152,8 @@ export async function updateRestaurant(restaurant: RestaurantDTO) {
   }
 }
 
-export async function getRestaurantById(
-  id: string
+export async function getRestaurantBySlug(
+  slug: string
 ): Promise<RestaurantDTO | null> {
   const session = await getSession();
 
@@ -164,7 +164,7 @@ export async function getRestaurantById(
   try {
     const restaurant = await prisma.restaurant.findUnique({
       where: {
-        id: id,
+        slug: slug,
         users: {
           some: {
             id: session.user.id,

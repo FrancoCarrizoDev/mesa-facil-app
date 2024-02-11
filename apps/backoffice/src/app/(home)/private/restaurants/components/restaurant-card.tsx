@@ -19,7 +19,7 @@ export default function RestaurantCard({
             </h5>
           </a>
         </div>
-        <Link color="secondary" href={`/private/restaurants/${id}/edit`}>
+        <Link color="secondary" href={`/private/restaurants/${slug}/edit`}>
           Editar
         </Link>
       </div>

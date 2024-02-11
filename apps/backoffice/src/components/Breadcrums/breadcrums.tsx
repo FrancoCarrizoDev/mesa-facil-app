@@ -6,7 +6,6 @@ import Link from "../Link/link";
 export default function Breadcrums() {
   const pathname = usePathname();
   const paths = pathname.split("/").filter((path) => path !== "");
-  paths.pop();
 
   return (
     <div className="flex">
