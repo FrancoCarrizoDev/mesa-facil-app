@@ -53,7 +53,7 @@ export default function RestaurantCard({
         </p>
       </div>
       <div className="mt-auto flex justify-around">
-        <Link color="secondary" href={`/private/restaurants/${id}`}>
+        <Link color="secondary" href={`/private/restaurants/${slug}`}>
           Gestionar
         </Link>
         <Link color="secondary" href={`/reserve/${slug}`}>
