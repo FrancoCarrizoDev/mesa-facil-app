@@ -26,9 +26,16 @@ export default async function RestaurantPage({
     <Section>
       <div className="mb-6 flex justify-between">
         <SectionTitle>{restaurant.name}</SectionTitle>
-        <Link href={`/private/restaurants/${params.slug}/reservations/create`}>
-          Crear reserva
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href={`/private/restaurants/${params.slug}/reservations/create`}
+          >
+            Crear reserva
+          </Link>
+          <Link href={`/private/restaurants/${params.slug}/reviews`}>
+            Ver reseñas
+          </Link>
+        </div>
       </div>
       <SectionBody>Restaurant Section</SectionBody>
     </Section>
