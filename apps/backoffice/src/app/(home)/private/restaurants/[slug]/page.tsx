@@ -5,6 +5,7 @@ import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import RestaurantForm from "../components/restaurant-form";
 import { notFound } from "next/navigation";
+import Link from "@/components/Link/link";
 
 interface Props {
   readonly params: {
@@ -23,8 +24,11 @@ export default async function RestaurantPage({
 
   return (
     <Section>
-      <div className="mb-6">
+      <div className="mb-6 flex justify-between">
         <SectionTitle>{restaurant.name}</SectionTitle>
+        <Link href={`/private/restaurants/${params.slug}/reservations/create`}>
+          Crear reserva
+        </Link>
       </div>
       <SectionBody>Restaurant Section</SectionBody>
     </Section>
