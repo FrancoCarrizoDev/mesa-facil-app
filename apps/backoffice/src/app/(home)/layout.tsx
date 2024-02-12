@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar/navbar";
+import PrivateNavbar from "@/components/Navbar/private-navbar";
 import HeaderContainer from "@/components/Header/header-container";
 import { BrandTitle } from "@repo/ui/brand-title";
 import { Suspense, type ReactNode } from "react";
@@ -17,7 +17,7 @@ export default async function Layout({
         <HeaderContainer>
           <BrandTitle />
           <Suspense fallback={<div>Cargando...</div>}>
-            <Navbar />
+            <PrivateNavbar />
           </Suspense>
         </HeaderContainer>
         <div className="p-5">

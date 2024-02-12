@@ -35,6 +35,9 @@ export default async function RestaurantPage({
           <Link href={`/private/restaurants/${params.slug}/reviews`}>
             Ver reseñas
           </Link>
+          <Link href={`/private/restaurants/${params.slug}/reviews`}>
+            Cear sorteo
+          </Link>
         </div>
       </div>
       <SectionBody>Restaurant Section</SectionBody>

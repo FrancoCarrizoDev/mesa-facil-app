@@ -8,11 +8,11 @@ import { ROLES } from "@/constants/roles";
 import { hasManageUsersPermission } from "@/utils/permissions";
 import getSession from "@/utils/get-session";
 
-export default async function Navbar(): Promise<JSX.Element> {
+export default async function PrivateNavbar(): Promise<JSX.Element> {
   const session = await getSession();
 
   const canShowUsersMenuLink = hasManageUsersPermission(
-    session?.user.role || "USER"
+    session?.user.role || "EMPLOYEE"
   );
 
   if (session) {
