@@ -1,13 +1,13 @@
 module.exports = {
-  extends: ["@repo/eslint-config/next.js"],
+  extends: ["@repo/eslint-config/next.js","plugin:import/errors",
+  "plugin:import/warnings",
+  "plugin:import/typescript"],
   settings: {
     "import/resolver": {
-      "alias": {
-        "map": [
-          ["@components", "./components/*"],
-        ],
-        "extensions": [".ts", ".tsx"]
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
-  }
+    
+  },
 };
