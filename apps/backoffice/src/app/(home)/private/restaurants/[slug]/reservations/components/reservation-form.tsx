@@ -47,12 +47,13 @@ export default function ReservationForm({
   const [diner, setDiner] = React.useState<string>("");
   const [dinerData, setDinerData] = React.useState<DinerDTO[]>([]);
   const dinerDebounce = useDebounce(diner, 1000);
-
   useEffect(() => {
     const getDinerByEmail = async () => {
       if (dinerDebounce) {
         const diner = await getDinnerByEmail(dinerDebounce);
         setDinerData(diner);
+      } else {
+        setDinerData([]);
       }
     };
     getDinerByEmail();
@@ -74,7 +75,6 @@ export default function ReservationForm({
                 setDiner(e.target.value);
               }}
               onSelect={(val) => {
-                debugger;
                 const diner = dinerData.find((diner) => diner.id === val.id);
                 if (diner) {
                   handleChange({
@@ -86,6 +86,7 @@ export default function ReservationForm({
               value={diner}
               displayProperty="email"
               label="Diner"
+              placeholder="Buscar por email"
             />
           </div>
           <div className="mb-6">

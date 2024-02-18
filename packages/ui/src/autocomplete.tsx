@@ -1,3 +1,5 @@
+import React, { useState, useRef, useEffect } from "react";
+
 interface AutocompleteProps<T> {
   items: T[];
   onSelect: (value: T) => void;
@@ -23,8 +25,27 @@ export default function Autocomplete<T>({
   displayProperty,
   placeholder = "",
 }: AutocompleteProps<T>): JSX.Element {
+  const [showList, setShowList] = useState(false);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent): void {
+      if (
+        autocompleteRef.current &&
+        !autocompleteRef.current.contains(event.target as Node)
+      ) {
+        setShowList(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div>
+    <div ref={autocompleteRef}>
       <label
         className="ui-block ui-mb-2 ui-text-sm ui-font-medium ui-text-gray-900 "
         htmlFor={label}
@@ -37,32 +58,48 @@ export default function Autocomplete<T>({
           </span>
         )}
       </label>
-      <input
-        className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400"
-        onChange={onChange}
-        placeholder={placeholder}
-        type="text"
-        value={value}
-      />
-      <ul className="ui-bg-white ui-block ui-w-full  ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400">
-        {items.map((item, i) => (
-          <li
-            className="ui-cursor-pointer ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all ui-rounded-lg hover:ui-bg-gray-100"
-            key={i}
-            onClick={() => {
-              onSelect(item);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                onSelect(item);
-              }
-            }}
-            role="presentation"
-          >
-            {item[displayProperty] as string}
-          </li>
-        ))}
-      </ul>
+      <div className="relative">
+        <input
+          autoComplete="new-password"
+          className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400"
+          onChange={onChange}
+          onFocus={() => {
+            setShowList(true);
+          }}
+          placeholder={placeholder}
+          type="text"
+          value={value}
+        />
+        {showList && (
+          <ul className="ui-bg-white ui-absolute ui-z-10 ui-min-w-[240px] ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400">
+            {items.length ? (
+              items.map((item, i) => (
+                <li
+                  className="ui-cursor-pointer ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all ui-rounded-lg hover:ui-bg-gray-100"
+                  key={i}
+                  onClick={() => {
+                    onSelect(item);
+                    setShowList(false);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      onSelect(item);
+                      setShowList(false);
+                    }
+                  }}
+                  role="presentation"
+                >
+                  {item[displayProperty] as string}
+                </li>
+              ))
+            ) : (
+              <li className="ui-cursor-pointer ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all ui-rounded-lg hover:ui-bg-gray-100">
+                No results
+              </li>
+            )}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
