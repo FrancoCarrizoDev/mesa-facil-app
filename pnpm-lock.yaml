@@ -152,9 +152,11 @@ importers:
       '@repo/tailwind-config': workspace:*
       '@repo/typescript-config': workspace:*
       '@types/react': ^18.2.46
+      '@types/react-autocomplete': ^1.8.10
       autoprefixer: ^10.4.16
       postcss: ^8.4.33
       react: ^18.2.0
+      react-autocomplete: ^1.8.1
       tailwindcss: ^3.4.0
       tsup: ^8.0.1
       typescript: ^5.3.3
@@ -163,9 +165,11 @@ importers:
       '@repo/tailwind-config': link:../tailwind-config
       '@repo/typescript-config': link:../config-typescript
       '@types/react': 18.2.47
+      '@types/react-autocomplete': 1.8.10
       autoprefixer: 10.4.16_postcss@8.4.33
       postcss: 8.4.33
       react: 18.2.0
+      react-autocomplete: 1.8.1_jnbmergxldlwssobus342vza4q
       tailwindcss: 3.4.1
       tsup: 8.0.1_lgrslf2l3qpqnpkzmtppzds4ay
       typescript: 5.3.3
@@ -1095,6 +1099,12 @@ packages:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
     dev: true
 
+  /@types/react-autocomplete/1.8.10:
+    resolution: {integrity: sha512-3pL4pHLKIKuwDArUfCg8y697tsRSNyowofZGpV8vYKoGc5Jws0jrnzqTgdUHcZew0g0UxcFO1zeXD7LG0WSggg==}
+    dependencies:
+      '@types/react': 18.2.47
+    dev: true
+
   /@types/react-datepicker/4.19.5_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-tKpuj19p9T4sBQm3Bw13CPuhalo4CFOe/LcSUGJ5z6DmHoiBX3uq33iMKePeSEq7OxyU8O1rh5emAm92nyXZLg==}
     dependencies:
@@ -1951,6 +1961,10 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       esutils: 2.0.3
+    dev: true
+
+  /dom-scroll-into-view/1.0.1:
+    resolution: {integrity: sha512-1Dmy6uH1vRcm2+Lvggyrlc04cMh+mr+VA+qcgs085hAEZp+v+6NT/xhRjfc6vRc7965sCSDdQcw063VkG+eNmQ==}
     dev: true
 
   /dotenv/16.0.3:
@@ -4050,6 +4064,18 @@ packages:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
 
+  /react-autocomplete/1.8.1_jnbmergxldlwssobus342vza4q:
+    resolution: {integrity: sha512-YQGVN5POdcI3G89wUVWnJhk9rLF6JeB6Ik6xnNpfvSMG4tJkksBzqOE4mkFNGqEz+2AaQw13xNmVXresg9E3zg==}
+    peerDependencies:
+      react: ^0.14.7 || ^15.0.0-0 || ^16.0.0-0
+      react-dom: ^0.14.7 || ^15.0.0-0 || ^16.0.0-0
+    dependencies:
+      dom-scroll-into-view: 1.0.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 16.14.0_react@18.2.0
+    dev: true
+
   /react-datepicker/4.25.0_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-zB7CSi44SJ0sqo8hUQ3BF1saE/knn7u25qEMTO1CQGofY1VAKahO8k9drZtp0cfW1DMfoYLR3uSY1/uMvbEzbg==}
     peerDependencies:
@@ -4065,6 +4091,18 @@ packages:
       react-onclickoutside: 6.13.0_biqbaboplfbrettd7655fr4n2y
       react-popper: 2.3.0_i7i4ysnnic4ssxw6fnjnyxwzui
     dev: false
+
+  /react-dom/16.14.0_react@18.2.0:
+    resolution: {integrity: sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==}
+    peerDependencies:
+      react: ^16.14.0
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      scheduler: 0.19.1
+    dev: true
 
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
@@ -4324,6 +4362,13 @@ packages:
       call-bind: 1.0.5
       get-intrinsic: 1.2.2
       is-regex: 1.1.4
+    dev: true
+
+  /scheduler/0.19.1:
+    resolution: {integrity: sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
     dev: true
 
   /scheduler/0.23.0:

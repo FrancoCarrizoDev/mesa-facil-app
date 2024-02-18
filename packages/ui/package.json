@@ -17,7 +17,8 @@
     "./section": "./src/section.tsx",
     "./grid-list-container": "./src/grid-list-container.tsx",
     "./select": "./src/select.tsx",
-    "./data-table": "./src/data-table.tsx"
+    "./data-table": "./src/data-table.tsx",
+    "./autocomplete": "./src/autocomplete.tsx"
   },
   "license": "MIT",
   "scripts": {

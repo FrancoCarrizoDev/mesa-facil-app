@@ -1,11 +1,15 @@
 "use client";
 import { RestaurantDTO } from "@/models/restaurant.model";
-import DatePicker from "@/components/DatePicker/date-picker";
-import React from "react";
+import React, { useEffect } from "react";
 import useDinnerReservation from "@/hooks/useDinnerReservation";
 import useForm from "@/hooks/use-form";
 import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
 import Input from "@repo/ui/input";
+
+import { DinerDTO } from "@/models/diner.model";
+import useDebounce from "@/hooks/useDebounce";
+import getDinnerByEmail from "@/actions/diner.actions";
+import Autocomplete from "@repo/ui/autocomplete";
 
 interface ReservationFormProps {
   restaurant: RestaurantDTO;
@@ -26,6 +30,7 @@ export default function ReservationForm({
     peopleQuantity: number;
     message?: string;
     email: string;
+    dinerEmail: string | null;
   }>({
     initialValues: {
       date: new Date() || null,
@@ -34,14 +39,55 @@ export default function ReservationForm({
       dinerId: "",
       peopleQuantity: 1,
       message: "",
+      dinerEmail: null,
     },
     onSubmit: (values) => {},
   });
+
+  const [diner, setDiner] = React.useState<string>("");
+  const [dinerData, setDinerData] = React.useState<DinerDTO[]>([]);
+  const dinerDebounce = useDebounce(diner, 1000);
+
+  useEffect(() => {
+    const getDinerByEmail = async () => {
+      if (dinerDebounce) {
+        const diner = await getDinnerByEmail(dinerDebounce);
+        setDinerData(diner);
+      }
+    };
+    getDinerByEmail();
+  }, [dinerDebounce]);
+
+  console.log({ values });
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col justify-between">
+          <div className="mb-6">
+            <Autocomplete
+              items={dinerData.map((diner) => ({
+                ...diner,
+                label: `${diner.firstName} ${diner.lastName}`,
+              }))}
+              onChange={(e) => {
+                setDiner(e.target.value);
+              }}
+              onSelect={(val) => {
+                debugger;
+                const diner = dinerData.find((diner) => diner.id === val.id);
+                if (diner) {
+                  handleChange({
+                    dinerId: diner.id,
+                    dinerEmail: diner.email,
+                  });
+                }
+              }}
+              value={diner}
+              displayProperty="email"
+              label="Diner"
+            />
+          </div>
           <div className="mb-6">
             <Input
               label="Email"

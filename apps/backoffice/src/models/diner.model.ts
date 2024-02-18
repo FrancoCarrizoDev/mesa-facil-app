@@ -5,10 +5,10 @@ export interface Diner {
   id: string;
   sub?: string;
   first_name: string;
-  last_name?: string;
-  phone?: string;
+  last_name: string | null;
+  phone: string | null;
   email: string;
-  birthday?: string;
+  birthday: string | null;
   reservation: Reservation[];
   created_at: Date;
   updated_at: Date;
@@ -17,9 +17,9 @@ export interface Diner {
 export interface DinerDTO {
   id: string;
   firstName: string;
-  lastName?: string;
-  phone?: string;
+  lastName: string | null;
+  phone: string | null;
   email: string;
-  birthday?: string;
+  birthday: string | null;
   reservations: ReservationDTO[];
 }
