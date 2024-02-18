@@ -5,6 +5,7 @@ import React from "react";
 import useDinnerReservation from "@/hooks/useDinnerReservation";
 import useForm from "@/hooks/use-form";
 import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
+import Input from "@repo/ui/input";
 
 interface ReservationFormProps {
   restaurant: RestaurantDTO;
@@ -24,10 +25,12 @@ export default function ReservationForm({
     dinerId: string;
     peopleQuantity: number;
     message?: string;
+    email: string;
   }>({
     initialValues: {
       date: new Date() || null,
       attentionScheduleId: "",
+      email: "",
       dinerId: "",
       peopleQuantity: 1,
       message: "",
@@ -38,7 +41,20 @@ export default function ReservationForm({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className="flex justify-between">
+        <div className="flex flex-col justify-between">
+          <div className="mb-6">
+            <Input
+              label="Email"
+              onChange={(e) => {
+                handleChange({
+                  email: e.target.value,
+                });
+              }}
+              type="text"
+              placeholder="Buscar por email"
+              value={values.email}
+            />
+          </div>
           <InputDatePicker
             selectedDate={values.date}
             onChange={(date) => {

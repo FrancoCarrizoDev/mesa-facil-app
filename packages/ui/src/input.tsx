@@ -1,3 +1,4 @@
+import Spinner from "../../../apps/backoffice/src/components/Spinner/Spinner";
 interface InputProps {
   autoComplete?: string;
   disabled?: boolean;
@@ -10,6 +11,7 @@ interface InputProps {
   type?: "text" | "email" | "password" | "time";
   value: string;
   onBlur?: () => void;
+  isLoading?: boolean;
 }
 
 export default function Input({
@@ -24,6 +26,7 @@ export default function Input({
   type = "text",
   required = false,
   onBlur,
+  isLoading = false,
 }: InputProps): JSX.Element {
   return (
     <div className="">
@@ -39,20 +42,32 @@ export default function Input({
           </span>
         )}
       </label>
-      <input
-        autoComplete={autoComplete}
-        className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400"
-        disabled={disabled}
-        id={label}
-        name={label}
-        onChange={onChange}
-        placeholder={placeholder}
-        type={type}
-        value={value}
-        onBlur={(e) => {
-          if (onBlur) onBlur();
-        }}
-      />
+      <div className="ui-inline-block ui-relative ">
+        <input
+          autoComplete={autoComplete}
+          className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400"
+          disabled={disabled}
+          id={label}
+          name={label}
+          onBlur={() => {
+            if (onBlur) onBlur();
+          }}
+          onChange={onChange}
+          placeholder={placeholder}
+          type={type}
+          value={value}
+        />
+        <div
+          style={{
+            position: "absolute",
+            right: "8px",
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          {isLoading && <Spinner size="sm" />}
+        </div>
+      </div>
     </div>
   );
 }

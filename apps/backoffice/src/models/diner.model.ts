@@ -1,4 +1,5 @@
 import type { Reservation } from "database";
+import { ReservationDTO } from "./reservation.model";
 
 export interface Diner {
   id: string;
@@ -11,4 +12,14 @@ export interface Diner {
   reservation: Reservation[];
   created_at: Date;
   updated_at: Date;
+}
+
+export interface DinerDTO {
+  id: string;
+  firstName: string;
+  lastName?: string;
+  phone?: string;
+  email: string;
+  birthday?: string;
+  reservations: ReservationDTO[];
 }

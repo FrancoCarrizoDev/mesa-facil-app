@@ -66,6 +66,9 @@ model Diner {
   reservation Reservation[]
   created_at  DateTime      @default(now())
   updated_at  DateTime      @updatedAt
+
+  @@index([sub], name: "sub")
+  @@index([email], name: "email")
 }
 
 model Reservation {
