@@ -59,8 +59,6 @@ export default function ReservationForm({
     getDinerByEmail();
   }, [dinerDebounce]);
 
-  console.log({ values });
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -83,7 +81,7 @@ export default function ReservationForm({
                   });
                 }
               }}
-              value={diner}
+              value={values.dinerEmail || ""}
               displayProperty="email"
               label="Diner"
               placeholder="Buscar por email"
