@@ -3,7 +3,7 @@ import { setMinutes, setHours, addDays } from "date-fns";
 import { WEEK_DAYS } from "@/constants/week-days";
 import { RestaurantDTO } from "@/models/restaurant.model";
 
-export default function useDinnerReservation({
+export default function useDinerReservation({
   restaurant,
 }: {
   readonly restaurant: RestaurantDTO;
