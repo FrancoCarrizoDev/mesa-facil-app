@@ -9,10 +9,17 @@ interface InputDatePickerProps {
   selectedDate: Date | null | undefined;
   filterDate?: (date: Date) => boolean;
   filterTime?: (date: Date) => boolean;
-  minDate: Date | null | undefined;
-  maxDate: Date | null | undefined;
+  minDate?: Date | null;
+  maxDate?: Date | null;
   onChange: (date: Date | null) => void;
   placeholderText: string | undefined;
+  readonly showTimeSelect?: boolean;
+  readonly timeIntervals?: number;
+  readonly dateFormat?: string;
+  readonly peekNextMonth?: boolean;
+  readonly showMonthDropdown?: boolean;
+  readonly showYearDropdown?: boolean;
+  readonly dropdownMode?: "scroll" | "select";
 }
 
 export default function InputDatePicker({
@@ -23,10 +30,17 @@ export default function InputDatePicker({
   selectedDate,
   filterDate,
   filterTime,
-  maxDate,
-  minDate,
+  maxDate = null,
+  minDate = null,
   onChange,
   placeholderText,
+  showTimeSelect,
+  timeIntervals,
+  dateFormat,
+  peekNextMonth,
+  showMonthDropdown,
+  showYearDropdown,
+  dropdownMode,
 }: InputDatePickerProps): JSX.Element {
   return (
     <div className="">
@@ -50,6 +64,13 @@ export default function InputDatePicker({
         minDate={minDate}
         onChange={onChange}
         placeholderText={placeholderText}
+        showTimeSelect={showTimeSelect}
+        timeIntervals={timeIntervals}
+        dateFormat={dateFormat}
+        peekNextMonth={peekNextMonth}
+        showMonthDropdown={showMonthDropdown}
+        showYearDropdown={showYearDropdown}
+        dropdownMode={dropdownMode}
       />
     </div>
   );

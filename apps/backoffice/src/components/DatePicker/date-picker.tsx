@@ -10,6 +10,13 @@ interface DatePickerProps {
   readonly placeholderText: string | undefined;
   readonly filterDate?: (date: Date) => boolean;
   readonly filterTime?: (time: Date) => boolean;
+  readonly showTimeSelect?: boolean;
+  readonly timeIntervals?: number;
+  readonly dateFormat?: string;
+  readonly dropdownMode?: "scroll" | "select";
+  readonly peekNextMonth?: boolean;
+  readonly showMonthDropdown?: boolean;
+  readonly showYearDropdown?: boolean;
 }
 
 export default function DatePicker({
@@ -19,23 +26,35 @@ export default function DatePicker({
   maxDate,
   filterDate,
   filterTime,
+  placeholderText,
+  showTimeSelect = false,
+  timeIntervals = 15,
+  dateFormat = "MMMM d, yyyy HH:mm",
+  peekNextMonth = false,
+  showMonthDropdown = false,
+  showYearDropdown = false,
+  dropdownMode = "scroll",
 }: DatePickerProps): JSX.Element {
   return (
     <ReactDatePicker
       calendarStartDay={1}
       className="w-full fullborder border bg-lemon-50 border-lemon-200 text-gray-500 rounded-md  capitalize placeholder:text-gray-500 placeholder:text-sm py-1 px-2"
-      dateFormat="MMMM d, yyyy HH:mm"
+      dateFormat={dateFormat}
       filterDate={filterDate}
       filterTime={filterTime}
       locale="es"
       maxDate={maxDate}
       minDate={minDate}
       onChange={onChange}
-      placeholderText="Fecha"
+      placeholderText={placeholderText}
       selected={selectedDate}
-      showTimeSelect
-      timeIntervals={15}
+      showTimeSelect={showTimeSelect}
+      timeIntervals={timeIntervals}
       wrapperClassName="w-full"
+      peekNextMonth={peekNextMonth}
+      showMonthDropdown={showMonthDropdown}
+      showYearDropdown={showYearDropdown}
+      dropdownMode={dropdownMode}
     />
   );
 }

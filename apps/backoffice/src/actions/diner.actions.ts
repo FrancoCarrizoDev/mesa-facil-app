@@ -1,10 +1,9 @@
 "use server";
 
 import { DinerDTO } from "@/models/diner.model";
+import { getSession } from "next-auth/react";
 
-export default async function getDinnerByEmail(
-  email: string
-): Promise<DinerDTO[]> {
+export async function getDinerByEmail(email: string): Promise<DinerDTO[]> {
   const diner = await prisma?.diner.findMany({
     where: {
       email: {
@@ -38,4 +37,42 @@ export default async function getDinnerByEmail(
   }
 
   return [];
+}
+
+export async function createDiner(diner: DinerDTO): Promise<DinerDTO> {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("User not loggqged in");
+  }
+
+  try {
+    const newDiner = await prisma?.diner.create({
+      data: {
+        id: diner.id,
+        first_name: diner.firstName,
+        last_name: diner.lastName,
+        phone: diner.phone,
+        email: diner.email,
+        birthday: diner.birthday,
+      },
+    });
+
+    if (!newDiner) {
+      throw new Error("Error creating diner");
+    }
+
+    return {
+      id: newDiner.id,
+      firstName: newDiner.first_name,
+      lastName: newDiner.last_name,
+      phone: newDiner.phone,
+      email: newDiner.email,
+      birthday: newDiner.birthday,
+      reservations: [],
+    };
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error creating diner");
+  }
 }

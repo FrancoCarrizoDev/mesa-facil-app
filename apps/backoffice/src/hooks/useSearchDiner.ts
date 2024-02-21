@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
-import getDinnerByEmail from "@/actions/diner.actions";
+import { getDinerByEmail as getDinerByEmailAction } from "@/actions/diner.actions";
 import { DinerDTO } from "@/models/diner.model";
 
 export default function useSearchDiner() {
@@ -12,7 +12,7 @@ export default function useSearchDiner() {
   useEffect(() => {
     const getDinerByEmail = async () => {
       if (dinerDebounce) {
-        const diner = await getDinnerByEmail(dinerDebounce);
+        const diner = await getDinerByEmailAction(dinerDebounce);
         setDinerData(diner);
       } else {
         setDinerData([]);

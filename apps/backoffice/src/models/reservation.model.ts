@@ -31,3 +31,10 @@ export interface ReservationDTO {
   readonly peopleQuantity: number;
   readonly message?: string;
 }
+
+export enum ReservationStatusEnum {
+  PENDING = 1,
+  CONFIRMED = 2,
+  CANCELED = 3,
+  REJECTED = 4,
+}
