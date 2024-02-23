@@ -53,7 +53,7 @@ export default function Autocomplete<T>({
         htmlFor={label}
       >
         {label}
-        {required && <span className="ui-text-red-600 ui-ms-1">*</span>}
+        {required ? <span className="ui-text-red-600 ui-ms-1">*</span> : null}
         {Boolean(error) && (
           <span className=" ui-text-sm  ui-text-red-600 ui-font-medium">
             {errorText}
@@ -81,13 +81,13 @@ export default function Autocomplete<T>({
           type="text"
           value={value}
         />
-        {showList && (
+        {showList ? (
           <ul className="ui-bg-white ui-absolute ui-z-10 ui-min-w-[240px] ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400">
             {items.length ? (
-              items.map((item, i) => (
+              items.map((item) => (
                 <li
-                  className="ui-cursor-pointer ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all ui-rounded-lg hover:ui-bg-gray-100"
-                  key={i}
+                  className="ui-cursor-pointer ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all ui-rounded-lg hover:ui-bg-gray-100 focus:ui-gray-100"
+                  key={item[selectKey] as string}
                   onClick={() => {
                     onSelect(item);
                     setShowList(false);
@@ -109,7 +109,7 @@ export default function Autocomplete<T>({
               </li>
             )}
           </ul>
-        )}
+        ) : null}
       </div>
     </div>
   );
