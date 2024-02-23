@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 
 interface AutocompleteProps<T> {
   items: T[];
-  onSelect: (value: T) => void;
+  onSelect: (value: T | undefined) => void;
+  selectKey: keyof T;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
@@ -24,6 +25,7 @@ export default function Autocomplete<T>({
   errorText,
   displayProperty,
   placeholder = "",
+  selectKey,
 }: AutocompleteProps<T>): JSX.Element {
   const [showList, setShowList] = useState(false);
   const autocompleteRef = useRef<HTMLDivElement>(null);
@@ -62,6 +64,15 @@ export default function Autocomplete<T>({
         <input
           autoComplete="new-password"
           className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400"
+          onBlur={() => {
+            setTimeout(() => {
+              setShowList(false);
+            }, 200);
+            const selectedItem = items.find(
+              (item) => item[selectKey] === value
+            );
+            onSelect(selectedItem);
+          }}
           onChange={onChange}
           onFocus={() => {
             setShowList(true);

@@ -1,7 +1,8 @@
 "use server";
 
 import { DinerDTO } from "@/models/diner.model";
-import { getSession } from "next-auth/react";
+import getSession from "@/utils/get-session";
+import { v4 as uuidv4 } from "uuid";
 
 export async function getDinerByEmail(email: string): Promise<DinerDTO[]> {
   const diner = await prisma?.diner.findMany({
@@ -49,7 +50,7 @@ export async function createDiner(diner: DinerDTO): Promise<DinerDTO> {
   try {
     const newDiner = await prisma?.diner.create({
       data: {
-        id: diner.id,
+        id: uuidv4(),
         first_name: diner.firstName,
         last_name: diner.lastName,
         phone: diner.phone,
