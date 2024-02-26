@@ -1,28 +1,88 @@
 "use client";
 
-import { ReservationDTO } from "@/models/reservation.model";
-import { TableColumn } from "@repo/ui/data-table";
+import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
+import Link from "@/components/Link/link";
+import useSearchReservation from "@/hooks/useSearchReservation";
+import {
+  ReservationDTO,
+  ReservationStatusEnum,
+} from "@/models/reservation.model";
+import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
+import Input from "@repo/ui/input";
+import Select from "@repo/ui/select";
+import { useState } from "react";
 
 interface Props {
   reservationList: ReservationDTO[];
 }
 
 const columns: TableColumn[] = [
-  { key: "date", header: "Fecha" },
   { key: "firstName", header: "Nombre" },
   { key: "lastName", header: "Apellido" },
-  { key: "email", header: "Email" },
+  { key: "date", header: "Fecha de reserva" },
   { key: "statusId", header: "Estado de reserva" },
+  { key: "email", header: "Email" },
+  { key: "message", header: "Nota" },
   { key: "createdAt", header: "Fecha Creación" },
   { key: "updatedAt", header: "Fecha Actualización" },
-  { key: "date", header: "Fecha de reserva" },
   { key: "action", header: "Action" },
 ];
 
 export default function ReservationClientPage({ reservationList }: Props) {
+  const { filters, onChangeDate, onChangeStatus, onChangeTerm } =
+    useSearchReservation();
+  const tableData: TableData[] = reservationList.map((reservation) => {
+    return {
+      date: new Date(reservation.date).toLocaleString("es-ES"),
+      firstName: reservation.diner.firstName,
+      lastName: reservation.diner.lastName || "SIN/DATOS",
+      email: reservation.diner.email,
+      message: reservation.message || "SIN/DATOS",
+      statusId: reservation.statusId,
+      createdAt: new Date(reservation.createdAt).toLocaleString("es-ES"),
+      updatedAt: new Date(reservation.updatedAt).toLocaleString("es-ES"),
+
+      action: (
+        <div className="flex items-center">
+          <div className="flex items-center gap-1 min-w-[60px]">
+            <Link href={`#`}>Ver</Link>
+          </div>
+        </div>
+      ),
+    };
+  });
+
   return (
-    <div>
-      <code>{JSON.stringify(reservationList)}</code>
+    <div className="w-full">
+      <div className="flex gap-3 mb-3">
+        <Input
+          label="Buscar"
+          placeholder="Buscar por nombre o email"
+          onChange={(e) => onChangeTerm(e.target.value)}
+          value={filters.term}
+        />
+        <Select
+          label="Estado"
+          onChange={(e) => onChangeStatus(e.target.value)}
+          value={filters.status?.toString() || "0"}
+          options={[
+            { value: "0", label: "Todos" },
+            { value: "1", label: "Pendiente" },
+            { value: "2", label: "Confirmado" },
+            { value: "3", label: "Cancelado" },
+          ]}
+          size="small"
+        />
+        <InputDatePicker
+          label="Fecha"
+          placeholderText="Buscar por fecha"
+          onChange={(date) => onChangeDate(date)}
+          selectedDate={filters.date}
+          required={false}
+          error={false}
+        />
+      </div>
+      <DataTable columns={columns} data={tableData} />
     </div>
   );
 }

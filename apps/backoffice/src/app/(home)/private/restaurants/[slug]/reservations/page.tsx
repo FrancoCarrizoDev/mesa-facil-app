@@ -25,7 +25,10 @@ export default async function ReservationPage({ params }: Props) {
     <Section>
       <div className="flex justify-between items-center">
         <SectionTitle>Reservas</SectionTitle>
-        <Link underline="hover" href="/private/users/create">
+        <Link
+          underline="hover"
+          href={`/private/restaurants/${params.slug}/reservations/create`}
+        >
           Crear reserva
         </Link>
       </div>
