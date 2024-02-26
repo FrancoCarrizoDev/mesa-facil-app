@@ -2,7 +2,7 @@
 import { createDiner } from "@/actions/diner.actions";
 import { createReserve } from "@/actions/reservation.actions";
 import { DinerDTO } from "@/models/diner.model";
-import { ReservationDTO } from "@/models/reservation.model";
+import { CreateReservationDTO } from "@/models/reservation.model";
 import { RestaurantDTO } from "@/models/restaurant.model";
 import { toast } from "react-toastify";
 import Autocomplete from "@repo/ui/autocomplete";
@@ -69,12 +69,12 @@ export default function ReservationForm({
       }
 
       if (dinnerID && values.date && values.attentionScheduleId) {
-        const reserve: ReservationDTO = {
+        const reserve: CreateReservationDTO = {
           attentionScheduleId: values.attentionScheduleId,
           date: values.date?.toISOString() || "",
           dinerId: dinnerID,
           peopleQuantity: parseInt(values.peopleQuantity),
-          message: values.message,
+          message: values.message || null,
         };
 
         await createReserve(reserve);

@@ -32,6 +32,9 @@ export default async function RestaurantPage({
           >
             Crear reserva
           </Link>
+          <Link href={`/private/restaurants/${params.slug}/reservations`}>
+            Ver reservas
+          </Link>
           <Link href={`/private/restaurants/${params.slug}/reviews`}>
             Ver reseñas
           </Link>

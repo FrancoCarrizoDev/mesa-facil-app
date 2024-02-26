@@ -1,12 +1,11 @@
 import { getUserList } from "@/actions/user.actions";
-import Link from "@/components/Link/link";
-import getSession from "@/utils/get-session";
 import { hasManageUsersPermission } from "@/utils/permissions";
+import getSession from "@/utils/get-session";
+import Link from "@/components/Link/link";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import UsersClientPage from "./page.client";
-import { Suspense } from "react";
 
 export default async function UsersPage() {
   const session = await getSession();

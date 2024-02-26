@@ -38,7 +38,7 @@ export default function DatePicker({
   return (
     <ReactDatePicker
       calendarStartDay={1}
-      className="w-full fullborder border bg-lemon-50 border-lemon-200 text-gray-500 rounded-md  capitalize placeholder:text-gray-500 placeholder:text-sm py-1 px-2"
+      className="w-full fullborder border bg-lemon-50 border-lemon-200 text-gray-500 rounded-md  capitalize placeholder:text-gray-500 placeholder:text-sm py-1 px-2 normal-case"
       dateFormat={dateFormat}
       filterDate={filterDate}
       filterTime={filterTime}
