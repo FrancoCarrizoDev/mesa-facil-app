@@ -20,6 +20,7 @@ export default function useForm<T>({
   }) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
   errors: { [key in keyof T]?: string };
+  handleReset: () => void;
 } {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<{ [K in keyof T]?: string }>({});
@@ -44,11 +45,16 @@ export default function useForm<T>({
     onSubmit(values);
   };
 
+  const handleReset = (): void => {
+    setValues(initialValues);
+  };
+
   return {
     values,
     handleChange,
     handleSubmit,
     errors,
     setErrors,
+    handleReset,
   };
 }

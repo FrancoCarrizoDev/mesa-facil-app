@@ -13,6 +13,7 @@ import useDinerReservation from "@/hooks/useDinerReservation";
 import useForm from "@/hooks/use-form";
 import useSearchDiner from "@/hooks/useSearchDiner";
 import { subYears } from "date-fns";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ReservationFormProps {
   restaurant: RestaurantDTO;
@@ -25,7 +26,8 @@ export default function ReservationForm({
     useDinerReservation({
       restaurant: restaurantData,
     });
-
+  const router = useRouter();
+  const path = usePathname();
   const { values, errors, handleChange, handleSubmit, setErrors } = useForm<{
     date: Date | null;
     attentionScheduleId: string | null;
@@ -59,7 +61,7 @@ export default function ReservationForm({
           firstName: values.firstName,
           lastName: values.lastName || "",
           phone: values.phone || "",
-          birthday: null,
+          birthday: values.birthday?.toISOString() || null,
           reservations: [],
         };
 
@@ -78,14 +80,32 @@ export default function ReservationForm({
         };
 
         await createReserve(reserve);
-        toast.success("Reserva creada con éxito");
+        toast.success("Reserva creada con éxito, se ha enviado un email");
       }
     },
   });
 
-  const { diner, setDiner, dinerData } = useSearchDiner();
+  const { dinerTerm, setDinerTerm, dinerData } = useSearchDiner();
 
-  const onDinerSelect = (val: DinerDTO) => {
+  const onDinerSelect = (val: DinerDTO | undefined) => {
+    debugger;
+    if (!val) {
+      if (values.dinerId) {
+        return handleChange({
+          dinerId: null,
+          email: dinerTerm,
+          birthday: null,
+          firstName: "",
+          lastName: "",
+          phone: "",
+        });
+      }
+      handleChange({
+        email: dinerTerm,
+      });
+      return;
+    }
+
     const diner = dinerData.find((diner) => diner.id === val.id);
     if (diner) {
       const getBirthday = diner.birthday ? new Date(diner.birthday) : null;
@@ -97,7 +117,13 @@ export default function ReservationForm({
         phone: diner.phone,
         birthday: getBirthday,
       });
-      setDiner(diner.email);
+      setDinerTerm(diner.email);
+    } else {
+      setDinerTerm("");
+      handleChange({
+        dinerId: null,
+        email: "",
+      });
     }
   };
 
@@ -107,7 +133,7 @@ export default function ReservationForm({
   }));
 
   const onDinerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDiner(e.target.value);
+    setDinerTerm(e.target.value);
   };
 
   const findAttendSchedule = (date: Date | null) => {
@@ -154,7 +180,7 @@ export default function ReservationForm({
     return attentionSchedule.id;
   };
 
-  console.log({ values, restaurant });
+  console.log({ values, dinerTerm });
 
   return (
     <div className="w-full">
@@ -186,8 +212,9 @@ export default function ReservationForm({
                 items={mapDinerItems}
                 onChange={onDinerChange}
                 onSelect={onDinerSelect}
-                value={diner}
+                value={dinerTerm}
                 displayProperty="email"
+                selectKey={"email"}
                 label="Email"
                 placeholder="Buscar por email"
                 required
@@ -243,7 +270,7 @@ export default function ReservationForm({
                 label="Apellido"
                 onChange={(e) => {
                   handleChange({
-                    firstName: e.target.value,
+                    lastName: e.target.value,
                   });
                 }}
                 type="text"
