@@ -6,6 +6,7 @@ import {
   ReservationStatusEnum,
 } from "@/models/reservation.model";
 import getSession from "@/utils/get-session";
+import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
@@ -30,6 +31,8 @@ export async function createReserve(
         status_id: ReservationStatusEnum.PENDING,
       },
     });
+
+    revalidatePath(`/private/restaurants`);
   } catch (error) {
     console.log(error);
     throw new Error("Error creating reserve");

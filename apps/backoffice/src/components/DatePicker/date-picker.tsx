@@ -17,6 +17,7 @@ interface DatePickerProps {
   readonly peekNextMonth?: boolean;
   readonly showMonthDropdown?: boolean;
   readonly showYearDropdown?: boolean;
+  readonly disabled?: boolean;
 }
 
 export default function DatePicker({
@@ -34,6 +35,7 @@ export default function DatePicker({
   showMonthDropdown = false,
   showYearDropdown = false,
   dropdownMode = "scroll",
+  disabled = false,
 }: DatePickerProps): JSX.Element {
   return (
     <ReactDatePicker
@@ -55,6 +57,7 @@ export default function DatePicker({
       showMonthDropdown={showMonthDropdown}
       showYearDropdown={showYearDropdown}
       dropdownMode={dropdownMode}
+      disabled={disabled}
     />
   );
 }

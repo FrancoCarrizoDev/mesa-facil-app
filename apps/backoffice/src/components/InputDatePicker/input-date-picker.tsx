@@ -2,17 +2,17 @@ import React from "react";
 import DatePicker from "../DatePicker/date-picker";
 
 interface InputDatePickerProps {
-  label: string;
-  required: boolean | undefined;
-  error: boolean | undefined;
-  errorText?: string;
-  selectedDate: Date | null | undefined;
-  filterDate?: (date: Date) => boolean;
-  filterTime?: (date: Date) => boolean;
-  minDate?: Date | null;
-  maxDate?: Date | null;
-  onChange: (date: Date | null) => void;
-  placeholderText: string | undefined;
+  readonly label: string;
+  readonly required: boolean | undefined;
+  readonly error: boolean | undefined;
+  readonly errorText?: string;
+  readonly selectedDate: Date | null | undefined;
+  readonly filterDate?: (date: Date) => boolean;
+  readonly filterTime?: (date: Date) => boolean;
+  readonly minDate?: Date | null;
+  readonly maxDate?: Date | null;
+  readonly onChange: (date: Date | null) => void;
+  readonly placeholderText: string | undefined;
   readonly showTimeSelect?: boolean;
   readonly timeIntervals?: number;
   readonly dateFormat?: string;
@@ -20,6 +20,7 @@ interface InputDatePickerProps {
   readonly showMonthDropdown?: boolean;
   readonly showYearDropdown?: boolean;
   readonly dropdownMode?: "scroll" | "select";
+  readonly disabled?: boolean;
 }
 
 export default function InputDatePicker({
@@ -41,6 +42,7 @@ export default function InputDatePicker({
   showMonthDropdown,
   showYearDropdown,
   dropdownMode,
+  disabled,
 }: InputDatePickerProps): JSX.Element {
   return (
     <div className="">
@@ -71,6 +73,7 @@ export default function InputDatePicker({
         showMonthDropdown={showMonthDropdown}
         showYearDropdown={showYearDropdown}
         dropdownMode={dropdownMode}
+        disabled={disabled}
       />
     </div>
   );

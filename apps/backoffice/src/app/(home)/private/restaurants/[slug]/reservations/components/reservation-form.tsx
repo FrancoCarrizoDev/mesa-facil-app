@@ -13,7 +13,6 @@ import useDinerReservation from "@/hooks/useDinerReservation";
 import useForm from "@/hooks/use-form";
 import useSearchDiner from "@/hooks/useSearchDiner";
 import { subYears } from "date-fns";
-import { usePathname, useRouter } from "next/navigation";
 
 interface ReservationFormProps {
   restaurant: RestaurantDTO;
@@ -26,9 +25,8 @@ export default function ReservationForm({
     useDinerReservation({
       restaurant: restaurantData,
     });
-  const router = useRouter();
-  const path = usePathname();
-  const { values, errors, handleChange, handleSubmit, setErrors } = useForm<{
+
+  const { values, errors, handleChange, handleSubmit, handleReset } = useForm<{
     date: Date | null;
     attentionScheduleId: string | null;
     dinerId: string | null;
@@ -80,6 +78,8 @@ export default function ReservationForm({
         };
 
         await createReserve(reserve);
+        handleReset();
+        setDinerTerm("");
         toast.success("Reserva creada con éxito, se ha enviado un email");
       }
     },
@@ -313,6 +313,7 @@ export default function ReservationForm({
                 showYearDropdown
                 dropdownMode="select"
                 maxDate={subYears(new Date(), 18)}
+                disabled={Boolean(values.dinerId)}
               />
             </div>
           </div>
