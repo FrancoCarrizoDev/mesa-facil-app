@@ -1,6 +1,7 @@
 import { ReservationStatusEnum } from "@/models/reservation.model";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import useDebounce from "./useDebounce";
 
 interface FilterProps {
   status: string;
@@ -15,6 +16,8 @@ export default function useSearchReservation() {
     date: null,
     term: "",
   });
+  const termDebounce = useDebounce(filters, 1000);
+  const pathname = usePathname();
 
   const onChangeStatus = (status: string) => {
     setFilters({ ...filters, status });
@@ -28,30 +31,32 @@ export default function useSearchReservation() {
     setFilters({ ...filters, term });
   };
 
-  console.log({ filters });
+  const isDebouncing =
+    termDebounce.status !== filters.status ||
+    termDebounce.date !== filters.date ||
+    termDebounce.term !== filters.term;
 
   useEffect(() => {
     const query = new URLSearchParams();
 
-    if (filters.status) {
-      query.set("status", filters.status.toString());
+    if (termDebounce.status) {
+      query.set("status", termDebounce.status.toString());
     }
 
-    if (filters.date) {
-      query.set("date", filters.date.toISOString());
+    if (termDebounce.date) {
+      query.set("date", termDebounce.date.toISOString());
     }
 
-    if (filters.term) {
-      query.set("term", filters.term);
-    }
+    query.set("term", termDebounce.term.toString());
 
-    // router.push(`./?${query.toString()}`);
-  }, [filters]);
+    router.push(`${pathname}?${query.toString()}`);
+  }, [termDebounce]);
 
   return {
     filters,
     onChangeStatus,
     onChangeDate,
     onChangeTerm,
+    isDebouncing,
   };
 }

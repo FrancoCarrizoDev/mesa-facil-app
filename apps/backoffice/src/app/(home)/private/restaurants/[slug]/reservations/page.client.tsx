@@ -2,6 +2,7 @@
 
 import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
 import Link from "@/components/Link/link";
+import Spinner from "@/components/Spinner/Spinner";
 import useSearchReservation from "@/hooks/useSearchReservation";
 import {
   ReservationDTO,
@@ -29,7 +30,7 @@ const columns: TableColumn[] = [
 ];
 
 export default function ReservationClientPage({ reservationList }: Props) {
-  const { filters, onChangeDate, onChangeStatus, onChangeTerm } =
+  const { filters, onChangeDate, onChangeStatus, onChangeTerm, isDebouncing } =
     useSearchReservation();
   const tableData: TableData[] = reservationList.map((reservation) => {
     return {
@@ -54,7 +55,7 @@ export default function ReservationClientPage({ reservationList }: Props) {
 
   return (
     <div className="w-full">
-      <div className="flex gap-3 mb-3">
+      <div className="flex items-baseline gap-3 mb-3">
         <Input
           label="Buscar"
           placeholder="Buscar por nombre o email"
@@ -66,10 +67,11 @@ export default function ReservationClientPage({ reservationList }: Props) {
           onChange={(e) => onChangeStatus(e.target.value)}
           value={filters.status?.toString() || "0"}
           options={[
-            { value: "0", label: "Todos" },
-            { value: "1", label: "Pendiente" },
-            { value: "2", label: "Confirmado" },
-            { value: "3", label: "Cancelado" },
+            { value: "all", label: "Todos" },
+            { value: "pending", label: "Pendiente" },
+            { value: "confirmed", label: "Confirmado" },
+            { value: "canceled", label: "Cancelado" },
+            { value: "rejected", label: "Rechadaza" },
           ]}
           size="small"
         />
@@ -81,6 +83,11 @@ export default function ReservationClientPage({ reservationList }: Props) {
           required={false}
           error={false}
         />
+        {isDebouncing && (
+          <div className="h-full mt-auto pb-2">
+            <Spinner size="sm" />
+          </div>
+        )}
       </div>
       <DataTable columns={columns} data={tableData} />
     </div>

@@ -2,24 +2,33 @@ import Link from "@/components/Link/link";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
-import React from "react";
 import ReservationClientPage from "./page.client";
 import {
   ensureLoggedUserBelongsToRestaurant,
   getReservationList,
 } from "@/actions/reservation.actions";
-import getSession from "@/utils/get-session";
+import { Suspense } from "react";
+
+export interface SearchReservationParams {
+  readonly status: string;
+  readonly date?: string;
+  readonly term?: string;
+}
 
 interface Props {
   readonly params: {
     slug: string;
   };
+  readonly searchParams: SearchReservationParams;
 }
 
-export default async function ReservationPage({ params }: Props) {
+export default async function ReservationPage({ params, searchParams }: Props) {
   const restaurantSlug = params.slug;
   await ensureLoggedUserBelongsToRestaurant(restaurantSlug);
-  const reservationList = await getReservationList(restaurantSlug);
+  const reservationList = await getReservationList(
+    restaurantSlug,
+    searchParams
+  );
 
   return (
     <Section>

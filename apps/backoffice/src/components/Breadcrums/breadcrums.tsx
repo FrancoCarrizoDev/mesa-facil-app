@@ -13,7 +13,10 @@ export default function Breadcrums() {
       {paths.map(({ displayName, href }, index) => {
         return (
           <div key={index}>
-            <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}${href}`}>
+            <Link
+              href={`${process.env.NEXT_PUBLIC_BASE_URL}${href}`}
+              disabled={paths.length - 1 === index}
+            >
               {displayName}
             </Link>
             {index !== paths.length - 1 && <span className="mx-1">{">"}</span>}

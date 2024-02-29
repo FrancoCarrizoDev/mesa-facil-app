@@ -6,9 +6,26 @@ import {
   ReservationStatusEnum,
 } from "@/models/reservation.model";
 import getSession from "@/utils/get-session";
+import { addDays } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
+import type { SearchReservationParams } from "src/app/(home)/private/restaurants/[slug]/reservations/page";
 import { v4 as uuidv4 } from "uuid";
+
+function getReservationStatusBySearchKeyLabel(searchKey: string) {
+  switch (searchKey) {
+    case "pending":
+      return ReservationStatusEnum.PENDING;
+    case "confirmed":
+      return ReservationStatusEnum.CONFIRMED;
+    case "canceled":
+      return ReservationStatusEnum.CANCELED;
+    case "rejected":
+      return ReservationStatusEnum.REJECTED;
+    default:
+      return null;
+  }
+}
 
 export async function createReserve(
   reserve: CreateReservationDTO
@@ -40,13 +57,24 @@ export async function createReserve(
 }
 
 export async function getReservationList(
-  restaurantSlug: string
+  restaurantSlug: string,
+  searchParams: SearchReservationParams
 ): Promise<ReservationDTO[]> {
   const session = await getSession();
 
   if (!session) {
     throw new Error("User not loggqged in");
   }
+  const status = getReservationStatusBySearchKeyLabel(searchParams.status);
+
+  console.log({
+    date: {
+      gte: searchParams.date,
+      lte: searchParams.date
+        ? addDays(new Date(searchParams.date), 1).toISOString()
+        : undefined,
+    },
+  });
 
   try {
     const reservations = await prisma?.reservation.findMany({
@@ -55,6 +83,32 @@ export async function getReservationList(
           restaurant: {
             slug: restaurantSlug,
           },
+        },
+        diner: {
+          OR: [
+            {
+              first_name: {
+                contains: searchParams.term,
+              },
+            },
+            {
+              last_name: {
+                contains: searchParams.term,
+              },
+            },
+            {
+              email: {
+                contains: searchParams.term,
+              },
+            },
+          ],
+        },
+        status_id: status ? status : undefined,
+        date: {
+          gte: searchParams.date,
+          lte: searchParams.date
+            ? addDays(new Date(searchParams.date), 1).toISOString()
+            : undefined,
         },
       },
       include: {

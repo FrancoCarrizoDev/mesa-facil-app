@@ -180,8 +180,6 @@ export default function ReservationForm({
     return attentionSchedule.id;
   };
 
-  console.log({ values, dinerTerm });
-
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit}>
