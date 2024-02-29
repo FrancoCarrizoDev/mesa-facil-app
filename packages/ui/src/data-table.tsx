@@ -30,11 +30,13 @@ export default function DataTable({ columns, data }: DataTableProps) {
             {data.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="ui-bg-white ui-border-b hover:ui-bg-gray-50"
+                className="ui-bg-white ui-border-b hover:ui-bg-gray-50 "
               >
                 {columns.map((column) => (
-                  <td key={column.key} className="ui-px-6 ui-py-4">
-                    {row[column.key]}
+                  <td key={column.key} className="ui-px-4 ui-py-2">
+                    <div className="ui-max-h-[40px] ui-overflow-auto">
+                      {row[column.key]}
+                    </div>
                   </td>
                 ))}
               </tr>

@@ -25,7 +25,6 @@ const columns: TableColumn[] = [
   { key: "lastName", header: "Apellido" },
   { key: "date", header: "Fecha de reserva" },
   { key: "statusId", header: "Estado de reserva" },
-  { key: "email", header: "Email" },
   { key: "message", header: "Nota" },
   { key: "createdAt", header: "Fecha Creación" },
   { key: "updatedAt", header: "Fecha Actualización" },
@@ -35,13 +34,20 @@ const columns: TableColumn[] = [
 export default function ReservationClientPage({ reservationList }: Props) {
   const { filters, onChangeDate, onChangeStatus, onChangeTerm, isDebouncing } =
     useSearchReservation();
+
+  console.log({ reservationList });
   const tableData: TableData[] = reservationList.map((reservation) => {
     return {
-      date: new Date(reservation.date).toLocaleString("es-ES"),
+      date: (
+        <p className="min-w-[150px]">
+          {new Date(reservation.date).toLocaleString("es-ES")}
+        </p>
+      ),
       firstName: reservation.diner.firstName,
       lastName: reservation.diner.lastName || "SIN/DATOS",
-      email: reservation.diner.email,
-      message: reservation.message || "SIN/DATOS",
+      message: (
+        <p id={`${reservation.id}`}>{reservation.message || "SIN/DATOS"}</p>
+      ),
       statusId: (
         <p
           className={`${getReservationStatusLabelColorById(
@@ -51,8 +57,16 @@ export default function ReservationClientPage({ reservationList }: Props) {
           {getReservationStatusLabelById(reservation.statusId)}
         </p>
       ),
-      createdAt: new Date(reservation.createdAt).toLocaleString("es-ES"),
-      updatedAt: new Date(reservation.updatedAt).toLocaleString("es-ES"),
+      createdAt: (
+        <p className="min-w-[150px]">
+          {new Date(reservation.createdAt).toLocaleString("es-ES")}
+        </p>
+      ),
+      updatedAt: (
+        <p className="min-w-[150px]">
+          {new Date(reservation.updatedAt).toLocaleString("es-ES")}
+        </p>
+      ),
       action: (
         <div className="flex items-center">
           <div className="flex items-center gap-1 min-w-[60px]">
