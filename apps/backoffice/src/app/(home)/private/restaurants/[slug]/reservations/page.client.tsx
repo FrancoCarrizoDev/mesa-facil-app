@@ -8,10 +8,13 @@ import {
   ReservationDTO,
   ReservationStatusEnum,
 } from "@/models/reservation.model";
+import {
+  getReservationStatusLabelById,
+  getReservationStatusLabelColorById,
+} from "@/utils/reservations";
 import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
-import { useState } from "react";
 
 interface Props {
   reservationList: ReservationDTO[];
@@ -39,10 +42,17 @@ export default function ReservationClientPage({ reservationList }: Props) {
       lastName: reservation.diner.lastName || "SIN/DATOS",
       email: reservation.diner.email,
       message: reservation.message || "SIN/DATOS",
-      statusId: reservation.statusId,
+      statusId: (
+        <p
+          className={`${getReservationStatusLabelColorById(
+            reservation.statusId
+          )}`}
+        >
+          {getReservationStatusLabelById(reservation.statusId)}
+        </p>
+      ),
       createdAt: new Date(reservation.createdAt).toLocaleString("es-ES"),
       updatedAt: new Date(reservation.updatedAt).toLocaleString("es-ES"),
-
       action: (
         <div className="flex items-center">
           <div className="flex items-center gap-1 min-w-[60px]">
@@ -82,6 +92,7 @@ export default function ReservationClientPage({ reservationList }: Props) {
           selectedDate={filters.date}
           required={false}
           error={false}
+          dateFormat="dd/MM/yyyy"
         />
         {isDebouncing && (
           <div className="h-full mt-auto pb-2">
