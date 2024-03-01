@@ -2,7 +2,10 @@
 import { createDiner } from "@/actions/diner.actions";
 import { createReserve } from "@/actions/reservation.actions";
 import { DinerDTO } from "@/models/diner.model";
-import { CreateReservationDTO } from "@/models/reservation.model";
+import {
+  CreateReservationDTO,
+  ReservationDTO,
+} from "@/models/reservation.model";
 import { RestaurantDTO } from "@/models/restaurant.model";
 import { toast } from "react-toastify";
 import Autocomplete from "@repo/ui/autocomplete";
@@ -13,13 +16,16 @@ import useDinerReservation from "@/hooks/useDinerReservation";
 import useForm from "@/hooks/use-form";
 import useSearchDiner from "@/hooks/useSearchDiner";
 import { subYears } from "date-fns";
+import Select from "@repo/ui/select";
 
 interface ReservationFormProps {
-  restaurant: RestaurantDTO;
+  restaurantData: RestaurantDTO;
+  reservationData?: ReservationDTO;
 }
 
 export default function ReservationForm({
-  restaurant: restaurantData,
+  restaurantData,
+  reservationData,
 }: ReservationFormProps): JSX.Element {
   const { filterTimes, hashClosedDays, restaurant, minDate, maxDate } =
     useDinerReservation({
@@ -37,18 +43,24 @@ export default function ReservationForm({
     lastName: string | null;
     phone: string | null;
     birthday: Date | null;
+    reservationStatusId: number;
   }>({
     initialValues: {
-      date: null,
+      date: reservationData ? new Date(reservationData.date) : null,
       attentionScheduleId: null,
-      email: "",
-      dinerId: null,
-      peopleQuantity: "",
-      message: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      birthday: null,
+      email: reservationData ? reservationData.diner.email : "",
+      dinerId: reservationData ? reservationData.diner.id : null,
+      peopleQuantity: reservationData
+        ? reservationData.peopleQuantity.toString()
+        : "",
+      message: reservationData?.message ?? "",
+      firstName: reservationData ? reservationData.diner.firstName : "",
+      lastName: reservationData ? reservationData.diner.lastName : "",
+      phone: reservationData ? reservationData.diner.phone : "",
+      birthday: reservationData?.diner.birthday
+        ? new Date(reservationData.diner.birthday)
+        : null,
+      reservationStatusId: reservationData ? reservationData.statusId : 1,
     },
     onSubmit: async (values) => {
       let dinnerID: string | null = values.dinerId;
@@ -75,6 +87,7 @@ export default function ReservationForm({
           dinerId: dinnerID,
           peopleQuantity: parseInt(values.peopleQuantity),
           message: values.message || null,
+          reservationStatusId: values.reservationStatusId,
         };
 
         await createReserve(reserve);
@@ -85,10 +98,11 @@ export default function ReservationForm({
     },
   });
 
-  const { dinerTerm, setDinerTerm, dinerData } = useSearchDiner();
+  const { dinerTerm, setDinerTerm, dinerData } = useSearchDiner(
+    reservationData?.diner.email || ""
+  );
 
   const onDinerSelect = (val: DinerDTO | undefined) => {
-    debugger;
     if (!val) {
       if (values.dinerId) {
         return handleChange({
@@ -243,6 +257,25 @@ export default function ReservationForm({
                 type="text"
                 placeholder="Algo que debamos tener en cuenta?"
                 value={values.message || ""}
+                required
+              />
+            </div>
+            <div className="mb-6">
+              <Select
+                label="Estado de reserva"
+                onChange={(e) => {
+                  handleChange({
+                    reservationStatusId: parseInt(e.target.value),
+                  });
+                }}
+                value={values.reservationStatusId}
+                options={[
+                  { value: "1", label: "Pendiente" },
+                  { value: "2", label: "Confirmado" },
+                  { value: "3", label: "Cancelado" },
+                  { value: "4", label: "Rechazado" },
+                ]}
+                size="small"
                 required
               />
             </div>

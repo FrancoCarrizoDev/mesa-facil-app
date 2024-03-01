@@ -71,8 +71,8 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         ),
         action: (
           <div className="flex items-center">
-            <div className="flex items-center gap-1 min-w-[60px]">
-              <Link href={`#`}>Ver</Link>
+            <div className="flex items-center gap-1">
+              <Link href={`./reservations/${reservation.id}`}>Ver</Link>
             </div>
           </div>
         ),

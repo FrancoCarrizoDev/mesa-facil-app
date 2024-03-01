@@ -31,6 +31,7 @@ export interface CreateReservationDTO {
   readonly dinerId: string;
   readonly peopleQuantity: number;
   readonly message: string | null;
+  readonly reservationStatusId: number;
 }
 
 export interface ReservationDTO {

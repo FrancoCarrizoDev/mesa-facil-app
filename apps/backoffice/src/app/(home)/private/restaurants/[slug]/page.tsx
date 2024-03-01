@@ -3,7 +3,6 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import RestaurantForm from "../components/restaurant-form";
 import { notFound } from "next/navigation";
 import Link from "@/components/Link/link";
 
@@ -19,8 +18,6 @@ export default async function RestaurantPage({
   if (!params) return notFound();
 
   const restaurant = await getRestaurantBySlug(params.slug);
-
-  if (!restaurant) return notFound();
 
   return (
     <Section>

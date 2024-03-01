@@ -46,7 +46,7 @@ export async function createReserve(
         diner_id: reserve.dinerId,
         people_quantity: reserve.peopleQuantity,
         message: reserve.message,
-        status_id: ReservationStatusEnum.PENDING,
+        status_id: reserve.reservationStatusId,
       },
     });
 
@@ -193,4 +193,43 @@ export async function ensureLoggedUserBelongsToRestaurant(
   if (!restaurant) {
     notFound();
   }
+}
+
+export async function getReservationById(id: string): Promise<ReservationDTO> {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("User not loggqged in");
+  }
+
+  const reservation = await prisma?.reservation.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      diner: true,
+    },
+  });
+
+  if (!reservation) {
+    notFound();
+  }
+
+  return {
+    id: reservation.id,
+    date: reservation.date,
+    diner: {
+      id: reservation.diner.id,
+      firstName: reservation.diner.first_name,
+      lastName: reservation.diner.last_name,
+      phone: reservation.diner.phone,
+      birthday: reservation.diner.birthday,
+      email: reservation.diner.email,
+    },
+    peopleQuantity: reservation.people_quantity,
+    message: reservation.message,
+    statusId: reservation.status_id,
+    createdAt: reservation.created_at,
+    updatedAt: reservation.updated_at,
+  };
 }

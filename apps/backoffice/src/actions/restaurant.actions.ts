@@ -7,6 +7,7 @@ import { authOptions } from "src/utils/auth-options";
 import { v4 as uuidv4 } from "uuid";
 import slugify from "slugify";
 import { revalidatePath } from "next/cache";
+import { notFound } from "next/navigation";
 
 export async function getRestaurantsNameByUser() {
   const session = await getServerSession(authOptions);
@@ -154,7 +155,7 @@ export async function updateRestaurant(restaurant: RestaurantDTO) {
 
 export async function getRestaurantBySlug(
   slug: string
-): Promise<RestaurantDTO | null> {
+): Promise<RestaurantDTO> {
   const session = await getSession();
 
   if (!session) {
@@ -193,7 +194,7 @@ export async function getRestaurantBySlug(
         })),
       };
 
-    return null;
+    return notFound();
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message);

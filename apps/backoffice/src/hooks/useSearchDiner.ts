@@ -5,8 +5,8 @@ import useDebounce from "./useDebounce";
 import { getDinerByEmail as getDinerByEmailAction } from "@/actions/diner.actions";
 import { DinerDTO } from "@/models/diner.model";
 
-export default function useSearchDiner() {
-  const [dinerTerm, setDinerTerm] = useState<string>("");
+export default function useSearchDiner(dinerInitialValue: string = "") {
+  const [dinerTerm, setDinerTerm] = useState<string>(dinerInitialValue);
   const [dinerData, setDinerData] = useState<DinerDTO[]>([]);
   const dinerDebounce = useDebounce(dinerTerm, 1000);
   useEffect(() => {
