@@ -16,6 +16,7 @@ import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
 import { PaginationDTO } from "../../../../../../models/pagination.model";
+import CustomDialog from "@/components/Dialog/Dialog";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -118,6 +119,7 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         )}
       </div>
       <DataTable columns={columns} data={tableData} />
+      <CustomDialog />
     </div>
   );
 }
