@@ -7,9 +7,16 @@ export interface TableData {
   [key: string]: string | number | JSX.Element;
 }
 
+export interface TablePagination {
+  page: number;
+  pageSize: number;
+  total: number;
+}
+
 interface DataTableProps {
   columns: TableColumn[];
   data: TableData[];
+  pagination?: TablePagination;
 }
 
 export default function DataTable({ columns, data }: DataTableProps) {
@@ -33,10 +40,8 @@ export default function DataTable({ columns, data }: DataTableProps) {
                 className="ui-bg-white ui-border-b hover:ui-bg-gray-50 "
               >
                 {columns.map((column) => (
-                  <td key={column.key} className="ui-px-4 ui-py-2">
-                    <div className="ui-max-h-[40px] ui-overflow-auto">
-                      {row[column.key]}
-                    </div>
+                  <td key={column.key} className="ui-px-4 ui-py-3">
+                    <div>{row[column.key]}</div>
                   </td>
                 ))}
               </tr>

@@ -11,6 +11,7 @@ import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 import type { SearchReservationParams } from "src/app/(home)/private/restaurants/[slug]/reservations/page";
 import { v4 as uuidv4 } from "uuid";
+import { PaginationDTO } from "../models/pagination.model";
 
 function getReservationStatusBySearchKeyLabel(searchKey: string) {
   switch (searchKey) {
@@ -59,7 +60,7 @@ export async function createReserve(
 export async function getReservationList(
   restaurantSlug: string,
   searchParams: SearchReservationParams
-): Promise<ReservationDTO[]> {
+): Promise<PaginationDTO<ReservationDTO[]>> {
   const session = await getSession();
 
   if (!session) {
@@ -114,9 +115,19 @@ export async function getReservationList(
       include: {
         diner: true,
       },
+      skip: searchParams.skip
+        ? searchParams.page * searchParams.pageSize
+        : searchParams.page,
+      take: searchParams.pageSize,
     });
 
-    if (!reservations) return [];
+    if (!reservations)
+      return {
+        page: searchParams.page,
+        pageSize: searchParams.pageSize,
+        total: 0,
+        data: [],
+      };
 
     const reservationList: ReservationDTO[] = reservations.map(
       ({
@@ -147,7 +158,12 @@ export async function getReservationList(
       })
     );
 
-    return reservationList;
+    return {
+      page: searchParams.page,
+      pageSize: searchParams.pageSize,
+      total: reservationList.length,
+      data: reservationList,
+    };
   } catch (error) {
     console.log(error);
     throw new Error("Error getting reservation list");

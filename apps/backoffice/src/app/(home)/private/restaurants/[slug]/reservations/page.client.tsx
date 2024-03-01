@@ -15,9 +15,10 @@ import {
 import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
+import { PaginationDTO } from "../../../../../../models/pagination.model";
 
 interface Props {
-  reservationList: ReservationDTO[];
+  paginatedReservation: PaginationDTO<ReservationDTO[]>;
 }
 
 const columns: TableColumn[] = [
@@ -31,51 +32,53 @@ const columns: TableColumn[] = [
   { key: "action", header: "Action" },
 ];
 
-export default function ReservationClientPage({ reservationList }: Props) {
+export default function ReservationClientPage({ paginatedReservation }: Props) {
   const { filters, onChangeDate, onChangeStatus, onChangeTerm, isDebouncing } =
     useSearchReservation();
 
-  console.log({ reservationList });
-  const tableData: TableData[] = reservationList.map((reservation) => {
-    return {
-      date: (
-        <p className="min-w-[150px]">
-          {new Date(reservation.date).toLocaleString("es-ES")}
-        </p>
-      ),
-      firstName: reservation.diner.firstName,
-      lastName: reservation.diner.lastName || "SIN/DATOS",
-      message: (
-        <p id={`${reservation.id}`}>{reservation.message || "SIN/DATOS"}</p>
-      ),
-      statusId: (
-        <p
-          className={`${getReservationStatusLabelColorById(
-            reservation.statusId
-          )}`}
-        >
-          {getReservationStatusLabelById(reservation.statusId)}
-        </p>
-      ),
-      createdAt: (
-        <p className="min-w-[150px]">
-          {new Date(reservation.createdAt).toLocaleString("es-ES")}
-        </p>
-      ),
-      updatedAt: (
-        <p className="min-w-[150px]">
-          {new Date(reservation.updatedAt).toLocaleString("es-ES")}
-        </p>
-      ),
-      action: (
-        <div className="flex items-center">
-          <div className="flex items-center gap-1 min-w-[60px]">
-            <Link href={`#`}>Ver</Link>
+  console.log({ reservationList: paginatedReservation });
+  const tableData: TableData[] = paginatedReservation.data.map(
+    (reservation) => {
+      return {
+        date: (
+          <p className="min-w-[150px]">
+            {new Date(reservation.date).toLocaleString("es-ES")}
+          </p>
+        ),
+        firstName: reservation.diner.firstName,
+        lastName: reservation.diner.lastName || "SIN/DATOS",
+        message: (
+          <p className=" overflow-auto">{reservation.message || "SIN/DATOS"}</p>
+        ),
+        statusId: (
+          <p
+            className={`${getReservationStatusLabelColorById(
+              reservation.statusId
+            )}`}
+          >
+            {getReservationStatusLabelById(reservation.statusId)}
+          </p>
+        ),
+        createdAt: (
+          <p className="min-w-[150px]">
+            {new Date(reservation.createdAt).toLocaleString("es-ES")}
+          </p>
+        ),
+        updatedAt: (
+          <p className="min-w-[150px]">
+            {new Date(reservation.updatedAt).toLocaleString("es-ES")}
+          </p>
+        ),
+        action: (
+          <div className="flex items-center">
+            <div className="flex items-center gap-1 min-w-[60px]">
+              <Link href={`#`}>Ver</Link>
+            </div>
           </div>
-        </div>
-      ),
-    };
-  });
+        ),
+      };
+    }
+  );
 
   return (
     <div className="w-full">
