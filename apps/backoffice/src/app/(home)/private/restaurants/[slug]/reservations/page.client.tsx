@@ -16,9 +16,8 @@ import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
 import { PaginationDTO } from "../../../../../../models/pagination.model";
-import CustomDialog from "@/components/Dialog/Dialog";
-import { CheckIcon, Cross1Icon, Cross2Icon } from "@radix-ui/react-icons";
 import Button from "@repo/ui/button";
+import CustomDropdownMenu from "@/components/DropdownMenu/DropdownMenu";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -87,23 +86,13 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
                     reservation.statusId !== ReservationStatusEnum.PENDING
                   }
                 >
-                  <div className="flex items-center">
-                    Aceptar
-                    <CheckIcon className="text-white" width={20} height={20} />
-                  </div>
+                  <div className="flex items-center">Aceptar</div>
                 </Button>
               </Link>
 
               <Link href={`./reservations/${reservation.id}`}>
                 <Button size="sm" color="danger" variant="outlined">
-                  <div className="flex items-center">
-                    Rechazar
-                    <Cross2Icon
-                      className="text-red-500"
-                      width={20}
-                      height={20}
-                    />
-                  </div>
+                  <div className="flex items-center">Rechazar</div>
                 </Button>
               </Link>
 
@@ -153,7 +142,7 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         )}
       </div>
       <DataTable columns={columns} data={tableData} />
-      <CustomDialog />
+      <CustomDropdownMenu />
     </div>
   );
 }
