@@ -40,6 +40,8 @@ const ROUNDED = {
   pill: "ui-rounded-pill",
 };
 
+const DISABLED = "ui-cursor-not-allowed ui-opacity-50";
+
 export default function Button({
   children,
   onClick,
@@ -57,10 +59,12 @@ export default function Button({
 
   return (
     <button
-      className={`ui-block ui-font-medium ${sizeClass} ${variantClass} ${colorClass}  ${roundedClass}  `}
+      className={`ui-block ui-font-medium ${sizeClass} ${variantClass} ${colorClass}  ${roundedClass} ${
+        disabled ? DISABLED : null
+      } `}
+      disabled={disabled}
       onClick={onClick}
       type={type}
-      disabled={disabled}
     >
       {children}
     </button>

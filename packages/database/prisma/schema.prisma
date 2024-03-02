@@ -80,6 +80,7 @@ model Reservation {
   date                  String
   people_quantity       Int
   message               String?
+  table_number          Int?
   reservation_status_id ReservationStatus @relation(fields: [status_id], references: [id])
   status_id             Int
   created_at            DateTime          @default(now())

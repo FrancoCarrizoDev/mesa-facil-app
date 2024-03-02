@@ -7,9 +7,9 @@ export function getReservationStatusLabelById(
     case 2:
       return "Confirmada";
     case 3:
-      return "Rechazada";
-    case 4:
       return "Cancelada";
+    case 4:
+      return "Rechazada";
     default:
       return "Sin estado";
   }

@@ -17,6 +17,8 @@ import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
 import { PaginationDTO } from "../../../../../../models/pagination.model";
 import CustomDialog from "@/components/Dialog/Dialog";
+import { CheckIcon, Cross1Icon, Cross2Icon } from "@radix-ui/react-icons";
+import Button from "@repo/ui/button";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -72,8 +74,40 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         ),
         action: (
           <div className="flex items-center">
-            <div className="flex items-center gap-1">
-              <Link href={`./reservations/${reservation.id}`}>Ver</Link>
+            <div className="flex w-full  items-center gap-3">
+              <Link
+                href={`./reservations/${reservation.id}`}
+                disabled={
+                  reservation.statusId !== ReservationStatusEnum.PENDING
+                }
+              >
+                <Button
+                  size="sm"
+                  disabled={
+                    reservation.statusId !== ReservationStatusEnum.PENDING
+                  }
+                >
+                  <div className="flex items-center">
+                    Aceptar
+                    <CheckIcon className="text-white" width={20} height={20} />
+                  </div>
+                </Button>
+              </Link>
+
+              <Link href={`./reservations/${reservation.id}`}>
+                <Button size="sm" color="danger" variant="outlined">
+                  <div className="flex items-center">
+                    Rechazar
+                    <Cross2Icon
+                      className="text-red-500"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                </Button>
+              </Link>
+
+              <Link href={`./reservations/${reservation.id}`}>Editar</Link>
             </div>
           </div>
         ),
