@@ -23,6 +23,7 @@ import CheckIcon from "@repo/ui/icons/check-icon";
 import CrossIcon from "@repo/ui/icons/cross-icon";
 import StopwatchIcon from "@repo/ui/icons/stop-watch-icon";
 import { updateReservationStatus } from "@/actions/reservation.actions";
+import RemoveIcon from "@repo/ui/icons/remove-icon";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -116,7 +117,7 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
                   <div className="w-full flex items-center justify-between">
                     <p className="min-w-[60px] font-medium">Eliminar</p>
                     <span>
-                      <CrossIcon className="text-red-400" />
+                      <RemoveIcon className="text-red-400" />
                     </span>
                   </div>
                 ),
