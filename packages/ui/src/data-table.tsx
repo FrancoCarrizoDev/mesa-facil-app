@@ -1,6 +1,6 @@
 export interface TableColumn {
   key: string;
-  header: string;
+  header: string | JSX.Element;
 }
 
 export interface TableData {

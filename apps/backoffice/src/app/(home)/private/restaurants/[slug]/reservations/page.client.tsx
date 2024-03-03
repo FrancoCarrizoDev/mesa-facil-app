@@ -24,6 +24,8 @@ import CrossIcon from "@repo/ui/icons/cross-icon";
 import StopwatchIcon from "@repo/ui/icons/stop-watch-icon";
 import { updateReservationStatus } from "@/actions/reservation.actions";
 import RemoveIcon from "@repo/ui/icons/remove-icon";
+import QuestionIcon from "@repo/ui/icons/question-icon";
+import Tooltip from "@repo/ui/tooltip";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -32,7 +34,17 @@ interface Props {
 const columns: TableColumn[] = [
   { key: "fullName", header: "Comensal" },
   { key: "date", header: "Fecha de reserva" },
-  { key: "statusId", header: "Estado de reserva" },
+  {
+    key: "statusId",
+    header: (
+      <Tooltip label="Puede cambiar los estados con los selectores.">
+        <div className="flex items-center">
+          <p>Estado de reserva</p>
+          <QuestionIcon />
+        </div>
+      </Tooltip>
+    ),
+  },
   { key: "tableNumber", header: "Mesa Asignada" },
   { key: "message", header: "Nota" },
   { key: "createdAt", header: "Fecha Creación" },
