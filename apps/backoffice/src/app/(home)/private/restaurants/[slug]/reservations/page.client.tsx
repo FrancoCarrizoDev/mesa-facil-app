@@ -17,7 +17,8 @@ import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
 import { PaginationDTO } from "../../../../../../models/pagination.model";
 import Button from "@repo/ui/button";
-import CustomDropdownMenu from "@/components/DropdownMenu/DropdownMenu";
+import CustomDropdownMenu from "@repo/ui/dropdown-menu";
+import CustomChevronDownIcon from "@repo/ui/icons/chevron-down-icon";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -41,6 +42,9 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
   console.log({ reservationList: paginatedReservation });
   const tableData: TableData[] = paginatedReservation.data.map(
     (reservation) => {
+      const reservationStatusLabelColor = getReservationStatusLabelColorById(
+        reservation.statusId
+      );
       return {
         date: (
           <p className="min-w-[150px]">
@@ -53,13 +57,31 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
           <p className=" overflow-auto">{reservation.message || "SIN/DATOS"}</p>
         ),
         statusId: (
-          <p
-            className={`${getReservationStatusLabelColorById(
-              reservation.statusId
-            )}`}
-          >
-            {getReservationStatusLabelById(reservation.statusId)}
-          </p>
+          <div className="flex items-center justify-between border gap-2 px-2 bg-gray-50 border-gray-300 p-1 rounded-sm  hover:bg-white hover:border-gray-200 min-w-[90px]">
+            <p className={`font-semibold ${reservationStatusLabelColor} `}>
+              {getReservationStatusLabelById(reservation.statusId)}
+            </p>
+            <CustomDropdownMenu
+              items={[
+                {
+                  label: "Pending",
+                  onClick: () => console.log("Pending"),
+                },
+                {
+                  label: "Confirm",
+                  onClick: () => console.log("Pending"),
+                },
+                {
+                  label: "Reject",
+                  onClick: () => console.log("Pending"),
+                },
+              ]}
+            >
+              <div className=" cursor-pointer">
+                <CustomChevronDownIcon />
+              </div>
+            </CustomDropdownMenu>
+          </div>
         ),
         createdAt: (
           <p className="min-w-[150px]">
@@ -74,28 +96,6 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         action: (
           <div className="flex items-center">
             <div className="flex w-full  items-center gap-3">
-              <Link
-                href={`./reservations/${reservation.id}`}
-                disabled={
-                  reservation.statusId !== ReservationStatusEnum.PENDING
-                }
-              >
-                <Button
-                  size="sm"
-                  disabled={
-                    reservation.statusId !== ReservationStatusEnum.PENDING
-                  }
-                >
-                  <div className="flex items-center">Aceptar</div>
-                </Button>
-              </Link>
-
-              <Link href={`./reservations/${reservation.id}`}>
-                <Button size="sm" color="danger" variant="outlined">
-                  <div className="flex items-center">Rechazar</div>
-                </Button>
-              </Link>
-
               <Link href={`./reservations/${reservation.id}`}>Editar</Link>
             </div>
           </div>
@@ -142,7 +142,6 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         )}
       </div>
       <DataTable columns={columns} data={tableData} />
-      <CustomDropdownMenu />
     </div>
   );
 }
