@@ -10,6 +10,7 @@ import {
 } from "@/models/reservation.model";
 import {
   getReservationStatusLabelById,
+  getReservationStatusLabelByType,
   getReservationStatusLabelColorById,
 } from "@/utils/reservations";
 import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
@@ -19,6 +20,7 @@ import { PaginationDTO } from "../../../../../../models/pagination.model";
 import Button from "@repo/ui/button";
 import CustomDropdownMenu from "@repo/ui/dropdown-menu";
 import CustomChevronDownIcon from "@repo/ui/icons/chevron-down-icon";
+import ReservationStatusLabel from "../../../../../../../../../packages/ui/src/reservation-status-label";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -42,9 +44,6 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
   console.log({ reservationList: paginatedReservation });
   const tableData: TableData[] = paginatedReservation.data.map(
     (reservation) => {
-      const reservationStatusLabelColor = getReservationStatusLabelColorById(
-        reservation.statusId
-      );
       return {
         date: (
           <p className="min-w-[150px]">
@@ -58,9 +57,10 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         ),
         statusId: (
           <div className="flex items-center justify-between border gap-2 px-2 bg-gray-50 border-gray-300 p-1 rounded-sm  hover:bg-white hover:border-gray-200 min-w-[90px]">
-            <p className={`font-semibold ${reservationStatusLabelColor} `}>
-              {getReservationStatusLabelById(reservation.statusId)}
-            </p>
+            <ReservationStatusLabel
+              label={getReservationStatusLabelById(reservation.statusId)}
+              status={getReservationStatusLabelByType(reservation.statusId)}
+            />
             <CustomDropdownMenu
               items={[
                 {
@@ -77,7 +77,7 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
                 },
               ]}
             >
-              <div className=" cursor-pointer">
+              <div className="cursor-pointer">
                 <CustomChevronDownIcon />
               </div>
             </CustomDropdownMenu>

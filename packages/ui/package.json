@@ -24,7 +24,8 @@
     "./icons/stop-watch-icon": "./src/icons/stop-watch-icon.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./icons/dots-vertical-icon": "./src/icons/dots-vertical-icon.tsx",
-    "./icons/chevron-down-icon": "./src/icons/chevron-down-icon.tsx"
+    "./icons/chevron-down-icon": "./src/icons/chevron-down-icon.tsx",
+    "./reservation-status-label": "./src/reservation-status-label.tsx"
   },
   "license": "MIT",
   "scripts": {

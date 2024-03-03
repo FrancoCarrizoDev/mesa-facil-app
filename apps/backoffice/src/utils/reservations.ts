@@ -31,3 +31,22 @@ export function getReservationStatusLabelColorById(
       return "text-gray-500";
   }
 }
+
+export function getReservationStatusLabelByType(
+  reservationStatus: number
+): StatusType {
+  switch (reservationStatus) {
+    case 1:
+      return "pending";
+    case 2:
+      return "confirm";
+    case 3:
+      return "cancel";
+    case 4:
+      return "reject";
+    default:
+      return "pending";
+  }
+}
+
+type StatusType = "pending" | "confirm" | "reject" | "cancel";
