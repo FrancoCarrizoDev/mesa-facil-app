@@ -4,33 +4,30 @@ import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
 import Link from "@/components/Link/link";
 import Spinner from "@/components/Spinner/Spinner";
 import useSearchReservation from "@/hooks/useSearchReservation";
-import {
-  ReservationDTO,
-  ReservationStatusEnum,
-} from "@/models/reservation.model";
+import type { ReservationDTO } from "@/models/reservation.model";
 import {
   getReservationStatusLabelById,
   getReservationStatusLabelByType,
-  getReservationStatusLabelColorById,
 } from "@/utils/reservations";
 import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import Input from "@repo/ui/input";
 import Select from "@repo/ui/select";
 import { PaginationDTO } from "../../../../../../models/pagination.model";
-import Button from "@repo/ui/button";
 import CustomDropdownMenu from "@repo/ui/dropdown-menu";
 import CustomChevronDownIcon from "@repo/ui/icons/chevron-down-icon";
-import ReservationStatusLabel from "../../../../../../../../../packages/ui/src/reservation-status-label";
+import ReservationStatusLabel from "@repo/ui/reservation-status-label";
+import CheckIcon from "@repo/ui/icons/check-icon";
+import CrossIcon from "@repo/ui/icons/cross-icon";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
 }
 
 const columns: TableColumn[] = [
-  { key: "firstName", header: "Nombre" },
-  { key: "lastName", header: "Apellido" },
+  { key: "fullName", header: "Comensal" },
   { key: "date", header: "Fecha de reserva" },
   { key: "statusId", header: "Estado de reserva" },
+  { key: "tableNumber", header: "Mesa Asignada" },
   { key: "message", header: "Nota" },
   { key: "createdAt", header: "Fecha Creación" },
   { key: "updatedAt", header: "Fecha Actualización" },
@@ -50,38 +47,63 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
             {new Date(reservation.date).toLocaleString("es-ES")}
           </p>
         ),
-        firstName: reservation.diner.firstName,
-        lastName: reservation.diner.lastName || "SIN/DATOS",
+        fullName: (
+          <p>
+            {`${reservation.diner.firstName} ${
+              reservation.diner.lastName || "SIN/DATOS"
+            }`}
+          </p>
+        ),
+        tableNumber: <p>{reservation.tableNumber || "SIN/DATOS"}</p>,
         message: (
           <p className=" overflow-auto">{reservation.message || "SIN/DATOS"}</p>
         ),
         statusId: (
-          <div className="flex items-center justify-between border gap-2 px-2 bg-gray-50 border-gray-300 p-1 rounded-sm  hover:bg-white hover:border-gray-200 min-w-[90px]">
-            <ReservationStatusLabel
-              label={getReservationStatusLabelById(reservation.statusId)}
-              status={getReservationStatusLabelByType(reservation.statusId)}
-            />
-            <CustomDropdownMenu
-              items={[
-                {
-                  label: "Pending",
-                  onClick: () => console.log("Pending"),
-                },
-                {
-                  label: "Confirm",
-                  onClick: () => console.log("Pending"),
-                },
-                {
-                  label: "Reject",
-                  onClick: () => console.log("Pending"),
-                },
-              ]}
-            >
-              <div className="cursor-pointer">
-                <CustomChevronDownIcon />
-              </div>
-            </CustomDropdownMenu>
-          </div>
+          <CustomDropdownMenu
+            items={[
+              {
+                label: (
+                  <div className="flex items-center justify-between">
+                    <p className="min-w-[60px]">Aceptar</p>
+                    <span>
+                      <CheckIcon className="text-green-500" />
+                    </span>
+                  </div>
+                ),
+                onClick: () => console.log("Pending"),
+              },
+              {
+                label: (
+                  <div className="flex items-center justify-between">
+                    <p className="min-w-[60px]">Cancelar</p>
+                    <span>
+                      <CrossIcon className="text-red-400" />
+                    </span>
+                  </div>
+                ),
+                onClick: () => console.log("Pending"),
+              },
+              {
+                label: (
+                  <div className="flex items-center justify-between">
+                    <p className="min-w-[60px]">Eliminar</p>
+                    <span>
+                      <CrossIcon className="text-red-400" />
+                    </span>
+                  </div>
+                ),
+                onClick: () => console.log("Pending"),
+              },
+            ]}
+          >
+            <div className="flex items-center justify-between border gap-2 px-2 bg-gray-50 border-gray-300 p-1 rounded-sm   hover:border-gray-400 min-w-[120px] cursor-pointer">
+              <ReservationStatusLabel
+                label={getReservationStatusLabelById(reservation.statusId)}
+                status={getReservationStatusLabelByType(reservation.statusId)}
+              />
+              <CustomChevronDownIcon />
+            </div>
+          </CustomDropdownMenu>
         ),
         createdAt: (
           <p className="min-w-[150px]">

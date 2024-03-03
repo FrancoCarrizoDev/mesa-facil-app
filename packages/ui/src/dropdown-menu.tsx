@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 interface DropdownMenuProps {
   children: ReactNode;
   items: {
-    label: string;
+    label: string | ReactNode;
     onClick: () => void;
   }[];
 }
@@ -16,24 +16,24 @@ export default function CustomDropdownMenu({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <div className="w-fit">{children}</div>
+        <div className="ui-w-fit">{children}</div>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className=" ui-bg-white ui-rounded-md ui-p-[5px] ui-shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] ui-will-change-[opacity,transform] data-[side=top]animate-slideDownAndFade data-[side=right]:ui-animate-slideLeftAndFade data-[side=bottom]:ui-animate-slideUpAndFade data-[side=left]:ui-animate-slideRightAndFade"
+          className="  ui-bg-gray-50 ui-rounded-md ui-p-[5px] ui-shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] ui-will-change-[opacity,transform] data-[side=top]animate-slideDownAndFade data-[side=right]:ui-animate-slideLeftAndFade data-[side=bottom]:ui-animate-slideUpAndFade data-[side=left]:ui-animate-slideRightAndFade ui-min-w-[125px]"
           sideOffset={5}
         >
           {items.map((item) => (
             <DropdownMenu.Item
-              className="ui-group ui-text-[13px] ui-leading-none ui-text-yellow-900 ui-rounded-[3px] ui-flex ui-items-center ui-h-[25px] ui-px-[20px] ui-relative ui-select-none ui-outline-none data-[disabled]:ui-text-mauve8 data-[disabled]:ui-pointer-events-none data-[highlighted]:ui-bg-yellow-100 data-[highlighted]:ui-text-yellow-950 ui-cursor-pointer"
-              key={item.label}
+              className="ui-group ui-min-h-[25px] ui-text-[13px] ui-leading-none ui-bg-gray-50 ui-text-gray-700 ui-rounded-[3px] ui-flex ui-items-center ui-h-[25px] ui-px-[20px] ui-relative ui-select-none ui-outline-none ui-transition-all data-[disabled]:ui-text-mauve8 data-[disabled]:ui-pointer-events-none data-[highlighted]:ui-font-semibold data-[highlighted]:ui-scale-105 data-[highlighted]:ui-text-yellow-950 ui-cursor-pointer"
+              key={item.label?.toString()}
             >
               {item.label}
             </DropdownMenu.Item>
           ))}
 
-          <DropdownMenu.Arrow className="fill-white" />
+          <DropdownMenu.Arrow className="ui-fill-white" />
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>

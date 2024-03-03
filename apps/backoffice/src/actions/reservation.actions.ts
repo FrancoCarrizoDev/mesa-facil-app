@@ -139,6 +139,7 @@ export async function getReservationList(
         status_id,
         created_at,
         updated_at,
+        table_number,
       }) => ({
         id: id,
         date: date,
@@ -155,6 +156,7 @@ export async function getReservationList(
         statusId: status_id,
         createdAt: created_at,
         updatedAt: updated_at,
+        tableNumber: table_number,
       })
     );
 
@@ -226,6 +228,7 @@ export async function getReservationById(id: string): Promise<ReservationDTO> {
       birthday: reservation.diner.birthday,
       email: reservation.diner.email,
     },
+    tableNumber: reservation.table_number,
     peopleQuantity: reservation.people_quantity,
     message: reservation.message,
     statusId: reservation.status_id,
