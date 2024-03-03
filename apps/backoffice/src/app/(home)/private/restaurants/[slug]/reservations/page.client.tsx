@@ -21,6 +21,7 @@ import CustomChevronDownIcon from "@repo/ui/icons/chevron-down-icon";
 import ReservationStatusLabel from "@repo/ui/reservation-status-label";
 import CheckIcon from "@repo/ui/icons/check-icon";
 import CrossIcon from "@repo/ui/icons/cross-icon";
+import StopwatchIcon from "@repo/ui/icons/stop-watch-icon";
 import { updateReservationStatus } from "@/actions/reservation.actions";
 
 interface Props {
@@ -68,7 +69,22 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
               {
                 label: (
                   <div className="w-full flex items-center justify-between">
-                    <p className="min-w-[60px]">Aceptar</p>
+                    <p className="min-w-[60px] font-medium">Pendiente</p>
+                    <span>
+                      <StopwatchIcon className="text-yellow-500" />
+                    </span>
+                  </div>
+                ),
+                onClick: async () =>
+                  await updateReservationStatus({
+                    id: reservation.id,
+                    status: ReservationStatusEnum.PENDING,
+                  }),
+              },
+              {
+                label: (
+                  <div className="w-full flex items-center justify-between">
+                    <p className="min-w-[60px] font-medium">Aceptar</p>
                     <span>
                       <CheckIcon className="text-green-500" />
                     </span>
@@ -83,7 +99,7 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
               {
                 label: (
                   <div className="w-full flex items-center justify-between">
-                    <p className="min-w-[60px]">Cancelar</p>
+                    <p className="min-w-[60px] font-medium">Cancelar</p>
                     <span>
                       <CrossIcon className="text-red-400" />
                     </span>
@@ -98,7 +114,7 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
               {
                 label: (
                   <div className="w-full flex items-center justify-between">
-                    <p className="min-w-[60px]">Eliminar</p>
+                    <p className="min-w-[60px] font-medium">Eliminar</p>
                     <span>
                       <CrossIcon className="text-red-400" />
                     </span>
