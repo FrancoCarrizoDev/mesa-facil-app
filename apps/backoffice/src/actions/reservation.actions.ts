@@ -236,3 +236,33 @@ export async function getReservationById(id: string): Promise<ReservationDTO> {
     updatedAt: reservation.updated_at,
   };
 }
+
+export async function updateReservationStatus({
+  id,
+  status,
+}: {
+  id: string;
+  status: ReservationStatusEnum;
+}): Promise<void> {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("User not loggqged in");
+  }
+
+  try {
+    await prisma?.reservation.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status_id: status,
+      },
+    });
+
+    revalidatePath(`/private/restaurants`);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error updating reservation status");
+  }
+}

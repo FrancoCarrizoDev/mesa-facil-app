@@ -4,7 +4,10 @@ import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
 import Link from "@/components/Link/link";
 import Spinner from "@/components/Spinner/Spinner";
 import useSearchReservation from "@/hooks/useSearchReservation";
-import type { ReservationDTO } from "@/models/reservation.model";
+import {
+  ReservationStatusEnum,
+  type ReservationDTO,
+} from "@/models/reservation.model";
 import {
   getReservationStatusLabelById,
   getReservationStatusLabelByType,
@@ -18,6 +21,7 @@ import CustomChevronDownIcon from "@repo/ui/icons/chevron-down-icon";
 import ReservationStatusLabel from "@repo/ui/reservation-status-label";
 import CheckIcon from "@repo/ui/icons/check-icon";
 import CrossIcon from "@repo/ui/icons/cross-icon";
+import { updateReservationStatus } from "@/actions/reservation.actions";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -63,29 +67,37 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
             items={[
               {
                 label: (
-                  <div className="flex items-center justify-between">
+                  <div className="w-full flex items-center justify-between">
                     <p className="min-w-[60px]">Aceptar</p>
                     <span>
                       <CheckIcon className="text-green-500" />
                     </span>
                   </div>
                 ),
-                onClick: () => console.log("Pending"),
+                onClick: async () =>
+                  await updateReservationStatus({
+                    id: reservation.id,
+                    status: ReservationStatusEnum.CONFIRMED,
+                  }),
               },
               {
                 label: (
-                  <div className="flex items-center justify-between">
+                  <div className="w-full flex items-center justify-between">
                     <p className="min-w-[60px]">Cancelar</p>
                     <span>
                       <CrossIcon className="text-red-400" />
                     </span>
                   </div>
                 ),
-                onClick: () => console.log("Pending"),
+                onClick: async () =>
+                  await updateReservationStatus({
+                    id: reservation.id,
+                    status: ReservationStatusEnum.CANCELED,
+                  }),
               },
               {
                 label: (
-                  <div className="flex items-center justify-between">
+                  <div className="w-full flex items-center justify-between">
                     <p className="min-w-[60px]">Eliminar</p>
                     <span>
                       <CrossIcon className="text-red-400" />
