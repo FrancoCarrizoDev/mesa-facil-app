@@ -27,7 +27,8 @@ import RemoveIcon from "@repo/ui/icons/remove-icon";
 import QuestionIcon from "@repo/ui/icons/question-icon";
 import Tooltip from "@repo/ui/tooltip";
 import DialogDemo from "@repo/ui/dialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { DialogContext } from "src/context/dialog/dialog.context";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -57,7 +58,7 @@ const columns: TableColumn[] = [
 export default function ReservationClientPage({ paginatedReservation }: Props) {
   const { filters, onChangeDate, onChangeStatus, onChangeTerm, isDebouncing } =
     useSearchReservation();
-  const [open, setOpen] = useState(false);
+  const { openDialog, closeDialog } = useContext(DialogContext);
 
   console.log({ reservationList: paginatedReservation });
   const tableData: TableData[] = paginatedReservation.data.map(
@@ -208,17 +209,23 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         )}
       </div>
       <DataTable columns={columns} data={tableData} />
-      <DialogDemo
-        description="Ingrese el número de mesa para confirmar la reserva."
-        open={open}
-        onOpenChange={() => setOpen(!open)}
-        title="Confirmar una reserva"
-        triggerElement="Trigger"
-        handleClose={() => setOpen(false)}
-        handleSubmit={() => console.log("Submit")}
+      <button
+        onClick={() =>
+          openDialog({
+            title: "Dialog Title",
+            description: "Dialog Description",
+            content: <div>Dialog Content</div>,
+            handleSubmit: () => {
+              console.log("Submit"), closeDialog();
+            },
+            handleClose: () => {
+              console.log("Close"), closeDialog();
+            },
+          })
+        }
       >
-        <p>Holis</p>
-      </DialogDemo>
+        OPEN DIALOG
+      </button>
     </div>
   );
 }
