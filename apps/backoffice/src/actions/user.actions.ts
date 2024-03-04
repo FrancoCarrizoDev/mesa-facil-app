@@ -4,9 +4,7 @@ import {
   CreateUserDTO,
   USER_STATUS,
   UpdateUserDTO,
-  User,
   UserDTO,
-  UserStatus,
 } from "src/models/user.model";
 import prisma from "database";
 import { hashPassword } from "src/utils/bcrypt";
