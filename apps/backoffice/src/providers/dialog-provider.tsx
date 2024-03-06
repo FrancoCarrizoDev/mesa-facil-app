@@ -9,26 +9,10 @@ export default function DialogProviderComponent({
 }: {
   children: React.ReactNode;
 }) {
-  const {
-    open,
-    content,
-    description,
-    onOpenChange,
-    title,
-    handleClose,
-    handleSubmit,
-  } = useContext(DialogContext);
+  const { open, content, onOpenChange } = useContext(DialogContext);
   return (
     <div>
-      <Dialog
-        open={open}
-        onOpenChange={onOpenChange}
-        description={description}
-        title={title}
-        handleClose={handleClose}
-        handleSubmit={handleSubmit}
-        content={content}
-      />
+      <Dialog open={open} onOpenChange={onOpenChange} content={content} />
       {children}
     </div>
   );

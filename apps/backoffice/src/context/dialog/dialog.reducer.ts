@@ -11,27 +11,18 @@ export const DialogReducer = (
 ): DialogStateProps => {
   switch (action.type) {
     case "[Dialog] - Open":
-      const { content, description, title, handleSubmit, handleClose } =
-        action.payload;
+      const { content, description, title } = action.payload;
       return {
         ...state,
         open: true,
         content,
-        description,
-        title,
-        handleSubmit,
-        handleClose,
       };
     case "[Dialog] - Close":
       return {
         ...state,
         open: false,
         onOpenChange: () => {},
-        title: "",
-        description: "",
         content: null,
-        handleSubmit: () => {},
-        handleClose: () => {},
       };
     default:
       return state;

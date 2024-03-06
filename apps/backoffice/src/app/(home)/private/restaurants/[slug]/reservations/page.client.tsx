@@ -29,6 +29,7 @@ import Tooltip from "@repo/ui/tooltip";
 import DialogDemo from "@repo/ui/dialog";
 import { useContext, useState } from "react";
 import { DialogContext } from "src/context/dialog/dialog.context";
+import ReservationConfigDialog from "../../../../../../components/ReservationConfirmDialog/reservation-confirm-dialog";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
@@ -92,11 +93,19 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
                     </span>
                   </div>
                 ),
-                onClick: async () =>
-                  await updateReservationStatus({
-                    id: reservation.id,
-                    status: ReservationStatusEnum.PENDING,
-                  }),
+                onClick: async () => {
+                  return openDialog({
+                    title: `Confirmar reserva de ${reservation.diner.firstName} ${reservation.diner.lastName}`,
+                    description:
+                      "¿Está seguro de confirmar esta reserva? Ingrese un número de mesa para asignar al comensal.",
+                    content: (
+                      <ReservationConfigDialog
+                        reservationId={reservation.id}
+                        reservationStatusId={ReservationStatusEnum.PENDING}
+                      />
+                    ),
+                  });
+                },
               },
               {
                 label: (
@@ -107,11 +116,23 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
                     </span>
                   </div>
                 ),
-                onClick: async () =>
-                  await updateReservationStatus({
-                    id: reservation.id,
-                    status: ReservationStatusEnum.CONFIRMED,
-                  }),
+                onClick: async () => {
+                  // await updateReservationStatus({
+                  //   id: reservation.id,
+                  //   status: ReservationStatusEnum.CONFIRMED,
+                  // }),
+                  return openDialog({
+                    title: `Confirmar reserva de ${reservation.diner.firstName} ${reservation.diner.lastName}`,
+                    description:
+                      "¿Está seguro de confirmar esta reserva? Ingrese un número de mesa para asignar al comensal.",
+                    content: (
+                      <ReservationConfigDialog
+                        reservationId={reservation.id}
+                        reservationStatusId={ReservationStatusEnum.CONFIRMED}
+                      />
+                    ),
+                  });
+                },
               },
               {
                 label: (
@@ -209,23 +230,6 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
         )}
       </div>
       <DataTable columns={columns} data={tableData} />
-      <button
-        onClick={() =>
-          openDialog({
-            title: "Dialog Title",
-            description: "Dialog Description",
-            content: <div>Dialog Content</div>,
-            handleSubmit: () => {
-              console.log("Submit"), closeDialog();
-            },
-            handleClose: () => {
-              console.log("Close"), closeDialog();
-            },
-          })
-        }
-      >
-        OPEN DIALOG
-      </button>
     </div>
   );
 }

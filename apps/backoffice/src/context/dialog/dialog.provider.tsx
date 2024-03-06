@@ -6,21 +6,13 @@ import { DialogReducer } from "./dialog.reducer";
 export interface DialogStateProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  title: string;
-  description: string;
   content: React.ReactNode;
-  handleSubmit?: () => void;
-  handleClose?: () => void;
 }
 
 const DIALOG_INITIAL_STATE: DialogStateProps = {
   open: false,
   onOpenChange: () => {},
-  title: "",
-  description: "",
   content: null,
-  handleSubmit: () => {},
-  handleClose: () => {},
 };
 
 type Props = { children: React.ReactNode };

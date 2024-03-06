@@ -29,7 +29,9 @@
     "./icons/cross-icon": "./src/icons/cross-icon.tsx",
     "./icons/stop-watch-icon": "./src/icons/stop-watch-icon.tsx",
     "./icons/remove-icon": "./src/icons/remove-icon.tsx",
-    "./icons/question-icon": "./src/icons/question-icon.tsx"
+    "./icons/question-icon": "./src/icons/question-icon.tsx",
+    "./dialog-header": "./src/dialog-header.tsx",
+    "./dialog-buttons": "./src/dialog-buttons.tsx"
   },
   "license": "MIT",
   "scripts": {
