@@ -69,59 +69,92 @@ export async function getReservationList(
   const status = getReservationStatusBySearchKeyLabel(searchParams.status);
 
   console.log({
-    date: {
-      gte: searchParams.date,
-      lte: searchParams.date
-        ? addDays(new Date(searchParams.date), 1).toISOString()
-        : undefined,
-    },
+    searchParams,
   });
 
   try {
-    const reservations = await prisma?.reservation.findMany({
-      where: {
-        attention_schedule: {
-          restaurant: {
-            slug: restaurantSlug,
+    const submission = await prisma?.$transaction([
+      prisma?.reservation.findMany({
+        where: {
+          attention_schedule: {
+            restaurant: {
+              slug: restaurantSlug,
+            },
+          },
+          diner: {
+            OR: [
+              {
+                first_name: {
+                  contains: searchParams.term,
+                },
+              },
+              {
+                last_name: {
+                  contains: searchParams.term,
+                },
+              },
+              {
+                email: {
+                  contains: searchParams.term,
+                },
+              },
+            ],
+          },
+          status_id: status ? status : undefined,
+          date: {
+            gte: searchParams.date,
+            lte: searchParams.date
+              ? addDays(new Date(searchParams.date), 1).toISOString()
+              : undefined,
           },
         },
-        diner: {
-          OR: [
-            {
-              first_name: {
-                contains: searchParams.term,
-              },
-            },
-            {
-              last_name: {
-                contains: searchParams.term,
-              },
-            },
-            {
-              email: {
-                contains: searchParams.term,
-              },
-            },
-          ],
+        include: {
+          diner: true,
         },
-        status_id: status ? status : undefined,
-        date: {
-          gte: searchParams.date,
-          lte: searchParams.date
-            ? addDays(new Date(searchParams.date), 1).toISOString()
-            : undefined,
+        skip:
+          searchParams.page === 1
+            ? 0
+            : (searchParams.page - 1) * searchParams.pageSize,
+        take: searchParams.pageSize,
+      }),
+      prisma?.reservation.count({
+        where: {
+          attention_schedule: {
+            restaurant: {
+              slug: restaurantSlug,
+            },
+          },
+          diner: {
+            OR: [
+              {
+                first_name: {
+                  contains: searchParams.term,
+                },
+              },
+              {
+                last_name: {
+                  contains: searchParams.term,
+                },
+              },
+              {
+                email: {
+                  contains: searchParams.term,
+                },
+              },
+            ],
+          },
+          status_id: status ? status : undefined,
+          date: {
+            gte: searchParams.date,
+            lte: searchParams.date
+              ? addDays(new Date(searchParams.date), 1).toISOString()
+              : undefined,
+          },
         },
-      },
-      include: {
-        diner: true,
-      },
-      skip: searchParams.skip
-        ? searchParams.page * searchParams.pageSize
-        : searchParams.page,
-      take: searchParams.pageSize,
-    });
+      }),
+    ]);
 
-    if (!reservations)
+    if (!submission)
       return {
         page: searchParams.page,
         pageSize: searchParams.pageSize,
@@ -129,7 +162,7 @@ export async function getReservationList(
         data: [],
       };
 
-    const reservationList: ReservationDTO[] = reservations.map(
+    const reservationList: ReservationDTO[] = submission[0].map(
       ({
         id,
         date,
@@ -163,7 +196,7 @@ export async function getReservationList(
     return {
       page: searchParams.page,
       pageSize: searchParams.pageSize,
-      total: reservationList.length,
+      total: submission[1],
       data: reservationList,
     };
   } catch (error) {

@@ -3,19 +3,17 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
 
-interface FilterProps {
+export interface ReservationParamsProps {
   status: string;
   date: Date | null;
   term: string;
+  page: number;
+  pageSize: number;
 }
 
-export default function useSearchReservation() {
+export default function useSearchReservation(params: ReservationParamsProps) {
   const router = useRouter();
-  const [filters, setFilters] = useState<FilterProps>({
-    status: "all",
-    date: null,
-    term: "",
-  });
+  const [filters, setFilters] = useState<ReservationParamsProps>(params);
   const termDebounce = useDebounce(filters, 1000);
   const pathname = usePathname();
 
@@ -34,8 +32,9 @@ export default function useSearchReservation() {
   const isDebouncing =
     termDebounce.status !== filters.status ||
     termDebounce.date !== filters.date ||
-    termDebounce.term !== filters.term;
-
+    termDebounce.term !== filters.term ||
+    termDebounce.page !== filters.page ||
+    termDebounce.pageSize !== filters.pageSize;
   useEffect(() => {
     const query = new URLSearchParams();
 
@@ -48,6 +47,10 @@ export default function useSearchReservation() {
     }
 
     query.set("term", termDebounce.term.toString());
+
+    query.set("page", termDebounce.page.toString());
+
+    query.set("pageSize", termDebounce.pageSize.toString());
 
     router.push(`${pathname}?${query.toString()}`);
   }, [termDebounce]);

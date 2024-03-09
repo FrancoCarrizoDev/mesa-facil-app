@@ -27,10 +27,13 @@ import Select from "@repo/ui/select";
 import Spinner from "@/components/Spinner/Spinner";
 import StopwatchIcon from "@repo/ui/icons/stop-watch-icon";
 import Tooltip from "@repo/ui/tooltip";
-import useSearchReservation from "@/hooks/useSearchReservation";
+import useSearchReservation, {
+  ReservationParamsProps,
+} from "@/hooks/useSearchReservation";
 
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
+  reservationParamsProps: ReservationParamsProps;
 }
 
 const columns: TableColumn[] = [
@@ -97,9 +100,18 @@ const reservationStatusSelectItems = [
   },
 ];
 
-export default function ReservationClientPage({ paginatedReservation }: Props) {
+export default function ReservationClientPage({
+  paginatedReservation,
+  reservationParamsProps,
+}: Props) {
   const { filters, onChangeDate, onChangeStatus, onChangeTerm, isDebouncing } =
-    useSearchReservation();
+    useSearchReservation({
+      page: reservationParamsProps.page,
+      pageSize: reservationParamsProps.pageSize,
+      status: reservationParamsProps.status,
+      date: reservationParamsProps.date,
+      term: reservationParamsProps.term,
+    });
   const { openDialog } = useContext(DialogContext);
 
   console.log({ reservationList: paginatedReservation });
@@ -219,7 +231,15 @@ export default function ReservationClientPage({ paginatedReservation }: Props) {
           </div>
         )}
       </div>
-      <DataTable columns={columns} data={tableData} />
+      <DataTable
+        pagination={{
+          page: paginatedReservation.page,
+          pageSize: paginatedReservation.pageSize,
+          total: paginatedReservation.total,
+        }}
+        columns={columns}
+        data={tableData}
+      />
     </div>
   );
 }

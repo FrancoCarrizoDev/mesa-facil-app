@@ -1,3 +1,5 @@
+import Link from "../../../apps/backoffice/src/components/Link/link";
+import { useSearchParams, usePathname } from "next/navigation";
 export interface TableColumn {
   key: string;
   header: string | JSX.Element;
@@ -19,7 +21,32 @@ interface DataTableProps {
   pagination?: TablePagination;
 }
 
-export default function DataTable({ columns, data }: DataTableProps) {
+export default function DataTable({
+  columns,
+  data,
+  pagination,
+}: DataTableProps) {
+  const params = useSearchParams();
+  const pathname = usePathname();
+  const decodeParams = decodeURIComponent(params);
+  const paramsSplit = decodeParams.toString().split("&");
+  const separeteInObj = paramsSplit.map((param) => {
+    const [key, value] = param.split("=");
+    return { [key]: value };
+  });
+  const reduceObject = separeteInObj.reduce((acc, obj) => {
+    return { ...acc, ...obj };
+  }, {});
+
+  const totalPaginationOptions = Math.ceil(
+    pagination?.total / pagination?.pageSize
+  );
+
+  const paginationOptions = Array.from(
+    { length: totalPaginationOptions },
+    (_, i) => i + 1
+  );
+
   return (
     <div className="w-full ui-bg-white ui-pb-3 ui-shadow-md ui-sm:rounded-lg ">
       <div className=" ui-w-full ui-relative ui-overflow-x-auto  ">
@@ -55,18 +82,27 @@ export default function DataTable({ columns, data }: DataTableProps) {
       >
         <span className="ui-text-sm ui-font-normal ui-text-gray-500  ui-mb-4 md:ui-mb-0 ui-block ui-w-full md:ui-inline md:ui-w-auto">
           Showing{" "}
-          <span className="ui-font-semibold ui-text-gray-900">1-10</span> of{" "}
-          <span className="ui-font-semibold ui-text-gray-900">1000</span>
+          <span className="ui-font-semibold ui-text-gray-900">{`${pagination?.page}-${pagination?.pageSize}`}</span>{" "}
+          of{" "}
+          <span className="ui-font-semibold ui-text-gray-900">
+            {pagination?.total}
+          </span>
         </span>
         <ul className="ui-inline-flex ui--space-x-px rtl:ui-space-x-reverse ui-text-sm ui-h-8">
           <li>
-            <a
-              href="#"
-              className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-ms-0 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 ui-rounded-s-lg hover:ui-bg-gray-100 hover:ui-text-gray-700"
-            >
-              Previous
-            </a>
+            <div className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-ms-0 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 ui-rounded-s-lg hover:ui-bg-gray-100 hover:ui-text-gray-700">
+              <Link href="#">Anteior</Link>
+            </div>
           </li>
+          {paginationOptions.map((page) => {
+            const params = new URLSearchParams(reduceObject);
+            params.set("page", page.toString());
+            return (
+              <li key={page} className="ui-px-3">
+                <Link href={pathname + "?" + params}>{page}</Link>
+              </li>
+            );
+          })}
           <li>
             <a
               href="#"
@@ -113,7 +149,7 @@ export default function DataTable({ columns, data }: DataTableProps) {
               href="#"
               className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 rounded-e-lg hover:ui-bg-gray-100 hover:ui-text-gray-700"
             >
-              Next
+              Siguiente
             </a>
           </li>
         </ul>

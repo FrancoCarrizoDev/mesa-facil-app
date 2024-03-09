@@ -15,7 +15,6 @@ export interface SearchReservationParams {
   readonly term?: string;
   readonly page: number;
   readonly pageSize: number;
-  readonly skip?: number;
 }
 
 interface Props {
@@ -31,10 +30,9 @@ export default async function ReservationPage({ params, searchParams }: Props) {
   const reservationList = await getReservationList(restaurantSlug, {
     status: searchParams.status,
     date: searchParams.date,
-    term: searchParams.term,
+    term: searchParams.term || "",
     page: Number(searchParams.page) || 1,
     pageSize: Number(searchParams.pageSize) || 10,
-    skip: Number(searchParams.skip) || 0,
   });
 
   console.log({ reservationList });
@@ -51,7 +49,16 @@ export default async function ReservationPage({ params, searchParams }: Props) {
         </Link>
       </div>
       <SectionBody>
-        <ReservationClientPage paginatedReservation={reservationList} />
+        <ReservationClientPage
+          paginatedReservation={reservationList}
+          reservationParamsProps={{
+            page: Number(searchParams.page) || 1,
+            pageSize: Number(searchParams.pageSize) || 10,
+            status: searchParams.status,
+            date: searchParams.date ? new Date(searchParams.date) : null,
+            term: searchParams.term || "",
+          }}
+        />
       </SectionBody>
     </Section>
   );
