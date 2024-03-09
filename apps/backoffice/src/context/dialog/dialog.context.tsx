@@ -2,8 +2,6 @@
 import { type ReactNode, createContext } from "react";
 
 export interface OpenDialogProps {
-  title: string;
-  description: string;
   content: ReactNode;
 }
 

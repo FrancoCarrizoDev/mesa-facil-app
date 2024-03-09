@@ -240,9 +240,11 @@ export async function getReservationById(id: string): Promise<ReservationDTO> {
 export async function updateReservationStatus({
   id,
   status,
+  tableNumber,
 }: {
   id: string;
   status: ReservationStatusEnum;
+  tableNumber?: number | null;
 }): Promise<void> {
   const session = await getSession();
 
@@ -257,6 +259,7 @@ export async function updateReservationStatus({
       },
       data: {
         status_id: status,
+        table_number: null,
       },
     });
 

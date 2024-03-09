@@ -1,12 +1,15 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import type { ReactNode } from "react";
 
-interface DropdownMenuProps {
+export interface DropDownMenuItem {
+  label: string | ReactNode;
+  onClick: () => void;
+  enabled?: boolean;
+}
+
+export interface DropdownMenuProps {
   children: ReactNode;
-  items: {
-    label: string | ReactNode;
-    onClick: () => void;
-  }[];
+  items: DropDownMenuItem[];
 }
 
 export default function CustomDropdownMenu({
@@ -27,6 +30,7 @@ export default function CustomDropdownMenu({
           {items.map((item) => (
             <DropdownMenu.Item
               className="ui-group ui-min-h-[25px] ui-text-[13px] ui-leading-none ui-bg-gray-50 ui-text-gray-700 ui-rounded-[3px] ui-flex ui-items-center ui-h-[30px] ui-px-[15px] ui-relative ui-select-none ui-outline-none ui-transition-all data-[disabled]:ui-text-gray500 data-[disabled]:ui-pointer-events-none data-[highlighted]:ui-font-semibold data-[highlighted]:ui-scale-105 data-[highlighted]:ui-text-yellow-950 data-[highlighted]:ui-border-b data-[highlighted]:ui-border-t ui-cursor-pointer"
+              disabled={!item.enabled}
               key={item.label?.toString()}
               onClick={item.onClick}
             >

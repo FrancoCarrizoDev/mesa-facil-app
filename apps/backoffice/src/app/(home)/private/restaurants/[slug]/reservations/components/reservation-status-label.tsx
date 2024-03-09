@@ -4,7 +4,11 @@ import {
   getReservationStatusLabelColorById,
 } from "@/utils/reservations";
 
-export default function ReservationStatus({ statusId }: { statusId: number }) {
+export default function ReservationStatusLabel({
+  statusId,
+}: {
+  statusId: number;
+}) {
   const reservationStatusLabelColor =
     getReservationStatusLabelColorById(statusId);
   return (
