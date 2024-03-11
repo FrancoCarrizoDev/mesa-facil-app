@@ -7,6 +7,7 @@ export default function Link({
   color = "primary",
   underline = "none",
   disabled = false,
+  weight = "semibold",
 }: LinkProps): JSX.Element {
   const colors = {
     primary: "text-gray-700 hover:text-primary-800",
@@ -19,9 +20,16 @@ export default function Link({
     always: "underline",
   };
 
+  const weights = {
+    normal: "font-normal",
+    bold: "font-bold",
+    semibold: "font-semibold",
+    extrabold: "font-extrabold",
+  };
+
   return (
     <NextLink
-      className={`text-sm font-semibold ${colors[color]} ${
+      className={`text-sm ${weights[weight]} ${colors[color]} ${
         underlineClasses[underline]
       } ${disabled ? "pointer-events-none text-gray-300" : ""} `}
       href={href}

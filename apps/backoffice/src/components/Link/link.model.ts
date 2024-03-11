@@ -4,4 +4,5 @@ export interface LinkProps {
   color?: "primary" | "secondary";
   underline?: "hover" | "none" | "always";
   disabled?: boolean;
+  weight?: "normal" | "bold" | "semibold" | "extrabold";
 }

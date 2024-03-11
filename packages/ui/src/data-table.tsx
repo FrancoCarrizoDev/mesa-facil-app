@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Link from "../../../apps/backoffice/src/components/Link/link";
 import { useSearchParams, usePathname } from "next/navigation";
 export interface TableColumn {
@@ -47,6 +48,18 @@ export default function DataTable({
     (_, i) => i + 1
   );
 
+  const nextHref = () => {
+    const params = new URLSearchParams(reduceObject);
+    params.set("page", (pagination?.page + 1).toString());
+    return pathname + "?" + params;
+  };
+
+  const prevHref = () => {
+    const params = new URLSearchParams(reduceObject);
+    params.set("page", (pagination?.page - 1).toString());
+    return pathname + "?" + params;
+  };
+
   return (
     <div className="w-full ui-bg-white ui-pb-3 ui-shadow-md ui-sm:rounded-lg ">
       <div className=" ui-w-full ui-relative ui-overflow-x-auto  ">
@@ -91,66 +104,44 @@ export default function DataTable({
         <ul className="ui-inline-flex ui--space-x-px rtl:ui-space-x-reverse ui-text-sm ui-h-8">
           <li>
             <div className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-ms-0 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 ui-rounded-s-lg hover:ui-bg-gray-100 hover:ui-text-gray-700">
-              <Link href="#">Anteior</Link>
+              <Link
+                weight="normal"
+                href={prevHref()}
+                disabled={pagination?.page === 1}
+              >
+                Anterior
+              </Link>
             </div>
           </li>
           {paginationOptions.map((page) => {
             const params = new URLSearchParams(reduceObject);
             params.set("page", page.toString());
+            const isActive = page === pagination?.page;
             return (
-              <li key={page} className="ui-px-3">
-                <Link href={pathname + "?" + params}>{page}</Link>
+              <li
+                key={page}
+                className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 hover:ui-bg-gray-100 hover:ui-text-gray-700"
+              >
+                <Link
+                  weight={isActive ? "semibold" : "normal"}
+                  href={pathname + "?" + params}
+                >
+                  {page}
+                </Link>
               </li>
             );
           })}
+
           <li>
-            <a
-              href="#"
-              className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 hover:ui-bg-gray-100 hover:ui-text-gray-700"
-            >
-              1
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 hover:ui-bg-gray-100 hover:ui-text-gray-700"
-            >
-              2
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              aria-current="page"
-              className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 text-blue-600 ui-border ui-border-gray-300 ui-bg-blue-50 hover:ui-bg-gray-100 hover:ui-text-gray-700"
-            >
-              3
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 hover:ui-bg-gray-100 hover:ui-text-gray-700"
-            >
-              4
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 hover:ui-bg-gray-100 hover:ui-text-gray-700"
-            >
-              5
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 rounded-e-lg hover:ui-bg-gray-100 hover:ui-text-gray-700"
-            >
-              Siguiente
-            </a>
+            <div className="ui-flex ui-items-center ui-justify-center ui-px-3 ui-h-8 ui-ms-0 ui-leading-tight ui-text-gray-500 ui-bg-white border ui-border-gray-300 ui-rounded-s-lg hover:ui-bg-gray-100 hover:ui-text-gray-700">
+              <Link
+                weight="normal"
+                href={nextHref()}
+                disabled={pagination?.page === totalPaginationOptions}
+              >
+                Siguiente
+              </Link>
+            </div>
           </li>
         </ul>
       </nav>
