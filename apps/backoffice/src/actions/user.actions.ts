@@ -8,7 +8,7 @@ import {
 } from "src/models/user.model";
 import prisma from "database";
 import { hashPassword } from "src/utils/bcrypt";
-import { v4 as uuidv4 } from "uuid";
+import uuid from "@repo/common/uuid";
 import { ROLES } from "@/constants/roles";
 import getSession from "@/utils/get-session";
 import { hasManageUsersPermission } from "@/utils/permissions";
@@ -28,7 +28,7 @@ export async function createRootUser(user: CreateUserDTO) {
 
     const newUser = await prisma.user.create({
       data: {
-        id: uuidv4(),
+        id: uuid(),
         email: user.email,
         password: await hashPassword(user.password),
         first_name: user.firstName,
@@ -85,7 +85,7 @@ export async function createUser(user: CreateUserDTO) {
 
     const newUser = await prisma.user.create({
       data: {
-        id: uuidv4(),
+        id: uuid(),
         email: user.email,
         password: await hashPassword(user.password),
         first_name: user.firstName,

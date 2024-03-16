@@ -10,7 +10,7 @@ import { addDays } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 import type { SearchReservationParams } from "src/app/(home)/private/restaurants/[slug]/reservations/page";
-import { v4 as uuidv4 } from "uuid";
+import uuid from "@repo/common/uuid";
 import { PaginationDTO } from "../models/pagination.model";
 
 function getReservationStatusBySearchKeyLabel(searchKey: string) {
@@ -40,7 +40,7 @@ export async function createReserve(
   try {
     await prisma?.reservation.create({
       data: {
-        id: uuidv4(),
+        id: uuid(),
         attention_schedule_id: reserve.attentionScheduleId,
         date: new Date(reserve.date).toISOString(),
         diner_id: reserve.dinerId,

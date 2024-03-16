@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
+import uuid from "@repo/common/uuid";
 import { faker } from "@faker-js/faker";
-import slugify from "slugify";
+import slugify from "@repo/common/slugify";
 
 const prisma = new PrismaClient();
 
@@ -9,7 +9,7 @@ const USER_ROOT = {
   email: "francoadrianc@gmail.com",
   first_name: "Jhon",
   last_name: "Doe",
-  id: uuidv4(),
+  id: uuid(),
   provider: "google",
 };
 
@@ -17,7 +17,7 @@ const USER_MANAGER = {
   email: "francoadrianc9@gmail.com",
   first_name: "Manager",
   last_name: "Martins",
-  id: uuidv4(),
+  id: uuid(),
   provider: "google",
 };
 
@@ -25,7 +25,7 @@ const USER_EMPLOYEE = {
   email: "franco.carrizo@bitlogic.io",
   first_name: "Employee",
   last_name: "Marcs",
-  id: uuidv4(),
+  id: uuid(),
   provider: "google",
 };
 
@@ -51,61 +51,58 @@ const reservationStatus = [
 export const generateRestaurants = (numberRestaurants) => {
   const restaurants = [];
   for (let i = 0; i < numberRestaurants; i++) {
-    const restaurantId = uuidv4();
+    const restaurantId = uuid();
     restaurants.push({
       id: restaurantId,
       name: faker.company.name(),
-      slug: slugify(faker.company.name(), {
-        lower: true,
-        remove: /[*+~.()'"!:@]/g,
-      }),
+      slug: slugify(faker.company.name()),
       address: faker.location.secondaryAddress(),
       phone: faker.phone.number(),
       attention_schedule: [
         {
-          id: uuidv4(),
+          id: uuid(),
           day_name: "Domingo",
           opening_hours: "08:00",
           ending_hours: "22:00",
           day_number: 0,
         },
         {
-          id: uuidv4(),
+          id: uuid(),
           day_name: "Lunes",
           opening_hours: "08:00",
           ending_hours: "22:00",
           day_number: 1,
         },
         {
-          id: uuidv4(),
+          id: uuid(),
           day_name: "Martes",
           opening_hours: "08:00",
           ending_hours: "22:00",
           day_number: 2,
         },
         {
-          id: uuidv4(),
+          id: uuid(),
           day_name: "Miércoles",
           opening_hours: "08:00",
           ending_hours: "22:00",
           day_number: 3,
         },
         {
-          id: uuidv4(),
+          id: uuid(),
           day_name: "Jueves",
           opening_hours: "08:00",
           ending_hours: "22:00",
           day_number: 4,
         },
         {
-          id: uuidv4(),
+          id: uuid(),
           day_name: "Viernes",
           opening_hours: "08:00",
           ending_hours: "22:00",
           day_number: 5,
         },
         {
-          id: uuidv4(),
+          id: uuid(),
           day_name: "Sábado",
           opening_hours: "08:00",
           ending_hours: "22:00",
@@ -121,7 +118,7 @@ export const generateDiners = (numberDiners) => {
   const diners = [];
   for (let i = 0; i < numberDiners; i++) {
     diners.push({
-      id: uuidv4(),
+      id: uuid(),
       first_name: faker.person.firstName(),
       last_name: faker.person.lastName(),
       email: faker.internet.email(),
@@ -137,7 +134,7 @@ export const generateReservations = (numberReservations) => {
   const reservations = [];
   for (let i = 0; i < numberReservations; i++) {
     reservations.push({
-      id: uuidv4(),
+      id: uuid(),
       attention_schedule_id:
         restaurants[Math.floor(Math.random() * restaurants.length)]
           .attention_schedule[faker.number.int({ min: 0, max: 6 })].id,

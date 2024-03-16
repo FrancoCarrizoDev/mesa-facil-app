@@ -4,8 +4,8 @@ import prisma from "database";
 import { getServerSession } from "next-auth";
 import { RestaurantDTO } from "src/models/restaurant.model";
 import { authOptions } from "src/utils/auth-options";
-import { v4 as uuidv4 } from "uuid";
-import slugify from "slugify";
+import uuid from "@repo/common/uuid";
+import slugify from "@repo/common/slugify";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 
@@ -78,21 +78,18 @@ export async function createRestaurant(restaurant: RestaurantDTO) {
   }
 
   try {
-    const newRestaurantId = uuidv4();
+    const newRestaurantId = uuid();
     await prisma.restaurant.create({
       data: {
         id: newRestaurantId,
         name: restaurant.name,
-        slug: slugify(restaurant.name, {
-          lower: true,
-          remove: /[*+~.()'"!:@]/g,
-        }),
+        slug: slugify(restaurant.name),
         address: restaurant.address,
         phone: restaurant.phone,
         attention_schedule: {
           createMany: {
             data: restaurant.attentionSchedule.map((schedule) => ({
-              id: uuidv4(),
+              id: uuid(),
               opening_hours: schedule.openingHours,
               ending_hours: schedule.endingHours,
               day_name: schedule.dayName,
@@ -135,7 +132,7 @@ export async function updateRestaurant(restaurant: RestaurantDTO) {
           deleteMany: {},
           createMany: {
             data: restaurant.attentionSchedule.map((schedule) => ({
-              id: uuidv4(),
+              id: uuid(),
               opening_hours: schedule.openingHours,
               ending_hours: schedule.endingHours,
               day_name: schedule.dayName,
