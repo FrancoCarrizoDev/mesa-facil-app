@@ -88,6 +88,8 @@ export const authOptions: NextAuthOptions = {
       //   },
       // });
 
+      console.log({ user, token, account });
+
       if (user) {
         const userDB = await prisma.user.findUnique({
           where: {
@@ -103,12 +105,11 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      // console.log({
-      //   session: {
-      //     session,
-      //     token,
-      //   },
-      // });
+      console.log({
+        session: {
+          user: session.user,
+        },
+      });
 
       if (session.user) {
         session.user.id = token.id;
@@ -119,13 +120,13 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async signIn({ user, account, profile }) {
-      // console.log({
-      //   signIn: {
-      //     user,
-      //     account,
-      //     profile,
-      //   },
-      // });
+      console.log({
+        signIn: {
+          user,
+          account,
+          profile,
+        },
+      });
 
       if (account?.provider === "credentials") return true;
 

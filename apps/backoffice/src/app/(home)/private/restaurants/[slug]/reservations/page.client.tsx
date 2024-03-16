@@ -132,7 +132,9 @@ export default function ReservationClientPage({
         ),
         tableNumber: <p>{reservation.tableNumber || "SIN/DATOS"}</p>,
         message: (
-          <p className=" overflow-auto">{reservation.message || "SIN/DATOS"}</p>
+          <p className="text-balance" style={{ height: "inherit" }}>
+            {reservation.message || "SIN/DATOS"}
+          </p>
         ),
         statusId: (
           <CustomDropdownMenu

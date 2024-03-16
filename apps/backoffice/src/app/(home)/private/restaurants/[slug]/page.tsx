@@ -5,19 +5,29 @@ import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import { notFound } from "next/navigation";
 import Link from "@/components/Link/link";
+import { SearchReservationParams } from "./reservations/page";
+import { getReservationSearchParams } from "@/utils/search-params";
+import { getReservationList } from "@/actions/reservation.actions";
 
 interface Props {
   readonly params: {
     slug: string;
   };
+  readonly searchParams: SearchReservationParams;
 }
 
 export default async function RestaurantPage({
   params,
+  searchParams,
 }: Props): Promise<JSX.Element> {
-  if (!params) return notFound();
-
   const restaurant = await getRestaurantBySlug(params.slug);
+
+  const reservationSearchParams = getReservationSearchParams(searchParams);
+
+  const restaurantList = await getReservationList(
+    params.slug,
+    reservationSearchParams
+  );
 
   return (
     <Section>
@@ -30,17 +40,21 @@ export default async function RestaurantPage({
             Crear reserva
           </Link>
           <Link href={`/private/restaurants/${params.slug}/reservations`}>
-            Ver reservas
+            Reservas
           </Link>
           <Link href={`/private/restaurants/${params.slug}/reviews`}>
-            Ver reseñas
+            Reseñas
           </Link>
           <Link href={`/private/restaurants/${params.slug}/reviews`}>
             Cear sorteo
           </Link>
         </div>
       </div>
-      <SectionBody>Restaurant Section</SectionBody>
+      <SectionBody>
+        <div>
+          <h4>Reservas de hoy</h4>
+        </div>
+      </SectionBody>
     </Section>
   );
 }

@@ -79,7 +79,7 @@ export default function RestaurantForm({
     AttentionScheduleDTO | undefined
   >();
   const router = useRouter();
-
+  console.log({ values });
   const checkIfAttentionScheduleIsColliding = (
     attentionSchedule: AttentionScheduleDTO
   ): boolean => {
