@@ -25,7 +25,7 @@ export default function Page(): JSX.Element {
       });
 
       if (res?.ok) {
-        router.push("/private");
+        router.push("/private/restaurants");
         router.refresh();
       }
 
@@ -84,7 +84,8 @@ export default function Page(): JSX.Element {
               variant="outlined"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/private",
+                  callbackUrl:
+                    process.env.NEXT_PUBLIC_BASE_URL + "/private/restaurants",
                 })
               }
             >

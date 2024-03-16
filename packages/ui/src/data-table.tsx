@@ -76,7 +76,7 @@ export default function DataTable({
               >
                 {columns.map((column) => (
                   <td key={column.key} className="ui-px-4 ui-py-3">
-                    <div className="ui-overflow-auto ui-w-[150px] ui-h-[40px] ui-flex ui-items-center ">
+                    <div className="ui-overflow-auto ui-min-w-[150px] ui-h-[40px] ui-flex ui-items-center ">
                       {row[column.key]}
                     </div>
                   </td>

@@ -38,7 +38,7 @@ export default function Page(): JSX.Element {
           password: formValues.password,
           redirect: false,
         });
-        router.push("/private");
+        router.push("/private/restaurants");
       }
     },
   });
@@ -144,7 +144,8 @@ export default function Page(): JSX.Element {
                   onClick={() =>
                     signIn("google", {
                       callbackUrl:
-                        process.env.NEXT_PUBLIC_BASE_URL + "/private",
+                        process.env.NEXT_PUBLIC_BASE_URL +
+                        "/private/restaurants",
                     })
                   }
                   color="secondary"
