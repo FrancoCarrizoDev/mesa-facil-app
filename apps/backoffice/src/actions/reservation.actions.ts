@@ -292,7 +292,7 @@ export async function updateReservationStatus({
       },
       data: {
         status_id: status,
-        table_number: null,
+        table_number: tableNumber,
       },
     });
 

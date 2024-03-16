@@ -8,12 +8,13 @@ import Link from "@/components/Link/link";
 import { SearchReservationParams } from "./reservations/page";
 import { getReservationSearchParams } from "@/utils/search-params";
 import { getReservationList } from "@/actions/reservation.actions";
+import ReservationDataTable from "@/components/ReservationDataTable/reservation-data-table";
 
 interface Props {
   readonly params: {
     slug: string;
   };
-  readonly searchParams: SearchReservationParams;
+  searchParams: SearchReservationParams;
 }
 
 export default async function RestaurantPage({
@@ -22,9 +23,11 @@ export default async function RestaurantPage({
 }: Props): Promise<JSX.Element> {
   const restaurant = await getRestaurantBySlug(params.slug);
 
+  searchParams.date = new Date().toISOString();
   const reservationSearchParams = getReservationSearchParams(searchParams);
 
-  const restaurantList = await getReservationList(
+  console.log({ reservationSearchParams });
+  const reservationList = await getReservationList(
     params.slug,
     reservationSearchParams
   );
@@ -32,7 +35,7 @@ export default async function RestaurantPage({
   return (
     <Section>
       <div className="mb-6 flex justify-between">
-        <SectionTitle>{restaurant.name}</SectionTitle>
+        <SectionTitle>{`${restaurant.name} - Reservas para hoy`}</SectionTitle>
         <div className="flex gap-3">
           <Link
             href={`/private/restaurants/${params.slug}/reservations/create`}
@@ -51,9 +54,16 @@ export default async function RestaurantPage({
         </div>
       </div>
       <SectionBody>
-        <div>
-          <h4>Reservas de hoy</h4>
-        </div>
+        <ReservationDataTable
+          paginatedReservation={reservationList}
+          reservationParamsProps={{
+            page: Number(searchParams.page) || 1,
+            pageSize: Number(searchParams.pageSize) || 10,
+            status: searchParams.status,
+            date: searchParams.date ? new Date(searchParams.date) : null,
+            term: searchParams.term || "",
+          }}
+        />
       </SectionBody>
     </Section>
   );

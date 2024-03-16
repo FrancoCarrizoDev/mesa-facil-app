@@ -10,7 +10,7 @@ import {
 } from "@/utils/reservations";
 import { DialogContext } from "src/context/dialog/dialog.context";
 import { PaginationDTO } from "@/models/pagination.model";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import ChangeReservationStatusContainer from "@/components/ChangeReservationStatusContainer/change-reservation-status-container";
 import CheckIcon from "@repo/ui/icons/check-icon";
 import CrossIcon from "@repo/ui/icons/cross-icon";
@@ -100,7 +100,7 @@ const reservationStatusSelectItems = [
   },
 ];
 
-export default function ReservationClientPage({
+export default function ReservationDataTable({
   paginatedReservation,
   reservationParamsProps,
 }: Props) {
@@ -114,86 +114,87 @@ export default function ReservationClientPage({
     });
   const { openDialog } = useContext(DialogContext);
 
-  console.log({ reservationList: paginatedReservation });
-  const tableData: TableData[] = paginatedReservation.data.map(
-    (reservation) => {
-      return {
-        date: (
-          <p className="min-w-[150px]">
-            {new Date(reservation.date).toLocaleString("es-ES")}
-          </p>
-        ),
-        fullName: (
-          <p>
-            {`${reservation.diner.firstName} ${
-              reservation.diner.lastName || "SIN/DATOS"
-            }`}
-          </p>
-        ),
-        tableNumber: <p>{reservation.tableNumber || "SIN/DATOS"}</p>,
-        message: (
-          <p className="text-balance" style={{ height: "inherit" }}>
-            {reservation.message || "SIN/DATOS"}
-          </p>
-        ),
-        statusId: (
-          <CustomDropdownMenu
-            items={reservationStatusSelectItems.map((status) => {
-              return {
-                label: (
-                  <div className="w-full flex items-center justify-between">
-                    <p className="min-w-[60px] font-medium">{status.label}</p>
-                    <span>{status.icon}</span>
-                  </div>
-                ),
-                onClick: async () => {
-                  return openDialog({
-                    content: (
-                      <ChangeReservationStatusContainer
-                        reservationId={reservation.id}
-                        reservationStatusId={status.value}
-                        title={status.dialog.title}
-                        description={status.dialog.description(
-                          `${reservation.diner.firstName} ${
-                            reservation.diner.lastName || "SIN/DATOS"
-                          }`
-                        )}
-                      />
-                    ),
-                  });
-                },
-                enabled: reservation.statusId !== status.value,
-              };
-            })}
-          >
-            <div className="flex items-center justify-between border gap-2 px-2 bg-gray-50 border-gray-300 p-1 rounded-sm   hover:border-gray-400 min-w-[120px] cursor-pointer">
-              <ReservationStatusLabel
-                label={getReservationStatusLabelById(reservation.statusId)}
-                status={getReservationStatusLabelByType(reservation.statusId)}
-              />
-              <CustomChevronDownIcon />
+  const tableData: TableData[] = useMemo(
+    () =>
+      paginatedReservation.data.map((reservation) => {
+        return {
+          date: (
+            <p className="min-w-[150px]">
+              {new Date(reservation.date).toLocaleString("es-ES")}
+            </p>
+          ),
+          fullName: (
+            <p>
+              {`${reservation.diner.firstName} ${
+                reservation.diner.lastName || "SIN/DATOS"
+              }`}
+            </p>
+          ),
+          tableNumber: <p>{reservation.tableNumber || "SIN/DATOS"}</p>,
+          message: (
+            <p className="text-balance" style={{ height: "inherit" }}>
+              {reservation.message || "SIN/DATOS"}
+            </p>
+          ),
+          statusId: (
+            <CustomDropdownMenu
+              items={reservationStatusSelectItems.map((status) => {
+                return {
+                  label: (
+                    <div className="w-full flex items-center justify-between">
+                      <p className="min-w-[60px] font-medium">{status.label}</p>
+                      <span>{status.icon}</span>
+                    </div>
+                  ),
+                  onClick: async () => {
+                    return openDialog({
+                      content: (
+                        <ChangeReservationStatusContainer
+                          reservationId={reservation.id}
+                          reservationStatusId={status.value}
+                          title={status.dialog.title}
+                          description={status.dialog.description(
+                            `${reservation.diner.firstName} ${
+                              reservation.diner.lastName || "SIN/DATOS"
+                            }`
+                          )}
+                        />
+                      ),
+                    });
+                  },
+                  enabled: reservation.statusId !== status.value,
+                };
+              })}
+            >
+              <div className="flex items-center justify-between border gap-2 px-2 bg-gray-50 border-gray-300 p-1 rounded-sm   hover:border-gray-400 min-w-[120px] cursor-pointer">
+                <ReservationStatusLabel
+                  label={getReservationStatusLabelById(reservation.statusId)}
+                  status={getReservationStatusLabelByType(reservation.statusId)}
+                />
+                <CustomChevronDownIcon />
+              </div>
+            </CustomDropdownMenu>
+          ),
+          createdAt: (
+            <p className="min-w-[150px]">
+              {new Date(reservation.createdAt).toLocaleString("es-ES")}
+            </p>
+          ),
+          updatedAt: (
+            <p className="min-w-[150px]">
+              {new Date(reservation.updatedAt).toLocaleString("es-ES")}
+            </p>
+          ),
+          action: (
+            <div className="flex items-center">
+              <div className="flex w-full  items-center gap-3">
+                <Link href={`./reservations/${reservation.id}`}>Editar</Link>
+              </div>
             </div>
-          </CustomDropdownMenu>
-        ),
-        createdAt: (
-          <p className="min-w-[150px]">
-            {new Date(reservation.createdAt).toLocaleString("es-ES")}
-          </p>
-        ),
-        updatedAt: (
-          <p className="min-w-[150px]">
-            {new Date(reservation.updatedAt).toLocaleString("es-ES")}
-          </p>
-        ),
-        action: (
-          <div className="flex items-center">
-            <div className="flex w-full  items-center gap-3">
-              <Link href={`./reservations/${reservation.id}`}>Editar</Link>
-            </div>
-          </div>
-        ),
-      };
-    }
+          ),
+        };
+      }),
+    [reservationParamsProps]
   );
 
   return (

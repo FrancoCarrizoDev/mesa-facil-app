@@ -2,16 +2,15 @@ import Link from "@/components/Link/link";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
-import ReservationClientPage from "./page.client";
 import {
   ensureLoggedUserBelongsToRestaurant,
   getReservationList,
 } from "@/actions/reservation.actions";
-import { Suspense } from "react";
+import ReservationDataTable from "@/components/ReservationDataTable/reservation-data-table";
 
 export interface SearchReservationParams {
   readonly status: string;
-  readonly date?: string;
+  date?: string;
   readonly term?: string;
   readonly page: number;
   readonly pageSize: number;
@@ -35,8 +34,6 @@ export default async function ReservationPage({ params, searchParams }: Props) {
     pageSize: Number(searchParams.pageSize) || 10,
   });
 
-  console.log({ reservationList });
-
   return (
     <Section>
       <div className="flex justify-between items-center">
@@ -49,7 +46,7 @@ export default async function ReservationPage({ params, searchParams }: Props) {
         </Link>
       </div>
       <SectionBody>
-        <ReservationClientPage
+        <ReservationDataTable
           paginatedReservation={reservationList}
           reservationParamsProps={{
             page: Number(searchParams.page) || 1,

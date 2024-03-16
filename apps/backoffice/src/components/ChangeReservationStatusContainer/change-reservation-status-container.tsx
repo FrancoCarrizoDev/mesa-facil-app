@@ -25,7 +25,6 @@ export default function ChangeReservationStatusContainer({
 }: ReservationDialogProps) {
   const [tableNumber, setTableNumber] = useState<string>("");
   const { closeDialog } = useContext(DialogContext);
-
   const handleConfirm = async () => {
     await updateReservationStatus({
       id: reservationId,
