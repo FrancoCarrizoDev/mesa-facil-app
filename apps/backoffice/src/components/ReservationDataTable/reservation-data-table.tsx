@@ -18,7 +18,7 @@ import CustomChevronDownIcon from "@repo/ui/icons/chevron-down-icon";
 import CustomDropdownMenu from "@repo/ui/dropdown-menu";
 import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
 import Input from "@repo/ui/input";
-import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
+import InputDatePicker from "@repo/ui/input-date-picker";
 import Link from "@/components/Link/link";
 import QuestionIcon from "@repo/ui/icons/question-icon";
 import RemoveIcon from "@repo/ui/icons/remove-icon";

@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import Autocomplete from "@repo/ui/autocomplete";
 import Button from "@repo/ui/button";
 import Input from "@repo/ui/input";
-import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
+import InputDatePicker from "@repo/ui/input-date-picker";
 import useDinerReservation from "@/hooks/useDinerReservation";
 import useForm from "@/hooks/use-form";
 import useSearchDiner from "@/hooks/useSearchDiner";

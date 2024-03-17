@@ -1,5 +1,4 @@
-import React from "react";
-import DatePicker from "../DatePicker/date-picker";
+import DatePicker from "./date-picker";
 
 interface InputDatePickerProps {
   readonly label: string;

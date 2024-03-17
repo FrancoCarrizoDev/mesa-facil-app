@@ -31,7 +31,8 @@
     "./icons/remove-icon": "./src/icons/remove-icon.tsx",
     "./icons/question-icon": "./src/icons/question-icon.tsx",
     "./dialog-header": "./src/dialog-header.tsx",
-    "./dialog-buttons": "./src/dialog-buttons.tsx"
+    "./dialog-buttons": "./src/dialog-buttons.tsx",
+    "./input-date-picker": "./src/input-date-picker.tsx"
   },
   "license": "MIT",
   "scripts": {
@@ -51,6 +52,9 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/common": "workspace:*",
+    "react-datepicker": "^4.25.0",
+    "@types/react-datepicker": "^4.19.3",
     "@types/react": "^18.2.46",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.33",
