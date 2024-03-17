@@ -4,7 +4,7 @@ import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import RestaurantForm from "../components/restaurant-form";
 import getSession from "@/utils/get-session";
-import { ROLES } from "@/constants/roles";
+import { ROLES } from "@repo/common/constants";
 
 export default async function CreateRestaurantPage(): Promise<JSX.Element> {
   const session = await getSession();

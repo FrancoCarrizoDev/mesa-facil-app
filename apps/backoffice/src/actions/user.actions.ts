@@ -5,11 +5,11 @@ import {
   USER_STATUS,
   UpdateUserDTO,
   UserDTO,
-} from "src/models/user.model";
+} from "@repo/common/models";
 import prisma from "database";
 import { hashPassword } from "src/utils/bcrypt";
 import uuid from "@repo/common/uuid";
-import { ROLES } from "@/constants/roles";
+import { ROLES } from "@repo/common/constants";
 import getSession from "@/utils/get-session";
 import { hasManageUsersPermission } from "@/utils/permissions";
 import { revalidatePath } from "next/cache";

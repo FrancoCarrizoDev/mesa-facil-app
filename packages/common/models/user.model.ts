@@ -1,6 +1,3 @@
-import { ROLES } from "@/constants/roles";
-import { type Restaurant } from "./restaurant.model";
-
 export interface CreateUserDTO {
   email: string;
   password: string;
@@ -14,18 +11,6 @@ export interface CreateUserDTO {
 export interface UpdateUserDTO extends CreateUserDTO {
   id: string;
   changePassword: boolean;
-}
-
-export interface User {
-  id: string;
-  provider: string;
-  email: string;
-  password?: string;
-  first_name: string;
-  last_name?: string;
-  restaurants: Restaurant[];
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface UserDTO {

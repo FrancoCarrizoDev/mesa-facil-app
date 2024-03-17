@@ -1,4 +1,4 @@
-import { ROLES } from "@/constants/roles";
+import { ROLES } from "@repo/common/constants";
 
 export const hasManageUsersPermission = (role: keyof typeof ROLES) =>
   role === ROLES.ADMIN.ID || role === ROLES.MANAGER.ID;

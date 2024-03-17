@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { AttentionScheduleDTO } from "@repo/common/models";
-import { WEEK_DAYS } from "@/constants/week-days";
+import { WEEK_DAYS } from "@repo/common/constants";
 import Select from "@repo/ui/select";
 import Input from "@repo/ui/input";
 import Checkbox from "@repo/ui/checkbox";

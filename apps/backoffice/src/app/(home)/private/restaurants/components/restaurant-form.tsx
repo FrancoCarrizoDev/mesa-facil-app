@@ -8,7 +8,7 @@ import { checkIfClosingTimeIsBeforeOpeningTime } from "@/utils/attention-schedul
 import { toast } from "react-toastify";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { WEEK_DAYS } from "@/constants/week-days";
+import { WEEK_DAYS } from "@repo/common/constants";
 import AttentionSchedules from "./attention-schedules";
 import Button from "@repo/ui/button";
 import Input from "@repo/ui/input";

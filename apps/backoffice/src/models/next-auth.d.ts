@@ -1,4 +1,4 @@
-import { ROLES } from "@/constants/roles";
+import { ROLES } from "@repo/common/constants";
 import NextAuth, { DefaultSession } from "next-auth";
 
 declare module "next-auth" {

@@ -119,7 +119,6 @@ importers:
       '@repo/eslint-config': workspace:*
       '@repo/typescript-config': workspace:*
       '@types/uuid': ^9.0.7
-      database: workspace:*
       date-fns: ^3.3.1
       next-auth: 4.24.5
       react: ^18.2.0
@@ -131,7 +130,6 @@ importers:
       '@repo/eslint-config': link:../config-eslint
       '@repo/typescript-config': link:../config-typescript
       '@types/uuid': 9.0.7
-      database: link:../database
       date-fns: 3.3.1
       next-auth: 4.24.5_6tqp36bm4r3alwpsonbjjpjz7y
       react: 18.2.0

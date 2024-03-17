@@ -5,7 +5,8 @@
     "./uuid": "./libs/uuid.ts",
     "./slugify": "./libs/slugify.ts",
     "./date": "./libs/date-fns.ts",
-    "./models": "./models/index.ts"
+    "./models": "./models/index.ts",
+    "./constants": "./constants/index.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -19,7 +20,6 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "database": "workspace:*",
     "@types/uuid": "^9.0.7",
     "react": "^18.2.0",
     "slugify": "^1.6.6",
