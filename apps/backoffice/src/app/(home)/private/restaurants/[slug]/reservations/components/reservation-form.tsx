@@ -15,7 +15,7 @@ import InputDatePicker from "@/components/InputDatePicker/input-date-picker";
 import useDinerReservation from "@/hooks/useDinerReservation";
 import useForm from "@/hooks/use-form";
 import useSearchDiner from "@/hooks/useSearchDiner";
-import { subYears } from "date-fns";
+import { subYears } from "@repo/common/date";
 import Select from "@repo/ui/select";
 
 interface ReservationFormProps {

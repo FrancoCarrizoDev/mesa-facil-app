@@ -6,7 +6,7 @@ import {
   ReservationStatusEnum,
 } from "@/models/reservation.model";
 import getSession from "@/utils/get-session";
-import { addDays } from "date-fns";
+import { addDays } from "@repo/common/date";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 import type { SearchReservationParams } from "src/app/(home)/private/restaurants/[slug]/reservations/page";
