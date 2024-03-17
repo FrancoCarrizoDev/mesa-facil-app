@@ -1,5 +1,5 @@
 import { comparePasswords } from "@repo/common/bcrypt";
-import { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import { ROLES } from "@repo/common/constants";
 import CredentialProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
