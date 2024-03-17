@@ -4,7 +4,7 @@ import {
   CreateReservationDTO,
   ReservationDTO,
   ReservationStatusEnum,
-} from "@/models/reservation.model";
+} from "@repo/common/models";
 import getSession from "@/utils/get-session";
 import { addDays } from "@repo/common/date";
 import { revalidatePath } from "next/cache";

@@ -1,4 +1,4 @@
-import { AttentionScheduleDTO } from "@/models/restaurant.model";
+import type { AttentionScheduleDTO } from "@repo/common/models";
 
 export const checkIfClosingTimeIsBeforeOpeningTime = (
   attentionSchedule: AttentionScheduleDTO

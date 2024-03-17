@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { setMinutes, setHours, addDays } from "@repo/common/date";
 import { WEEK_DAYS } from "@/constants/week-days";
-import { RestaurantDTO } from "@/models/restaurant.model";
+import type { RestaurantDTO } from "@repo/common/models";
 
 export default function useDinerReservation({
   restaurant,

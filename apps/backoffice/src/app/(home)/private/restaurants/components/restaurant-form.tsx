@@ -1,9 +1,9 @@
 "use client";
-import {
+import type {
   AttentionScheduleDTO,
   RestaurantDTOValidateFields,
-  type RestaurantDTO,
-} from "@/models/restaurant.model";
+  RestaurantDTO,
+} from "@repo/common/models";
 import { checkIfClosingTimeIsBeforeOpeningTime } from "@/utils/attention-schedule";
 import { toast } from "react-toastify";
 import { useMemo, useState } from "react";

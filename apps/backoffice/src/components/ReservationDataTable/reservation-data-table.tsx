@@ -3,13 +3,13 @@
 import {
   ReservationStatusEnum,
   type ReservationDTO,
-} from "@/models/reservation.model";
+  type PaginationDTO,
+} from "@repo/common/models";
 import {
   getReservationStatusLabelById,
   getReservationStatusLabelByType,
 } from "@/utils/reservations";
 import { DialogContext } from "src/context/dialog/dialog.context";
-import { PaginationDTO } from "@/models/pagination.model";
 import { useContext, useMemo } from "react";
 import ChangeReservationStatusContainer from "@/components/ChangeReservationStatusContainer/change-reservation-status-container";
 import CheckIcon from "@repo/ui/icons/check-icon";

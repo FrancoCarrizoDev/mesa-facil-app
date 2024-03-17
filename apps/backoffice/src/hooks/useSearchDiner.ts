@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import useDebounce from "./useDebounce";
 import { getDinerByEmail as getDinerByEmailAction } from "@/actions/diner.actions";
-import { DinerDTO } from "@/models/diner.model";
+import type { DinerDTO } from "@repo/common/models";
 
 export default function useSearchDiner(dinerInitialValue: string = "") {
   const [dinerTerm, setDinerTerm] = useState<string>(dinerInitialValue);

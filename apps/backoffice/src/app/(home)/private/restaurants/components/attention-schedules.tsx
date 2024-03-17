@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AttentionScheduleDTO } from "@/models/restaurant.model";
+import type { AttentionScheduleDTO } from "@repo/common/models";
 import { WEEK_DAYS } from "@/constants/week-days";
 import Select from "@repo/ui/select";
 import Input from "@repo/ui/input";

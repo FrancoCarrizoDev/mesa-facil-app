@@ -9,7 +9,7 @@ import Select from "@repo/ui/select";
 import { createUser, editUser } from "@/actions/user.actions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { UserDTO } from "@/models/user.model";
+import { UserDTO } from "@repo/common/models";
 import { useState } from "react";
 
 interface CreateEdutUserFormValues {

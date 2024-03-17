@@ -1,6 +1,6 @@
 "use client";
 import { DialogContext } from "src/context/dialog/dialog.context";
-import { ReservationStatusEnum } from "@/models/reservation.model";
+import { ReservationStatusEnum } from "@repo/common/models";
 import { updateReservationStatus } from "@/actions/reservation.actions";
 import { useContext, useState } from "react";
 import DialogButtons from "@repo/ui/dialog-buttons";

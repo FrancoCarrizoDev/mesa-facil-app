@@ -1,6 +1,6 @@
 "use server";
 
-import { DinerDTO } from "@/models/diner.model";
+import type { DinerDTO } from "@repo/common/models";
 import getSession from "@/utils/get-session";
 import uuid from "@repo/common/uuid";
 

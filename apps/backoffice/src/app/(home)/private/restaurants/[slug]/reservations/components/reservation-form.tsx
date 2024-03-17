@@ -1,12 +1,12 @@
 "use client";
 import { createDiner } from "@/actions/diner.actions";
 import { createReserve } from "@/actions/reservation.actions";
-import { DinerDTO } from "@/models/diner.model";
-import {
+import type {
   CreateReservationDTO,
   ReservationDTO,
-} from "@/models/reservation.model";
-import { RestaurantDTO } from "@/models/restaurant.model";
+  RestaurantDTO,
+  DinerDTO,
+} from "@repo/common/models";
 import { toast } from "react-toastify";
 import Autocomplete from "@repo/ui/autocomplete";
 import Button from "@repo/ui/button";
