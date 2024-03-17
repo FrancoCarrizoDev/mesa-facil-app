@@ -3,7 +3,7 @@ import "@repo/ui/styles.css";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
-import ComposeProviders from "src/providers/compose-providers";
+import SessionProvider from "@/providers/session-providers";
 import { authOptions } from "src/utils/auth-options";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,12 +21,9 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="es">
-      <head>
-        <link href="/favicon.png" rel="icon" />
-      </head>
-      <ComposeProviders session={session}>
+      <SessionProvider session={session}>
         <body className={inter.className}>{children}</body>
-      </ComposeProviders>
+      </SessionProvider>
     </html>
   );
 }

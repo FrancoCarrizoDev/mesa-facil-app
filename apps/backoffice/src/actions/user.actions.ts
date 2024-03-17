@@ -7,7 +7,7 @@ import {
   UserDTO,
 } from "@repo/common/models";
 import prisma from "database";
-import { hashPassword } from "src/utils/bcrypt";
+import { hashPassword } from "@repo/common/bcrypt";
 import uuid from "@repo/common/uuid";
 import { ROLES } from "@repo/common/constants";
 import getSession from "@/utils/get-session";

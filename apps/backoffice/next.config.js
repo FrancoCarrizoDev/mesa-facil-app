@@ -16,6 +16,7 @@ module.exports = {
         protocol: "https",
         port: "",
       },
-    ]
-  }
+    ],
+  },
+  transpilePackages: ["@repo/ui", "database"],
 };
