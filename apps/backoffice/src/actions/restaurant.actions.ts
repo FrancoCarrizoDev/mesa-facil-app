@@ -2,7 +2,7 @@
 import getSession from "@/utils/get-session";
 import prisma from "database";
 import { getServerSession } from "next-auth";
-import { RestaurantDTO } from "src/models/restaurant.model";
+import { RestaurantDTO } from "@repo/common/models";
 import { authOptions } from "src/utils/auth-options";
 import uuid from "@repo/common/uuid";
 import slugify from "@repo/common/slugify";

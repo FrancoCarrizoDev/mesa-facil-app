@@ -125,7 +125,7 @@ export default function Page(): JSX.Element {
                   }}
                 >
                   I agree with the{" "}
-                  <a href="#" className="text-blue-600 ">
+                  <a href="/TEST" className="text-blue-600 ">
                     terms and conditions
                   </a>
                   .

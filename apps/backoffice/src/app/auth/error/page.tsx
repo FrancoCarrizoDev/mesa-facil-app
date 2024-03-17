@@ -6,7 +6,7 @@ export default function ErrorPage({
   searchParams: {
     error: string;
   };
-}) {
+}): JSX.Element {
   const errorParam = new URLSearchParams(searchParams).get("error");
   const decodedError = decodeURIComponent(errorParam as string);
 

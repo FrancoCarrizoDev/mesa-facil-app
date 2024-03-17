@@ -10,7 +10,7 @@ import UserForm from "../components/user-form";
 export default async function Create() {
   const session = await getSession();
   const hasPermissionInPage = hasManageUsersPermission(
-    session?.user.role || "USER"
+    session?.user.role || "EMPLOYEE"
   );
 
   if (!hasPermissionInPage) {

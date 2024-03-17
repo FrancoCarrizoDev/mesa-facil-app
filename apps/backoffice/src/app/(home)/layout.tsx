@@ -8,11 +8,11 @@ import Breadcrums from "@/components/Breadcrums/breadcrums";
 import { DialogProvider } from "src/context/dialog/dialog.provider";
 import DialogProviderComponent from "@/providers/dialog-provider";
 
-export default async function Layout({
+export default function Layout({
   children,
 }: {
   children: ReactNode;
-}): Promise<JSX.Element> {
+}): JSX.Element {
   return (
     <div>
       <DialogProvider>

@@ -1,11 +1,12 @@
 "use server";
 
-import type { DinerDTO } from "@repo/common/models";
 import getSession from "@/utils/get-session";
+import type { DinerDTO } from "@repo/common/models";
 import uuid from "@repo/common/uuid";
+import prisma from "database";
 
 export async function getDinerByEmail(email: string): Promise<DinerDTO[]> {
-  const diner = await prisma?.diner.findMany({
+  const diner = await prisma.diner.findMany({
     where: {
       email: {
         contains: email.toLowerCase(),
@@ -16,15 +17,15 @@ export async function getDinerByEmail(email: string): Promise<DinerDTO[]> {
     },
   });
 
-  if (diner) {
-    return diner.map((diner) => ({
-      id: diner.id,
-      firstName: diner.first_name,
-      lastName: diner.last_name,
-      phone: diner.phone,
-      email: diner.email,
-      birthday: diner.birthday,
-      reservations: diner.reservation.map((reservation) => ({
+  if (diner.length > 0) {
+    return diner.map((mapDiner) => ({
+      id: mapDiner.id,
+      firstName: mapDiner.first_name,
+      lastName: mapDiner.last_name,
+      phone: mapDiner.phone,
+      email: mapDiner.email,
+      birthday: mapDiner.birthday,
+      reservations: mapDiner.reservation.map((reservation) => ({
         id: reservation.id,
         date: reservation.date,
         peopleQuantity: reservation.people_quantity,
@@ -50,7 +51,7 @@ export async function createDiner(diner: DinerDTO): Promise<DinerDTO> {
   }
 
   try {
-    const newDiner = await prisma?.diner.create({
+    const newDiner = await prisma.diner.create({
       data: {
         id: uuid(),
         first_name: diner.firstName,
@@ -60,10 +61,6 @@ export async function createDiner(diner: DinerDTO): Promise<DinerDTO> {
         birthday: diner.birthday,
       },
     });
-
-    if (!newDiner) {
-      throw new Error("Error creating diner");
-    }
 
     return {
       id: newDiner.id,

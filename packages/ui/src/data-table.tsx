@@ -29,7 +29,7 @@ export default function DataTable({
 }: DataTableProps) {
   const params = useSearchParams();
   const pathname = usePathname();
-  const decodeParams = decodeURIComponent(params);
+  const decodeParams = decodeURIComponent(params.toString());
   const paramsSplit = decodeParams.toString().split("&");
   const separeteInObj = paramsSplit.map((param) => {
     const [key, value] = param.split("=");

@@ -2,7 +2,6 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import restaurantList from "../../components/restaurant-list";
 import UserForm from "../components/user-form";
 import { hasEditUserPermission } from "@/utils/permissions";
 import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";

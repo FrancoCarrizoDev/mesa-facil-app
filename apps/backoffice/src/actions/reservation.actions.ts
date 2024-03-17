@@ -11,7 +11,8 @@ import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 import type { SearchReservationParams } from "src/app/(home)/private/restaurants/[slug]/reservations/page";
 import uuid from "@repo/common/uuid";
-import { PaginationDTO } from "../models/pagination.model";
+import { PaginationDTO } from "@repo/common/models";
+import prisma from "database";
 
 function getReservationStatusBySearchKeyLabel(searchKey: string) {
   switch (searchKey) {
@@ -38,7 +39,7 @@ export async function createReserve(
   }
 
   try {
-    await prisma?.reservation.create({
+    await prisma.reservation.create({
       data: {
         id: uuid(),
         attention_schedule_id: reserve.attentionScheduleId,
@@ -73,8 +74,8 @@ export async function getReservationList(
   });
 
   try {
-    const submission = await prisma?.$transaction([
-      prisma?.reservation.findMany({
+    const submission = await prisma.$transaction([
+      prisma.reservation.findMany({
         where: {
           attention_schedule: {
             restaurant: {
@@ -117,7 +118,7 @@ export async function getReservationList(
             : (searchParams.page - 1) * searchParams.pageSize,
         take: searchParams.pageSize,
       }),
-      prisma?.reservation.count({
+      prisma.reservation.count({
         where: {
           attention_schedule: {
             restaurant: {
@@ -214,7 +215,7 @@ export async function ensureLoggedUserBelongsToRestaurant(
     throw new Error("User not loggqged in");
   }
 
-  const restaurant = await prisma?.restaurant.findFirst({
+  const restaurant = await prisma.restaurant.findFirst({
     where: {
       slug: restaurantSlug,
       users: {
@@ -237,7 +238,7 @@ export async function getReservationById(id: string): Promise<ReservationDTO> {
     throw new Error("User not loggqged in");
   }
 
-  const reservation = await prisma?.reservation.findUnique({
+  const reservation = await prisma.reservation.findUnique({
     where: {
       id: id,
     },
@@ -286,7 +287,7 @@ export async function updateReservationStatus({
   }
 
   try {
-    await prisma?.reservation.update({
+    await prisma.reservation.update({
       where: {
         id: id,
       },

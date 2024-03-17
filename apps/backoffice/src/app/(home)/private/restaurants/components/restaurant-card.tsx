@@ -1,10 +1,9 @@
 import Link from "@/components/Link/link";
-import { type RestaurantDTO } from "src/models/restaurant.model";
+import { type RestaurantDTO } from "@repo/common/models";
 
 export default function RestaurantCard({
   name,
   address,
-  id,
   slug,
   attentionSchedule,
   phone,

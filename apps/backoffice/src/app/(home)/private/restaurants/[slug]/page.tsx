@@ -3,7 +3,6 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import { notFound } from "next/navigation";
 import Link from "@/components/Link/link";
 import { SearchReservationParams } from "./reservations/page";
 import { getReservationSearchParams } from "@/utils/search-params";

@@ -1,9 +1,9 @@
-import { NextAuthOptions, Session } from "next-auth";
+import { comparePasswords } from "./bcrypt";
+import { NextAuthOptions } from "next-auth";
+import { ROLES } from "@repo/common/constants";
 import CredentialProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "database";
-import { comparePasswords } from "./bcrypt";
-import { ROLES } from "@repo/common/constants";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -60,8 +60,8 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     GoogleProvider({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_S || "",
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_SECRET || "",
     }),
   ],
   pages: {
