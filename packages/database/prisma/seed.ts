@@ -1,9 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import uuid from "@repo/common/uuid";
+
 import { faker } from "@faker-js/faker";
-import slugify from "@repo/common/slugify";
+import slugify from "slugify";
+import { uuid } from "uuidv4";
 
 const prisma = new PrismaClient();
+
+console.log({ uuid: JSON.stringify(uuid) });
 
 const USER_ROOT = {
   email: "francoadrianc@gmail.com",

@@ -1,13 +1,5 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "outDir": "../../dist/database",
-        "rootDir": "./src",
-        "baseUrl": "./src",
-        "paths": {
-        "@app/*": ["./src/*"]
-        }
-    },
-    "include": ["./src/**/*"],
-    "exclude": ["./src/**/*.spec.ts"]
+  "extends": "@repo/typescript-config/base.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
 }
