@@ -1,17 +1,20 @@
 import { ROLES } from "@repo/common/constants";
 
-export const hasManageUsersPermission = (role: keyof typeof ROLES) =>
-  role === ROLES.ADMIN.ID || role === ROLES.MANAGER.ID;
+export const hasManageUsersPermission = (roleId: number) =>
+  roleId === ROLES.ADMIN.id || roleId === ROLES.MANAGER.id;
 
 export function hasEditUserPermission(
-  userLoggedRole: string,
-  userRole: string
+  userLoggedRoleId: number,
+  userRoleId: number
 ) {
-  if (userLoggedRole === ROLES.ADMIN.ID) {
+  if (userLoggedRoleId === ROLES.ADMIN.id) {
     return true;
   }
 
-  if (userLoggedRole === ROLES.MANAGER.ID && userRole === ROLES.EMPLOYEE.ID) {
+  if (
+    userLoggedRoleId === ROLES.MANAGER.id &&
+    userRoleId === ROLES.EMPLOYEE.id
+  ) {
     return true;
   }
 

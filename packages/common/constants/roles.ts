@@ -1,5 +1,5 @@
 interface Role {
-  ID: string;
+  id: number;
   DISPLAY_NAME: string;
 }
 
@@ -11,15 +11,15 @@ interface Roles {
 
 export const ROLES: Roles = {
   ADMIN: {
-    ID: "ADMIN",
+    id: 1,
     DISPLAY_NAME: "Administrador",
   },
   MANAGER: {
-    ID: "MANAGER",
+    id: 2,
     DISPLAY_NAME: "Gerente/Encargado",
   },
   EMPLOYEE: {
-    ID: "EMPLOYEE",
+    id: 3,
     DISPLAY_NAME: "Empleado",
   },
 };

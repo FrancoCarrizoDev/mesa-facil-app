@@ -23,22 +23,25 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials) return null;
 
-        const existsUser = await prisma.user.findUnique({
+        let existsUser: any = await prisma.admin.findUnique({
           where: {
             email: credentials.email,
           },
         });
-        if (!existsUser) throw new Error("User not found");
+
+        if (!existsUser) {
+          existsUser = await prisma.user.findUnique({
+            where: {
+              username: credentials.email,
+            },
+          });
+        }
+
+        if (!existsUser) throw new Error("Invalid email or password");
 
         if (existsUser.provider === "google" || !existsUser.password) {
           throw new Error(
             "El usuario se registro con Google, por favor inicie sesión con Google"
-          );
-        }
-
-        if (!existsUser.active) {
-          throw new Error(
-            "El usuario se encuentra inactivo, por favor contacte al administrador"
           );
         }
 
@@ -52,8 +55,8 @@ export const authOptions: NextAuthOptions = {
             id: existsUser.id,
             name: existsUser.first_name,
             email: existsUser.email,
-            role: existsUser.user_role,
-            user_root_id: existsUser.user_root_id,
+            role: existsUser.role_id,
+            admin_id: existsUser.admin_id,
           };
 
         throw new Error("Invalid password");
@@ -97,30 +100,35 @@ export const authOptions: NextAuthOptions = {
 
         if (!userDB) return {};
         token.id = userDB.id;
-        token.role = userDB.user_role;
-        token.user_root_id = userDB.user_root_id;
+        token.role = userDB.role_id;
+        token.admin_id = userDB.admin_id;
       }
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
         session.user.id = token.id;
-        session.user.role = token.role;
-        session.user.user_root_id = token.user_root_id;
+        session.user.role = token.role_id;
+        session.user.admin_id = token.admin_id;
       }
 
       return session;
     },
     async signIn({ user, account, profile }) {
-      // console.log({
-      //   signIn: {
-      //     user,
-      //     account,
-      //     profile,
-      //   },
-      // });
+      console.log({
+        signIn: {
+          user,
+          account,
+          profile,
+        },
+      });
 
       if (account?.provider === "credentials") return true;
+
+      if (!user.email)
+        throw new Error(
+          "No se pudo obtener el email de Google, por favor intente de nuevo."
+        );
 
       const iprofile = profile as {
         email?: string;
@@ -130,14 +138,14 @@ export const authOptions: NextAuthOptions = {
         sub?: string;
       };
 
-      const userDB = await prisma.user.findUnique({
+      const userDB = await prisma.admin.findUnique({
         where: {
           email: user.email || "",
         },
       });
 
       if (!userDB) {
-        await prisma.user.create({
+        await prisma.admin.create({
           data: {
             email: iprofile?.email || "",
             first_name: iprofile?.given_name || "",
@@ -145,7 +153,7 @@ export const authOptions: NextAuthOptions = {
             password: null,
             id: iprofile.sub!,
             provider: "google",
-            user_role: ROLES.ADMIN.ID,
+            role_id: ROLES.ADMIN.id,
           },
         });
         return true;
@@ -159,13 +167,16 @@ export const authOptions: NextAuthOptions = {
         );
       }
 
-      if (!userDB.active) {
-        throw new Error(
-          encodeURI(
-            "El usuario ya existe, pero se encuentra inactivo, por favor contacte al administrador."
-          )
-        );
-      }
+      await prisma.admin.update({
+        where: {
+          email: user.email,
+        },
+        data: {
+          last_login: new Date(),
+          // TODO refactor after
+          id: iprofile.sub!,
+        },
+      });
 
       return true;
     },

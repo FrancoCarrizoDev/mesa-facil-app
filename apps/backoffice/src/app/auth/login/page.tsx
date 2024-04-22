@@ -44,13 +44,13 @@ export default function Page(): JSX.Element {
         <form className="flex flex-col " onSubmit={handleSubmit}>
           <div className="mb-6">
             <Input
-              label="Email"
+              label="Nombre de usuario o email"
               onChange={(e) => {
                 handleChange({
                   email: e.target.value,
                 });
               }}
-              type="email"
+              type="text"
               value={values.email}
             />
           </div>

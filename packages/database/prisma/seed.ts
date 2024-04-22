@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Admin, PrismaClient, Role, User } from "@prisma/client";
 
 import { faker } from "@faker-js/faker";
 import slugify from "slugify";
@@ -6,30 +6,50 @@ import { uuid } from "uuidv4";
 
 const prisma = new PrismaClient();
 
-console.log({ uuid: JSON.stringify(uuid) });
+const ADMIN_ROLE: Role = {
+  id: 1,
+  name: "ADMIN",
+  created_at: new Date(),
+  updated_at: new Date(),
+};
+const MANAGER_ROLE: Role = {
+  id: 2,
+  name: "MANAGER",
+  created_at: new Date(),
+  updated_at: new Date(),
+};
+const EMPLOYEE_ROLE: Role = {
+  id: 3,
+  name: "EMPLOYEE",
+  created_at: new Date(),
+  updated_at: new Date(),
+};
 
-const USER_ROOT = {
+const USER_ROOT: Admin = {
+  id: uuid(),
   email: "francoadrianc@gmail.com",
-  first_name: "Jhon",
-  last_name: "Doe",
-  id: uuid(),
-  provider: "google",
-};
-
-const USER_MANAGER = {
-  email: "francoadrianc9@gmail.com",
-  first_name: "Manager",
+  created_at: new Date(),
+  first_name: "Root",
+  last_login: new Date(),
   last_name: "Martins",
-  id: uuid(),
   provider: "google",
+  role_id: 1,
+  updated_at: new Date(),
+  password: null,
 };
 
-const USER_EMPLOYEE = {
-  email: "franco.carrizo@bitlogic.io",
-  first_name: "Employee",
-  last_name: "Marcs",
-  id: uuid(),
-  provider: "google",
+const createUser = (role_id: number, admin_id: string): User => {
+  return {
+    id: uuid(),
+    created_at: new Date(),
+    last_login: new Date(),
+    role_id,
+    updated_at: new Date(),
+    password: "test1234",
+    active: true,
+    admin_id: admin_id,
+    username: faker.internet.userName(),
+  };
 };
 
 const reservationStatus = [
@@ -154,8 +174,7 @@ export const generateReservations = (numberReservations) => {
   return reservations;
 };
 
-export const users = [USER_ROOT, USER_MANAGER, USER_EMPLOYEE];
-
+const roles = [ADMIN_ROLE, MANAGER_ROLE, EMPLOYEE_ROLE];
 const restaurants = generateRestaurants(2);
 const diners = generateDiners(400);
 const reservations = generateReservations(1000);
@@ -174,9 +193,28 @@ const load = async () => {
     console.log("Users deleted data");
     await prisma.reservationStatus.deleteMany();
     console.log("ReservationStatus deleted data");
+    await prisma.admin.deleteMany();
+    console.log("Admins deleted data");
+    await prisma.role.deleteMany();
+    console.log("Roles deleted data");
 
+    roles.map(async (role) => {
+      await prisma.role.create({
+        data: role,
+      });
+    });
+    console.log("roles created data");
+
+    const adminUser = await prisma.admin.create({
+      data: USER_ROOT,
+    });
+
+    console.log("Admin created data");
+
+    const managerUser = createUser(MANAGER_ROLE.id, adminUser.id);
+    const employeeUser = createUser(EMPLOYEE_ROLE.id, adminUser.id);
     await prisma.user.createMany({
-      data: users,
+      data: [managerUser, employeeUser],
     });
 
     console.log("Users created data");
@@ -190,9 +228,9 @@ const load = async () => {
               data: restaurant.attention_schedule,
             },
           },
-          users: {
+          admins: {
             connect: {
-              id: USER_ROOT.id,
+              id: adminUser.id,
             },
           },
         },

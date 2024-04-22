@@ -8,22 +8,51 @@ datasource db {
   url      = "postgresql://postgres:postgres@localhost:5432/mesa-facil?schema=public"
 }
 
-model User {
-  id           String       @id @unique
-  provider     String
-  email        String       @unique
-  password     String?
-  first_name   String
-  last_name    String?
-  restaurants  Restaurant[]
-  created_at   DateTime     @default(now())
-  updated_at   DateTime     @updatedAt
-  user_role    String       @default("EMPLOYEE")
-  user_root_id String?
-  active       Boolean      @default(true)
+model Admin {
+  id          String       @id @unique
+  provider    String
+  email       String       @unique
+  password    String?
+  first_name  String
+  last_name   String?
+  created_at  DateTime     @default(now())
+  restaurants Restaurant[]
+  updated_at  DateTime     @updatedAt
+  last_login  DateTime?
+  role        Role         @relation(fields: [role_id], references: [id])
+  role_id     Int
+  users       User[]
 
-  @@index([user_root_id], name: "user_root_id")
   @@index([email], name: "user_email")
+  @@map("admin")
+}
+
+model User {
+  id          String       @id @unique
+  password    String
+  username    String       @unique
+  restaurants Restaurant[]
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  last_login  DateTime?
+  admin       Admin        @relation(fields: [admin_id], references: [id])
+  admin_id    String
+  active      Boolean      @default(true)
+  role        Role         @relation(fields: [role_id], references: [id])
+  role_id     Int
+
+  @@map("user")
+}
+
+model Role {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  admins     Admin[]
+  users      User[]
+
+  @@map("role")
 }
 
 model Restaurant {
@@ -33,11 +62,13 @@ model Restaurant {
   address            String
   attention_schedule AttentionSchedule[]
   users              User[]
+  admins             Admin[]
   slug               String?             @unique
   created_at         DateTime            @default(now())
   updated_at         DateTime            @updatedAt
 
   @@index([slug], name: "slug")
+  @@map("restaurant")
 }
 
 model AttentionSchedule {
@@ -53,6 +84,7 @@ model AttentionSchedule {
   updated_at    DateTime      @updatedAt
 
   @@index([restaurant_id], name: "restaurant_id")
+  @@map("attention_schedule")
 }
 
 model Diner {
@@ -69,6 +101,7 @@ model Diner {
 
   @@index([sub], name: "sub")
   @@index([email], name: "email")
+  @@map("diner")
 }
 
 model Reservation {
@@ -85,6 +118,8 @@ model Reservation {
   status_id             Int
   created_at            DateTime          @default(now())
   updated_at            DateTime          @updatedAt
+
+  @@map("reservation")
 }
 
 model ReservationStatus {
@@ -93,4 +128,6 @@ model ReservationStatus {
   status      String
   created_at  DateTime      @default(now())
   updated_at  DateTime      @updatedAt
+
+  @@map("reservation_status")
 }
