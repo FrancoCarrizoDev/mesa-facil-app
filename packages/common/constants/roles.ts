@@ -1,4 +1,4 @@
-interface Role {
+export interface Role {
   id: number;
   DISPLAY_NAME: string;
 }

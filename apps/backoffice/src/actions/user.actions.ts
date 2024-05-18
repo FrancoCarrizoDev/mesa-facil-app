@@ -16,7 +16,7 @@ import { revalidatePath } from "next/cache";
 
 export async function createRootUser(user: CreateUserDTO) {
   try {
-    const alreadyExists = await prisma.user.findUnique({
+    const alreadyExists = await prisma.admin.findUnique({
       where: {
         email: user.email,
       },
@@ -26,7 +26,7 @@ export async function createRootUser(user: CreateUserDTO) {
       throw new Error("User already exists");
     }
 
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.admin.create({
       data: {
         id: uuid(),
         email: user.email,
@@ -34,7 +34,7 @@ export async function createRootUser(user: CreateUserDTO) {
         first_name: user.firstName,
         last_name: user.lastName,
         provider: "credentials",
-        user_role: ROLES.ADMIN.ID,
+        role_id: ROLES.ADMIN.id,
       },
     });
 
@@ -49,12 +49,12 @@ export async function createUser(user: CreateUserDTO) {
     const session = await getSession();
     if (!session) throw new Error("User not logged in");
 
-    const hasPermission = hasManageUsersPermission(session.user.role);
+    const hasPermission = hasManageUsersPermission(session.user.role.id);
     if (!hasPermission) throw new Error("User not authorized");
 
     const alreadyExists = await prisma.user.findUnique({
       where: {
-        email: user.email,
+        username: user.email,
       },
     });
 

@@ -8,39 +8,24 @@ datasource db {
   url      = "postgresql://postgres:postgres@localhost:5432/mesa-facil?schema=public"
 }
 
-model Admin {
-  id          String       @id @unique
-  provider    String
-  email       String       @unique
-  password    String?
-  first_name  String
-  last_name   String?
-  created_at  DateTime     @default(now())
-  restaurants Restaurant[]
-  updated_at  DateTime     @updatedAt
-  last_login  DateTime?
-  role        Role         @relation(fields: [role_id], references: [id])
-  role_id     Int
-  users       User[]
-
-  @@index([email], name: "user_email")
-  @@map("admin")
-}
-
 model User {
-  id          String       @id @unique
-  password    String
-  username    String       @unique
-  restaurants Restaurant[]
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  last_login  DateTime?
-  admin       Admin        @relation(fields: [admin_id], references: [id])
-  admin_id    String
-  active      Boolean      @default(true)
-  role        Role         @relation(fields: [role_id], references: [id])
-  role_id     Int
+  id            String       @id @unique
+  password      String
+  username      String       @unique
+  restaurants   Restaurant[]
+  created_at    DateTime     @default(now())
+  email         String       @unique
+  updated_at    DateTime     @updatedAt
+  last_login    DateTime?
+  active        Boolean      @default(true)
+  role          Role         @relation(fields: [role_id], references: [id])
+  role_id       Int
+  created_by_id String?
+  created_by    User?        @relation("UserCreatedBy", fields: [created_by_id], references: [id])
+  createdUsers  User[]       @relation("UserCreatedBy")
 
+  @@index([role_id], name: "role_id")
+  @@index([created_by_id], name: "created_by_id")
   @@map("user")
 }
 
@@ -49,7 +34,6 @@ model Role {
   name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  admins     Admin[]
   users      User[]
 
   @@map("role")
@@ -62,7 +46,6 @@ model Restaurant {
   address            String
   attention_schedule AttentionSchedule[]
   users              User[]
-  admins             Admin[]
   slug               String?             @unique
   created_at         DateTime            @default(now())
   updated_at         DateTime            @updatedAt

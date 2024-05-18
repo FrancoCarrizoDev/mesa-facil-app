@@ -83,32 +83,37 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
-      // console.log({
-      //   jwt: {
-      //     token,
-      //     user,
-      //     account,
-      //   },
-      // });
-
       if (user) {
-        const userDB = await prisma.user.findUnique({
+        const adminDB = await prisma.admin.findUnique({
           where: {
             id: user.id,
           },
         });
 
-        if (!userDB) return {};
-        token.id = userDB.id;
-        token.role = userDB.role_id;
-        token.admin_id = userDB.admin_id;
+        if (adminDB) {
+          token.id = adminDB.id;
+          token.role = adminDB.role_id;
+          token.admin_id = adminDB.id;
+        } else {
+          const userDB = await prisma.user.findUnique({
+            where: {
+              id: user.id,
+            },
+          });
+
+          if (!userDB) return {};
+          token.id = userDB.id;
+          token.role = userDB.role_id;
+          token.admin_id = userDB.admin_id;
+        }
       }
+
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
         session.user.id = token.id;
-        session.user.role = token.role_id;
+        session.user.role = token.role;
         session.user.admin_id = token.admin_id;
       }
 

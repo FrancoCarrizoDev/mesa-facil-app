@@ -12,7 +12,7 @@ export default async function PrivateNavbar(): Promise<JSX.Element> {
     session?.user.role || "EMPLOYEE"
   );
 
-  console.log({ session });
+  // console.log({ session });
 
   if (session) {
     return (

@@ -16,6 +16,8 @@ export async function getRestaurantsNameByUser() {
 
   const { id } = session.user;
 
+  console.log({ id });
+
   const restaurants = await prisma.restaurant.findMany({
     where: {
       users: {
@@ -36,17 +38,30 @@ export async function getRestaurantsNameByUser() {
 export async function getRestaurantsByUser(): Promise<RestaurantDTO[]> {
   const session = await getSession();
 
+  console.log({ session });
+
   if (!session) throw new Error("User not loggqged in");
 
   const { id } = session.user;
 
   const restaurants = await prisma.restaurant.findMany({
     where: {
-      users: {
-        some: {
-          id: id,
+      OR: [
+        {
+          users: {
+            some: {
+              id: id,
+            },
+          },
         },
-      },
+        {
+          admins: {
+            some: {
+              id: id,
+            },
+          },
+        },
+      ],
     },
     include: {
       attention_schedule: true,

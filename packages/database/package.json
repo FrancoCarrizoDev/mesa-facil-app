@@ -3,27 +3,25 @@
   "version": "0.0.0",
   "main": "./index.ts",
   "types": "./index.ts",
-  "type": "module",
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push --skip-generate",
-    "db:seed": "ts-node --esm ./prisma/seed.ts"
+    "db:seed": "ts-node ./prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.6.0",
-    "@repo/common": "workspace:*"
+    "@prisma/client": "^5.6.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@repo/typescript-config": "workspace:*",
     "@types/node": "^17.0.12",
+    "typescript": "^5.3.3",
     "prisma": "^5.6.0",
     "slugify": "^1.6.6",
     "ts-node": "^10.9.2",
-    "uuidv4": "^6.2.13"
-  },
-  "compilerOptions": {
-    "esModuleInterop": true
+    "uuidv4": "^6.2.13",
+    "@repo/common": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
   }
 }
