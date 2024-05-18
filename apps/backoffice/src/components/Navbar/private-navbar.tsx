@@ -1,16 +1,18 @@
 import { getAvatarLabel } from "@/utils/avatar-label";
+import { hasManageUsersPermission } from "@/utils/permissions";
 import Avatar from "@repo/ui/avatar";
+import getSession from "@/utils/get-session";
 import Link from "../Link/link";
 import SignOutButton from "@/components/SignOutButton/SignOutButton";
-import { hasManageUsersPermission } from "@/utils/permissions";
-import getSession from "@/utils/get-session";
 
 export default async function PrivateNavbar(): Promise<JSX.Element> {
   const session = await getSession();
 
-  const canShowUsersMenuLink = hasManageUsersPermission(
-    session?.user.roleId || "EMPLOYEE"
-  );
+  const canShowUsersMenuLink = !session?.user.roleId
+    ? false
+    : hasManageUsersPermission(session?.user.roleId);
+
+  console.log({ session });
 
   if (session) {
     return (
@@ -20,8 +22,8 @@ export default async function PrivateNavbar(): Promise<JSX.Element> {
         {canShowUsersMenuLink && (
           <Link href="/private/users">Mis Usuarios</Link>
         )}
-        {session.user?.name && (
-          <Avatar label={getAvatarLabel(session.user.name)} />
+        {session.user?.username && (
+          <Avatar label={getAvatarLabel(session.user.username)} />
         )}
         <SignOutButton />
       </nav>

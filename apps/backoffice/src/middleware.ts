@@ -4,4 +4,4 @@ export default withAuth({
   secret: process.env.NEXT_PUBLIC_SECRET,
 });
 
-export const config = { matcher: ["/private"] };
+export const config = { matcher: ["/private/:path*"] };

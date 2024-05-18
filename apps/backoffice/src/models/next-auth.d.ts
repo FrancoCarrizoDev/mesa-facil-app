@@ -1,5 +1,4 @@
-import { Role } from "@repo/common/constants";
-import NextAuth, { DefaultSession } from "next-auth";
+import { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
   /**
@@ -9,6 +8,8 @@ declare module "next-auth" {
     user: {
       /** The user's postal address. */
       id: string;
+      roleId: number;
+      username: string;
     } & DefaultSession["user"];
   }
 }

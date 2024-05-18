@@ -1,14 +1,18 @@
-import { getRestaurantsByUser } from "@/actions/restaurant.actions";
-import Link from "@/components/Link/link";
+import { getRestaurantsByUserId } from "@/actions/restaurant.actions";
+import { redirect } from "next/navigation";
+import getSession from "@/utils/get-session";
 import GridListContainer from "@repo/ui/grid-list-container";
+import Link from "@/components/Link/link";
+import React from "react";
+import RestaurantCard from "./components/restaurant-card";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
-import React from "react";
-import RestaurantCard from "./components/restaurant-card";
 
 export default async function RestauranstPage(): Promise<JSX.Element> {
-  // const restaurants = await getRestaurantsByUser();
+  const session = await getSession();
+
+  const restaurants = await getRestaurantsByUserId(session.user.id);
 
   return (
     <Section>
@@ -18,7 +22,7 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
           Crear Restaurante
         </Link>
       </div>
-      {/* <SectionBody>
+      <SectionBody>
         <GridListContainer>
           {restaurants.map((restaurant) => (
             <li key={restaurant.id} className="h-full">
@@ -26,7 +30,7 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
             </li>
           ))}
         </GridListContainer>
-      </SectionBody> */}
+      </SectionBody>
     </Section>
   );
 }

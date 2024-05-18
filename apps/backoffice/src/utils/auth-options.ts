@@ -86,32 +86,27 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
-    async jwt({ token, user }: { token: any; user: any }) {
+    async jwt({ user, token }: { token: any; user: any }) {
       if (user) {
-        return {
-          id: user.id,
-          email: user.email,
-          roleId: user.roleId,
-          username: user.username,
-          lastLogin: user.lastLogin,
-          createdById: user.createdById,
-        };
+        token.id = user.id;
+        token.email = user.email;
+        token.roleId = user.roleId;
+        token.username = user.username;
+        token.lastLogin = user.lastLogin;
+        token.createdById = user.createdById;
       }
+
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log({ session, token });
+      console.log();
       if (token) {
-        return {
-          user: {
-            id: token.id,
-            email: token.email,
-            roleId: token.roleId,
-            username: token.username,
-            lastLogin: token.lastLogin,
-            createdById: token.createdById,
-          },
-        };
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.roleId = token.roleId;
+        session.user.username = token.username;
+        session.user.lastLogin = token.lastLogin;
+        session.user.createdById = token.createdById;
       }
       return session;
     },
