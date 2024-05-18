@@ -14,12 +14,12 @@ export default function Page(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
-      email: "",
+      term: "",
       password: "",
     },
     onSubmit: async (formValues) => {
       const res = await signIn("credentials", {
-        email: formValues.email,
+        term: formValues.term,
         password: formValues.password,
         redirect: false,
       });
@@ -47,11 +47,11 @@ export default function Page(): JSX.Element {
               label="Nombre de usuario o email"
               onChange={(e) => {
                 handleChange({
-                  email: e.target.value,
+                  term: e.target.value,
                 });
               }}
               type="text"
-              value={values.email}
+              value={values.term}
             />
           </div>
           <div className="mb-2">
@@ -77,27 +77,6 @@ export default function Page(): JSX.Element {
           <div className="flex flex-col gap-3">
             <Button type="submit" size="md">
               Ingresar
-            </Button>
-            <Button
-              size="md"
-              color="tertiary"
-              variant="outlined"
-              onClick={() =>
-                signIn("google", {
-                  callbackUrl:
-                    process.env.NEXT_PUBLIC_BASE_URL + "/private/restaurants",
-                })
-              }
-            >
-              <div className="flex justify-center items-center gap-3">
-                Ingresar con google{" "}
-                <Image
-                  src="/google-icon.png"
-                  width={30}
-                  height={30}
-                  alt="google-icon"
-                />
-              </div>
             </Button>
           </div>
         </form>
