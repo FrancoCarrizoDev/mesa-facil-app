@@ -6,5 +6,3 @@ export const slugifyString = (text: string): string => {
     remove: /[*+~.()'"!:@]/g,
   });
 };
-
-export default slugifyString;
