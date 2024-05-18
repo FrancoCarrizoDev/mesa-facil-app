@@ -27,7 +27,7 @@ const EMPLOYEE_ROLE: Role = {
 const createUser = (role_id: number): User => {
   return {
     id: uuid(),
-    created_at: new Date() || 1,
+    created_at: new Date(),
     last_login: new Date(),
     role_id,
     updated_at: new Date(),
