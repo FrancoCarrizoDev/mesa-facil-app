@@ -9,10 +9,8 @@ export default async function PrivateNavbar(): Promise<JSX.Element> {
   const session = await getSession();
 
   const canShowUsersMenuLink = hasManageUsersPermission(
-    session?.user.role || "EMPLOYEE"
+    session?.user.roleId || "EMPLOYEE"
   );
-
-  // console.log({ session });
 
   if (session) {
     return (

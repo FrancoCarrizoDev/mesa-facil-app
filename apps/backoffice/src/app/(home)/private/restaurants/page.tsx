@@ -8,7 +8,7 @@ import React from "react";
 import RestaurantCard from "./components/restaurant-card";
 
 export default async function RestauranstPage(): Promise<JSX.Element> {
-  const restaurants = await getRestaurantsByUser();
+  // const restaurants = await getRestaurantsByUser();
 
   return (
     <Section>
@@ -18,7 +18,7 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
           Crear Restaurante
         </Link>
       </div>
-      <SectionBody>
+      {/* <SectionBody>
         <GridListContainer>
           {restaurants.map((restaurant) => (
             <li key={restaurant.id} className="h-full">
@@ -26,7 +26,7 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
             </li>
           ))}
         </GridListContainer>
-      </SectionBody>
+      </SectionBody> */}
     </Section>
   );
 }

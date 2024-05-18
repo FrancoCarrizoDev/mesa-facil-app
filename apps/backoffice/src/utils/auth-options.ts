@@ -1,7 +1,7 @@
 import { comparePasswords } from "@repo/common/bcrypt";
-import type { NextAuthOptions } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import prisma from "database";
+import type { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -18,9 +18,8 @@ export const authOptions: NextAuthOptions = {
           type: "password",
         },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<any> {
         if (!credentials) return null;
-        console.log(credentials);
         const existsUser = await prisma.user.findFirst({
           where: {
             OR: [
@@ -43,10 +42,28 @@ export const authOptions: NextAuthOptions = {
 
         if (!isValidPassword) throw new Error("Invalid password");
 
+        const lastLogin = new Date();
+        prisma.user
+          .update({
+            where: {
+              id: existsUser.id,
+            },
+            data: {
+              last_login: lastLogin,
+            },
+          })
+          .then((user) => {
+            console.log(
+              `User ${user.email} logged in at ${new Date(
+                lastLogin
+              ).toISOString()}`
+            );
+          });
+
         return {
           id: existsUser.id,
           email: existsUser.email,
-          role: existsUser.role_id,
+          roleId: existsUser.role_id,
           username: existsUser.username,
           lastLogin: existsUser.last_login,
           createdById: existsUser.created_by_id,
@@ -69,38 +86,33 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
-    async jwt({ token, user }) {
-      console.log({
-        token,
-        user,
-      });
+    async jwt({ token, user }: { token: any; user: any }) {
+      if (user) {
+        return {
+          id: user.id,
+          email: user.email,
+          roleId: user.roleId,
+          username: user.username,
+          lastLogin: user.lastLogin,
+          createdById: user.createdById,
+        };
+      }
       return token;
-      // if (user) {
-      //   const userDB = await prisma.user.findUnique({
-      //     where: {
-      //       id: user.id,
-      //     },
-      //   });
-
-      //   if (!userDB) return {};
-      //   token.id = userDB.id;
-      //   token.role = userDB.role_id;
-      //   token.created_by_id = userDB.created_by_id;
-      // }
-
-      // return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log({
-        session,
-        token,
-      });
-      if (session.user) {
-        session.user.id = token.id;
-        session.user.role = token.role;
-        session.user.admin_id = token.admin_id;
+      console.log({ session, token });
+      if (token) {
+        return {
+          user: {
+            id: token.id,
+            email: token.email,
+            roleId: token.roleId,
+            username: token.username,
+            lastLogin: token.lastLogin,
+            createdById: token.createdById,
+          },
+        };
       }
-
       return session;
     },
   },
