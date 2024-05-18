@@ -1,5 +1,5 @@
 import { PrismaClient, Role, User } from "@prisma/client";
-
+import { hashPassword } from "@repo/common/bcrypt";
 import { faker } from "@faker-js/faker";
 import { uuid } from "uuidv4";
 
@@ -24,14 +24,14 @@ const EMPLOYEE_ROLE: Role = {
   updated_at: new Date(),
 };
 
-const createUser = (role_id: number): User => {
+const createUser = async (role_id: number): Promise<User> => {
   return {
     id: uuid(),
     created_at: new Date(),
     last_login: new Date(),
     role_id,
     updated_at: new Date(),
-    password: "test1234",
+    password: await hashPassword("test1234"),
     active: true,
     username: faker.internet.userName(),
     created_by_id: null,
@@ -195,15 +195,12 @@ const load = async () => {
 
     console.log("Admin created data");
 
-    const managerUser = createUser(MANAGER_ROLE.id);
-    const employeeUser = createUser(EMPLOYEE_ROLE.id);
-    const adminUser = createUser(ADMIN_ROLE.id);
+    const managerUser = await createUser(MANAGER_ROLE.id);
+    const employeeUser = await createUser(EMPLOYEE_ROLE.id);
+    const adminUser = await createUser(ADMIN_ROLE.id);
 
     await prisma.user.createMany({
-      data: [managerUser, employeeUser, adminUser].map((user) => ({
-        ...user,
-        password: "test1234",
-      })),
+      data: [managerUser, employeeUser, adminUser],
     });
 
     console.log("Users created data");
