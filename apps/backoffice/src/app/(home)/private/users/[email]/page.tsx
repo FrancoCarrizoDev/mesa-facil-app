@@ -3,7 +3,7 @@ import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import UserForm from "../components/user-form";
-import { hasEditUserPermission } from "@/utils/permissions";
+import { canEditUser } from "@/utils/permissions";
 import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";
 import { getUserByEmail } from "@/actions/user.actions";
 import { notFound } from "next/navigation";
@@ -28,7 +28,7 @@ export default async function UserPage({
     return notFound();
   }
 
-  const hasPermissionInPage = hasEditUserPermission(
+  const hasPermissionInPage = canEditUser(
     session.user.roleId,
     userToEdit.userRoleId
   );

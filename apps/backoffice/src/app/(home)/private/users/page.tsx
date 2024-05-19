@@ -2,7 +2,7 @@ import {
   getUserListByAdmin,
   getUserListByManager,
 } from "@/actions/user.actions";
-import { hasManageUsersPermission } from "@/utils/permissions";
+import { canManageUsers } from "@/utils/permissions";
 import getSession from "@/utils/get-session";
 import Link from "@/components/Link/link";
 import Section from "@repo/ui/section";
@@ -14,7 +14,7 @@ import { UserDTO } from "@repo/common/models";
 export default async function UsersPage() {
   const session = await getSession();
 
-  const hasPermission = hasManageUsersPermission(session.user.roleId);
+  const hasPermission = canManageUsers(session.user.roleId);
 
   if (!hasPermission) {
     return <div>Ups, no tienes permisos para ver esta página...</div>;

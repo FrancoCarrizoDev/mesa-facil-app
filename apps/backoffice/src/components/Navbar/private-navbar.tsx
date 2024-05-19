@@ -1,5 +1,5 @@
 import { getAvatarLabel } from "@/utils/avatar-label";
-import { hasManageUsersPermission } from "@/utils/permissions";
+import { canManageUsers } from "@/utils/permissions";
 import Avatar from "@repo/ui/avatar";
 import getSession from "@/utils/get-session";
 import Link from "../Link/link";
@@ -10,7 +10,7 @@ export default async function PrivateNavbar(): Promise<JSX.Element> {
 
   const canShowUsersMenuLink = !session?.user.roleId
     ? false
-    : hasManageUsersPermission(session?.user.roleId);
+    : canManageUsers(session?.user.roleId);
 
   console.log({ session });
 

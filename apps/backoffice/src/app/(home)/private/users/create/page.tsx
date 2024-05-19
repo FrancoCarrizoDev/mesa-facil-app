@@ -3,15 +3,13 @@ import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import getSession from "@/utils/get-session";
-import { hasManageUsersPermission } from "@/utils/permissions";
+import { canManageUsers } from "@/utils/permissions";
 import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";
 import UserForm from "../components/user-form";
 
 export default async function Create() {
   const session = await getSession();
-  const hasPermissionInPage = hasManageUsersPermission(
-    session?.user.role || "EMPLOYEE"
-  );
+  const hasPermissionInPage = canManageUsers(session?.user.role || "EMPLOYEE");
 
   if (!hasPermissionInPage) {
     return <h1>Acceso denegado - No tienes permisos</h1>;

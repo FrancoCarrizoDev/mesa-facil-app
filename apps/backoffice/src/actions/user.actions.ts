@@ -11,7 +11,7 @@ import { hashPassword } from "@repo/common/bcrypt";
 import uuid from "@repo/common/uuid";
 import { ROLES } from "@repo/common/constants";
 import getSession from "@/utils/get-session";
-import { hasManageUsersPermission } from "@/utils/permissions";
+import { canManageUsers } from "@/utils/permissions";
 import { revalidatePath } from "next/cache";
 
 export async function createRootUser(user: CreateUserDTO) {
@@ -218,7 +218,7 @@ export async function editUserStatus({
     const session = await getSession();
     if (!session) throw new Error("User not logged in");
 
-    const hasPermission = hasManageUsersPermission(session.user.role);
+    const hasPermission = canManageUsers(session.user.role);
     if (!hasPermission) throw new Error("User not authorized");
 
     const user = await prisma.user.findUnique({

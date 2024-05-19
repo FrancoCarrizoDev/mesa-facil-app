@@ -8,7 +8,7 @@ import { Tooltip } from "react-tooltip";
 import React from "react";
 import { editUserStatus } from "@/actions/user.actions";
 import { toast } from "react-toastify";
-import { hasEditUserPermission } from "@/utils/permissions";
+import { canEditUser } from "@/utils/permissions";
 import { getRoleDisplayNameByRoleId } from "@repo/common/constants";
 
 export default function UsersClientPage({
@@ -31,10 +31,7 @@ export default function UsersClientPage({
   ];
 
   const data: TableData[] = userList.map((user) => {
-    const cantEditUser = !hasEditUserPermission(
-      userLoggedRole,
-      user.userRoleId
-    );
+    const cantEditUser = !canEditUser(userLoggedRole, user.userRoleId);
 
     return {
       ...user,

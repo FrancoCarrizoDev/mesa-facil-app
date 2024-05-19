@@ -1,12 +1,12 @@
 import { ROLES } from "@repo/common/constants";
 
-export const hasManageUsersPermission = (roleId: number) =>
+export const canManageUsers = (roleId: number): boolean =>
   roleId === ROLES.ADMIN.ID || roleId === ROLES.MANAGER.ID;
 
-export function hasEditUserPermission(
+export function canEditUser(
   userLoggedRoleId: number,
   userRoleId: number
-) {
+): boolean {
   if (userLoggedRoleId === ROLES.ADMIN.ID) {
     return true;
   }
@@ -20,3 +20,9 @@ export function hasEditUserPermission(
 
   return false;
 }
+
+export const canEditRestaurant = (roleId: number): boolean =>
+  roleId === ROLES.ADMIN.ID || roleId === ROLES.MANAGER.ID;
+
+export const canCreateRestaurant = (roleId: number): boolean =>
+  roleId === ROLES.ADMIN.ID;
