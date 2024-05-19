@@ -151,64 +151,65 @@ export async function getUserListByAdmin(userId: string): Promise<UserDTO[]> {
   }
 }
 
-// export async function getUserListByManager(userId: string): Promise<UserDTO[]> {
-//   const userWithRestaurants = await prisma.user.findUnique({
-//     where: {
-//       id: session.user.id,
-//     },
-//     include: {
-//       restaurants: true,
-//     },
-//   });
+export async function getUserListByManager(
+  userId: string,
+  userRootId: string
+): Promise<UserDTO[]> {
+  const userWithRestaurants = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      restaurants: true,
+    },
+  });
 
-//   const users = await prisma.user.findMany({
-//     where: {
-//       user_root_id: session.user.user_root_id,
-//       restaurants: {
-//         some: {
-//           id: {
-//             in: userWithRestaurants?.restaurants.map(
-//               (restaurant) => restaurant.id
-//             ),
-//           },
-//         },
-//       },
-//     },
-//     select: {
-//       id: true,
-//       provider: true,
-//       email: true,
-//       first_name: true,
-//       last_name: true,
-//       created_at: true,
-//       updated_at: true,
-//       user_role: true,
-//       active: true,
-//       restaurants: {
-//         select: {
-//           id: true,
-//           name: true,
-//         },
-//       },
-//     },
-//     orderBy: {
-//       updated_at: "desc",
-//     },
-//   });
+  const users = await prisma.user.findMany({
+    where: {
+      user_root_id: userRootId,
+      restaurants: {
+        some: {
+          id: {
+            in: userWithRestaurants?.restaurants.map(
+              (restaurant) => restaurant.id
+            ),
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+      created_at: true,
+      updated_at: true,
+      role_id: true,
+      active: true,
+      last_login: true,
+      restaurants: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      updated_at: "desc",
+    },
+  });
 
-//   return users.map((user) => ({
-//     id: user.id,
-//     provider: user.provider,
-//     email: user.email,
-//     firstName: user.first_name,
-//     lastName: user.last_name || "SIN DATOS",
-//     restaurants: user.restaurants,
-//     status: user.active ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE,
-//     createdAt: user.created_at.toISOString(),
-//     updatedAt: user.updated_at.toISOString(),
-//     userRole: user.user_role,
-//   }));
-// }
+  return users.map((user) => ({
+    id: user.id,
+    email: user.email,
+    username: user.username,
+    restaurants: user.restaurants,
+    createdAt: user.created_at.toISOString(),
+    updatedAt: user.updated_at.toISOString(),
+    userRoleId: user.role_id,
+    active: user.active,
+    lastLogin: user.last_login?.toISOString() || null,
+  }));
+}
 
 export async function editUserStatus({
   id,

@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
           roleId: existsUser.role_id,
           username: existsUser.username,
           lastLogin: existsUser.last_login,
-          createdById: existsUser.created_by_id,
+          userRootId: existsUser.user_root_id,
         };
       },
     }),
@@ -93,7 +93,7 @@ export const authOptions: NextAuthOptions = {
         token.roleId = user.roleId;
         token.username = user.username;
         token.lastLogin = user.lastLogin;
-        token.createdById = user.createdById;
+        token.userRootId = user.userRootId;
       }
 
       return token;
@@ -106,7 +106,7 @@ export const authOptions: NextAuthOptions = {
         session.user.roleId = token.roleId;
         session.user.username = token.username;
         session.user.lastLogin = token.lastLogin;
-        session.user.createdById = token.createdById;
+        session.user.userRootId = token.userRootId;
       }
       return session;
     },
