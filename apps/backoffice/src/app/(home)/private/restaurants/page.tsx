@@ -8,24 +8,30 @@ import RestaurantCard from "./components/restaurant-card";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
+import { canCreateRestaurant } from "@/utils/permissions";
 
 export default async function RestauranstPage(): Promise<JSX.Element> {
   const session = await getSession();
 
   const restaurants = await getRestaurantsByUserId(session.user.id);
+  const hasCreateRestaurantPermission = canCreateRestaurant(
+    session.user.roleId
+  );
 
   return (
     <Section>
       <div className="mb-6 flex justify-between">
         <SectionTitle>Mis Restaurantes</SectionTitle>
-        <Link underline="hover" href="/private/restaurants/create">
-          Crear Restaurante
-        </Link>
+        {hasCreateRestaurantPermission ? (
+          <Link href="/private/restaurants/create" underline="hover">
+            Crear Restaurante
+          </Link>
+        ) : null}
       </div>
       <SectionBody>
         <GridListContainer>
           {restaurants.map((restaurant) => (
-            <li key={restaurant.id} className="h-full">
+            <li className="h-full" key={restaurant.id}>
               <RestaurantCard {...restaurant} />
             </li>
           ))}

@@ -2,6 +2,7 @@ import React from "react";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
+import { redirect } from "next/navigation";
 import getSession from "@/utils/get-session";
 import { canCreateRestaurant } from "@/utils/permissions";
 import RestaurantForm from "../components/restaurant-form";
@@ -14,7 +15,7 @@ export default async function CreateRestaurantPage(): Promise<JSX.Element> {
   );
 
   if (!hasCreateRestaurantPermission) {
-    return <div>No tienes permisos para acceder a esta sección</div>;
+    return redirect("/unauthorized");
   }
 
   return (

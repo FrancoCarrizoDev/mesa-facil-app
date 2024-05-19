@@ -2,7 +2,7 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getRestaurantBySlug } from "@/actions/restaurant.actions";
 import getSession from "@/utils/get-session";
 import { canEditRestaurant } from "@/utils/permissions";
@@ -21,7 +21,7 @@ export default async function RestaurantPage({
   const hasEditPermission = canEditRestaurant(session.user.roleId);
 
   if (!hasEditPermission) {
-    return <div>No tienes permisos para acceder a esta sección</div>;
+    return redirect("/unauthorized");
   }
 
   const restaurant = await getRestaurantBySlug(params.slug);

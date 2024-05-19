@@ -7,7 +7,8 @@ export default function RestaurantCard({
   slug,
   attentionSchedule,
   phone,
-}: RestaurantDTO) {
+  canEdit,
+}: RestaurantDTO & { canEdit: boolean }) {
   return (
     <div className="max-w-sm p-6 rounded-lg shadow bg-gray-800 border-gray-700 h-full flex flex-col  ">
       <div className="flex items-center justify-between mb-3">
@@ -18,9 +19,11 @@ export default function RestaurantCard({
             </h5>
           </a>
         </div>
-        <Link color="secondary" href={`/private/restaurants/${slug}/edit`}>
-          Editar
-        </Link>
+        {canEdit ? (
+          <Link color="secondary" href={`/private/restaurants/${slug}/edit`}>
+            Editar
+          </Link>
+        ) : null}
       </div>
       <div className="min-h-[150px] mb-3 font-normal text-xs text-gray-500 dark:text-gray-400">
         <p className="mb-1">
