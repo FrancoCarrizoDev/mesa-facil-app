@@ -5,6 +5,8 @@ import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import { notFound } from "next/navigation";
 import RestaurantForm from "../../components/restaurant-form";
+import getSession from "@/utils/get-session";
+import { ROLES } from "@repo/common/constants";
 
 interface Props {
   readonly params: {
@@ -15,6 +17,15 @@ interface Props {
 export default async function RestaurantPage({
   params,
 }: Props): Promise<JSX.Element> {
+  const session = await getSession();
+  const hasCreateRestaurantPermission =
+    session.user.roleId === ROLES.ADMIN.ID ||
+    session.user.roleId === ROLES.MANAGER.ID;
+
+  if (!hasCreateRestaurantPermission) {
+    return <div>No tienes permisos para acceder a esta sección</div>;
+  }
+
   const restaurant = await getRestaurantBySlug(params.slug);
 
   if (!restaurant) return notFound();

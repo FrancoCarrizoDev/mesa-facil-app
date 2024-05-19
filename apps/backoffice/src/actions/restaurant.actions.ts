@@ -86,7 +86,9 @@ export async function createRestaurant(
   }
 }
 
-export async function updateRestaurant(restaurant: RestaurantDTO) {
+export async function updateRestaurant(
+  restaurant: RestaurantDTO
+): Promise<void> {
   try {
     await prisma.restaurant.update({
       where: {
