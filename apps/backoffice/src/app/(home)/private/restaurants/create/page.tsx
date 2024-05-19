@@ -1,15 +1,15 @@
+import { ROLES } from "@repo/common/constants";
+import React from "react";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
-import React from "react";
-import RestaurantForm from "../components/restaurant-form";
 import getSession from "@/utils/get-session";
-import { ROLES } from "@repo/common/constants";
+import RestaurantForm from "../components/restaurant-form";
 
 export default async function CreateRestaurantPage(): Promise<JSX.Element> {
   const session = await getSession();
 
-  const hasCreateRestaurantPermission = session?.user.role === ROLES.ADMIN.ID;
+  const hasCreateRestaurantPermission = session.user.roleId === ROLES.ADMIN.ID;
 
   if (!hasCreateRestaurantPermission) {
     return <div>No tienes permisos para acceder a esta sección</div>;

@@ -4,14 +4,13 @@ import type {
   RestaurantDTOValidateFields,
   RestaurantDTO,
 } from "@repo/common/models";
-import { checkIfClosingTimeIsBeforeOpeningTime } from "@/utils/attention-schedule";
 import { toast } from "react-toastify";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { WEEK_DAYS } from "@repo/common/constants";
-import AttentionSchedules from "./attention-schedules";
 import Button from "@repo/ui/button";
 import Input from "@repo/ui/input";
+import { checkIfClosingTimeIsBeforeOpeningTime } from "@/utils/attention-schedule";
 import useForm from "@/hooks/use-form";
 import {
   createRestaurant,
@@ -22,6 +21,7 @@ import {
   validateRestaurantName,
   validateRestaurantPhone,
 } from "@/utils/validations";
+import AttentionSchedules from "./attention-schedules";
 
 const INITIAL_VALUES: RestaurantDTO = {
   id: "1",

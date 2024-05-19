@@ -1,39 +1,13 @@
 "use server";
-import getSession from "@/utils/get-session";
+
 import prisma from "database";
-import { getServerSession } from "next-auth";
 import { RestaurantDTO } from "@repo/common/models";
 import { authOptions } from "src/utils/auth-options";
-import uuid from "@repo/common/uuid";
-import slugify from "@repo/common/slugify";
+import { generateUUID } from "@repo/common/uuid";
+import { slugifyString } from "@repo/common/slugify";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
-
-export async function getRestaurantsNameByUser() {
-  const session = await getServerSession(authOptions);
-
-  if (!session) return [];
-
-  const { id } = session.user;
-
-  console.log({ id });
-
-  const restaurants = await prisma.restaurant.findMany({
-    where: {
-      users: {
-        some: {
-          id: id,
-        },
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-    },
-  });
-
-  return restaurants;
-}
+import getSession from "@/utils/get-session";
 
 export async function getRestaurantsByUserId(
   id: string
@@ -72,26 +46,24 @@ export async function getRestaurantsByUserId(
   }));
 }
 
-export async function createRestaurant(restaurant: RestaurantDTO) {
+export async function createRestaurant(
+  restaurant: RestaurantDTO
+): Promise<void> {
   const session = await getSession();
 
-  if (!session) {
-    throw new Error("User not loggqged in");
-  }
-
   try {
-    const newRestaurantId = uuid();
+    const newRestaurantId = generateUUID();
     await prisma.restaurant.create({
       data: {
         id: newRestaurantId,
         name: restaurant.name,
-        slug: slugify(restaurant.name),
+        slug: slugifyString(restaurant.name),
         address: restaurant.address,
         phone: restaurant.phone,
         attention_schedule: {
           createMany: {
             data: restaurant.attentionSchedule.map((schedule) => ({
-              id: uuid(),
+              id: generateUUID(),
               opening_hours: schedule.openingHours,
               ending_hours: schedule.endingHours,
               day_name: schedule.dayName,
@@ -115,12 +87,6 @@ export async function createRestaurant(restaurant: RestaurantDTO) {
 }
 
 export async function updateRestaurant(restaurant: RestaurantDTO) {
-  const session = await getSession();
-
-  if (!session) {
-    throw new Error("User not loggqged in");
-  }
-
   try {
     await prisma.restaurant.update({
       where: {
@@ -134,7 +100,7 @@ export async function updateRestaurant(restaurant: RestaurantDTO) {
           deleteMany: {},
           createMany: {
             data: restaurant.attentionSchedule.map((schedule) => ({
-              id: uuid(),
+              id: generateUUID(),
               opening_hours: schedule.openingHours,
               ending_hours: schedule.endingHours,
               day_name: schedule.dayName,
@@ -155,20 +121,14 @@ export async function updateRestaurant(restaurant: RestaurantDTO) {
 export async function getRestaurantBySlug(
   slug: string
 ): Promise<RestaurantDTO> {
-  const session = await getSession();
-
-  if (!session) {
-    throw new Error("User not loggqged in");
-  }
-
   try {
     const restaurant = await prisma.restaurant.findUnique({
       where: {
         slug: slug,
         users: {
-          some: {
-            id: session.user.id,
-          },
+          // some: {
+          //   id: session.user.id,
+          // },
         },
       },
       include: {
@@ -206,18 +166,12 @@ export async function getRestaurantListToUserAssing(): Promise<
     name: string;
   }[]
 > {
-  const session = await getSession();
-
-  if (!session) {
-    throw new Error("User not loggqged in");
-  }
-
   try {
     const restaurants = await prisma.restaurant.findMany({
       where: {
         users: {
           some: {
-            id: session.user.id,
+            // id: session.user.id,
           },
         },
       },
