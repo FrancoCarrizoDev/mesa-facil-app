@@ -12,12 +12,12 @@ export default function Checkbox({
   id,
 }: CheckboxProps): JSX.Element {
   return (
-    <div className="ui-flex ui-items-center">
+    <div className="ui-flex">
       <input
         id={id}
         type="checkbox"
         checked={checked}
-        className="ui-w-4 ui-h-4 ui-text-blue-600 ui-bg-gray-100 ui-border-gray-300 ui-rounded focus:ui-ring-blue-500"
+        className="ui-w-4 ui-h-4 ui-text-blue-600 ui-bg-gray-100 ui-border-gray-300 ui-rounded focus:ui-ring-blue-500 "
         onChange={onChange}
       />
       <label

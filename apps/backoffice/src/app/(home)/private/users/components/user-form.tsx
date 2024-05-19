@@ -11,23 +11,22 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { UserDTO } from "@repo/common/models";
 import { useState } from "react";
+import GridListContainer from "@repo/ui/grid-list-container";
 
 interface CreateEdutUserFormValues {
   id?: string;
-  name: string;
-  lastName: string;
+  username: string;
   email: string;
   password: string;
   password2: string;
-  role: string;
+  role: number;
   restaurantIds: string[];
 }
 
 const getInitialValues = (user?: UserDTO): CreateEdutUserFormValues => {
   if (!user) {
     return {
-      name: "",
-      lastName: "",
+      username: "",
       email: "",
       password: "",
       password2: "",
@@ -38,12 +37,11 @@ const getInitialValues = (user?: UserDTO): CreateEdutUserFormValues => {
 
   return {
     id: user.id,
-    name: user.firstName,
-    lastName: user.lastName,
+    username: user.username,
     email: user.email,
     password: "",
     password2: "",
-    role: user.userRole,
+    role: user.userRoleId,
     restaurantIds: user.restaurants.map(({ id }) => id),
   };
 };
@@ -67,8 +65,7 @@ export default function UserForm({
           if (!user) {
             await createUser({
               email: formValues.email,
-              firstName: formValues.name,
-              lastName: formValues.lastName,
+              firstName: formValues.username,
               password: formValues.password,
               role: formValues.role,
               restaurantIds: formValues.restaurantIds,
@@ -77,7 +74,7 @@ export default function UserForm({
             await editUser({
               id: user.id,
               email: formValues.email,
-              firstName: formValues.name,
+              firstName: formValues.username,
               lastName: formValues.lastName,
               password: formValues.password,
               role: formValues.role,
@@ -95,32 +92,25 @@ export default function UserForm({
     });
   const [changePassword, setChangePassword] = useState(false);
 
+  const selectOptions = Object.values(ROLES).map(({ ID, DISPLAY_NAME }) => ({
+    value: ID,
+    label: DISPLAY_NAME,
+  }));
+
   return (
     <form className="w-full " onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 juistify-items-center gap-4">
         <div className="w-full">
           <div className="mb-6">
             <Input
-              label="Nombre"
+              label="Usuario"
               onChange={(e) => {
                 handleChange({
-                  name: e.target.value,
+                  username: e.target.value,
                 });
               }}
               type="text"
-              value={values.name}
-            />
-          </div>
-          <div className="mb-6">
-            <Input
-              label="Apellido"
-              onChange={(e) => {
-                handleChange({
-                  lastName: e.target.value,
-                });
-              }}
-              type="text"
-              value={values.lastName}
+              value={values.username}
             />
           </div>
           <div className="mb-6">
@@ -184,44 +174,43 @@ export default function UserForm({
               label="Seleccione un rol"
               onChange={(e) => {
                 handleChange({
-                  role: e.target.value,
+                  role: +e.target.value,
                 });
               }}
-              options={Object.values(ROLES).map(({ ID, DISPLAY_NAME }) => ({
-                value: ID,
-                label: DISPLAY_NAME,
-              }))}
+              options={selectOptions}
               value={values.role}
             />
           </div>
           <div className="mb-6 flex flex-col">
-            <h6 className="ui-block ui-mb-2 ui-text-sm ui-font-medium ui-text-gray-900 ">
+            <h6 className="ui-block ui-mb-2 ui-text-sm ui-font-medium ui-text-gray-900">
               Permisos para restaurantes
             </h6>
-            <div className="flex gap-3 py-1">
-              {restaurantList.map(({ id, name }) => (
-                <Checkbox
-                  key={id}
-                  id={id}
-                  checked={values.restaurantIds.includes(id)}
-                  onChange={(e) => {
-                    const isChecked = e.target.checked;
-                    if (isChecked) {
-                      handleChange({
-                        restaurantIds: [...values.restaurantIds, id],
-                      });
-                    } else {
-                      handleChange({
-                        restaurantIds: values.restaurantIds.filter(
-                          (restaurantId) => restaurantId !== id
-                        ),
-                      });
-                    }
-                  }}
-                >
-                  {name}
-                </Checkbox>
-              ))}
+            <div className="mt-1">
+              <GridListContainer>
+                {restaurantList.map(({ id, name }) => (
+                  <Checkbox
+                    key={id}
+                    id={id}
+                    checked={values.restaurantIds.includes(id)}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      if (isChecked) {
+                        handleChange({
+                          restaurantIds: [...values.restaurantIds, id],
+                        });
+                      } else {
+                        handleChange({
+                          restaurantIds: values.restaurantIds.filter(
+                            (restaurantId) => restaurantId !== id
+                          ),
+                        });
+                      }
+                    }}
+                  >
+                    {name}
+                  </Checkbox>
+                ))}
+              </GridListContainer>
             </div>
           </div>
         </div>

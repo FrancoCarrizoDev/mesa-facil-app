@@ -251,26 +251,19 @@ export async function editUserStatus({
 
 export async function getUserByEmail(email: string): Promise<UserDTO> {
   try {
-    const session = await getSession();
-    if (!session) throw new Error("User not logged in");
-
-    const hasPermission = hasManageUsersPermission(session.user.role);
-    if (!hasPermission) throw new Error("User not authorized");
-
     const user = await prisma.user.findUnique({
       where: {
-        email: email,
+        email,
       },
       select: {
         id: true,
-        provider: true,
         email: true,
-        first_name: true,
-        last_name: true,
+        username: true,
         created_at: true,
         updated_at: true,
-        user_role: true,
+        role_id: true,
         active: true,
+        last_login: true,
         restaurants: {
           select: {
             id: true,
@@ -284,15 +277,14 @@ export async function getUserByEmail(email: string): Promise<UserDTO> {
 
     return {
       id: user.id,
-      provider: user.provider,
       email: user.email,
-      firstName: user.first_name,
-      lastName: user.last_name || "SIN DATOS",
+      username: user.username,
       restaurants: user.restaurants,
-      status: user.active ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE,
       createdAt: user.created_at.toISOString(),
       updatedAt: user.updated_at.toISOString(),
-      userRole: user.user_role,
+      userRoleId: user.role_id,
+      active: user.active,
+      lastLogin: user.last_login?.toISOString() || null,
     };
   } catch (error: any) {
     console.log(error);

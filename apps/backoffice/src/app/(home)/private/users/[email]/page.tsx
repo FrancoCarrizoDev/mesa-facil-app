@@ -29,8 +29,8 @@ export default async function UserPage({
   }
 
   const hasPermissionInPage = hasEditUserPermission(
-    session?.user.role || "USER",
-    userToEdit.userRole
+    session.user.roleId,
+    userToEdit.userRoleId
   );
 
   if (!hasPermissionInPage) {
