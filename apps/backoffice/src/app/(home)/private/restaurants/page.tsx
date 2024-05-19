@@ -8,7 +8,7 @@ import RestaurantCard from "./components/restaurant-card";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
-import { canCreateRestaurant } from "@/utils/permissions";
+import { canCreateRestaurant, canEditRestaurant } from "@/utils/permissions";
 
 export default async function RestauranstPage(): Promise<JSX.Element> {
   const session = await getSession();
@@ -17,6 +17,7 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
   const hasCreateRestaurantPermission = canCreateRestaurant(
     session.user.roleId
   );
+  const hasEditRestaurantPermission = canEditRestaurant(session.user.roleId);
 
   return (
     <Section>
@@ -32,7 +33,10 @@ export default async function RestauranstPage(): Promise<JSX.Element> {
         <GridListContainer>
           {restaurants.map((restaurant) => (
             <li className="h-full" key={restaurant.id}>
-              <RestaurantCard {...restaurant} />
+              <RestaurantCard
+                {...restaurant}
+                canEdit={hasEditRestaurantPermission}
+              />
             </li>
           ))}
         </GridListContainer>
