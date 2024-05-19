@@ -104,7 +104,7 @@ export async function getUserListByAdmin(userId: string): Promise<UserDTO[]> {
       where: {
         OR: [
           {
-            created_by_id: userId,
+            user_root_id: userId,
           },
           {
             id: userId,

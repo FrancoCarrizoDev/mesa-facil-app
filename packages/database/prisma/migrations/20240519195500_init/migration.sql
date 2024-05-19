@@ -4,11 +4,12 @@ CREATE TABLE "user" (
     "password" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "email" TEXT NOT NULL,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "last_login" TIMESTAMP(3),
     "active" BOOLEAN NOT NULL DEFAULT true,
     "role_id" INTEGER NOT NULL,
-    "created_by_id" TEXT,
+    "user_root_id" TEXT,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -104,6 +105,12 @@ CREATE UNIQUE INDEX "user_id_key" ON "user"("id");
 CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+
+-- CreateIndex
+CREATE INDEX "user_root_id" ON "user"("user_root_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "restaurant_slug_key" ON "restaurant"("slug");
 
 -- CreateIndex
@@ -137,7 +144,7 @@ CREATE INDEX "_RestaurantToUser_B_index" ON "_RestaurantToUser"("B");
 ALTER TABLE "user" ADD CONSTRAINT "user_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "user" ADD CONSTRAINT "user_created_by_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "user" ADD CONSTRAINT "user_user_root_id_fkey" FOREIGN KEY ("user_root_id") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "attention_schedule" ADD CONSTRAINT "attention_schedule_restaurant_id_fkey" FOREIGN KEY ("restaurant_id") REFERENCES "restaurant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

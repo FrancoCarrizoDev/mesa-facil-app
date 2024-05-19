@@ -9,22 +9,22 @@ datasource db {
 }
 
 model User {
-  id            String       @id @unique
-  password      String
-  username      String       @unique
-  restaurants   Restaurant[]
-  created_at    DateTime     @default(now())
-  email         String       @unique
-  updated_at    DateTime     @updatedAt
-  last_login    DateTime?
-  active        Boolean      @default(true)
-  role          Role         @relation(fields: [role_id], references: [id])
-  role_id       Int
-  created_by_id String?
-  created_by    User?        @relation("UserCreatedBy", fields: [created_by_id], references: [id])
-  createdUsers  User[]       @relation("UserCreatedBy")
+  id           String       @id @unique
+  password     String
+  username     String       @unique
+  restaurants  Restaurant[]
+  created_at   DateTime     @default(now())
+  email        String       @unique
+  updated_at   DateTime     @updatedAt
+  last_login   DateTime?
+  active       Boolean      @default(true)
+  role         Role         @relation(fields: [role_id], references: [id])
+  role_id      Int
+  user_root_id String?
+  user_root    User?        @relation("UserCreatedBy", fields: [user_root_id], references: [id])
+  createdUsers User[]       @relation("UserCreatedBy")
 
-  @@index([created_by_id], name: "created_by_id")
+  @@index([user_root_id], name: "user_root_id")
   @@map("user")
 }
 

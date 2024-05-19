@@ -35,7 +35,7 @@ const createUser = async (role_id: number): Promise<User> => {
     password: await hashPassword("test1234"),
     active: true,
     username: faker.internet.userName(),
-    created_by_id: null,
+    user_root_id: null,
     email: faker.internet.email(),
   };
 };
@@ -207,9 +207,9 @@ const load = async () => {
     } else {
       var adminUser = await createUser(ADMIN_ROLE.id);
       var managerUser = await createUser(MANAGER_ROLE.id);
-      managerUser.created_by_id = adminUser.id;
+      managerUser.user_root_id = adminUser.id;
       var employeeUser = await createUser(EMPLOYEE_ROLE.id);
-      employeeUser.created_by_id = managerUser.id;
+      employeeUser.user_root_id = adminUser.id;
 
       await prisma.user.create({
         data: adminUser,
