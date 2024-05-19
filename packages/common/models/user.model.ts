@@ -1,11 +1,10 @@
 export interface CreateUserDTO {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
-  role?: string;
+  username: string;
+  userRoleId: number;
   restaurantIds: string[];
-  root_user_id?: string;
+  root_user_id: string | null;
 }
 
 export interface UpdateUserDTO extends CreateUserDTO {
@@ -23,6 +22,7 @@ export interface UserDTO {
   lastLogin: string | null;
   createdAt: string;
   updatedAt: string;
+  userRootId: string | null;
 }
 
 export interface UserRestaurantDTO {

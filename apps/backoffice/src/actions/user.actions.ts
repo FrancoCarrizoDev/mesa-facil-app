@@ -41,59 +41,51 @@ export async function createRootUser(user: CreateUserDTO) {
   // }
 }
 
-export async function createUser(user: CreateUserDTO) {
-  // try {
-  //   const session = await getSession();
-  //   if (!session) throw new Error("User not logged in");
-  //   const hasPermission = hasManageUsersPermission(session.user.role.id);
-  //   if (!hasPermission) throw new Error("User not authorized");
-  //   const alreadyExists = await prisma.user.findUnique({
-  //     where: {
-  //       username: user.email,
-  //     },
-  //   });
-  //   if (alreadyExists) {
-  //     throw new Error("User already exists");
-  //   }
-  //   // ensure that the restaurants belong to the user
-  //   if (!user.restaurantIds) throw new Error("Restaurant not found");
-  //   const restaurants = await prisma.restaurant.findMany({
-  //     where: {
-  //       users: {
-  //         some: {
-  //           id: session.user.id,
-  //         },
-  //       },
-  //       id: {
-  //         in: user.restaurantIds,
-  //       },
-  //     },
-  //   });
-  //   if (restaurants.length !== user.restaurantIds.length) {
-  //     throw new Error("Restaurant not found");
-  //   }
-  //   const newUser = await prisma.user.create({
-  //     data: {
-  //       id: uuid(),
-  //       email: user.email,
-  //       password: await hashPassword(user.password),
-  //       first_name: user.firstName,
-  //       last_name: user.lastName,
-  //       provider: "credentials",
-  //       user_role: user.role,
-  //       user_root_id: session.user.id,
-  //       restaurants: {
-  //         connect: restaurants.map((restaurant) => ({
-  //           id: restaurant.id,
-  //         })),
-  //       },
-  //     },
-  //   });
-  //   revalidatePath("/private/users");
-  //   return newUser;
-  // } catch (error) {
-  //   console.log(error);
-  // }
+export async function createUser(user: CreateUserDTO): Promise<void> {
+  try {
+    const alreadyExists = await prisma.user.findUnique({
+      where: {
+        username: user.email,
+      },
+    });
+    if (alreadyExists) {
+      throw new Error("User already exists");
+    }
+
+    const restaurants = await prisma.restaurant.findMany({
+      where: {
+        users: {
+          some: {
+            id: user.root_user_id!,
+          },
+        },
+        id: {
+          in: user.restaurantIds,
+        },
+      },
+    });
+    if (restaurants.length !== user.restaurantIds.length) {
+      throw new Error("Restaurant not found");
+    }
+    await prisma.user.create({
+      data: {
+        id: uuid(),
+        email: user.email,
+        password: await hashPassword(user.password),
+        username: user.username,
+        role_id: user.userRoleId,
+        user_root_id: user.root_user_id,
+        restaurants: {
+          connect: restaurants.map((restaurant) => ({
+            id: restaurant.id,
+          })),
+        },
+      },
+    });
+    revalidatePath("/private/users");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function getUserListByAdmin(userId: string): Promise<UserDTO[]> {
@@ -120,6 +112,7 @@ export async function getUserListByAdmin(userId: string): Promise<UserDTO[]> {
         role_id: true,
         active: true,
         last_login: true,
+        user_root_id: true,
         restaurants: {
           select: {
             id: true,
@@ -142,6 +135,7 @@ export async function getUserListByAdmin(userId: string): Promise<UserDTO[]> {
       userRoleId: user.role_id,
       active: user.active,
       lastLogin: user.last_login?.toISOString() || null,
+      userRootId: user.user_root_id,
     }));
 
     // if the user is a manager, return all users with the same restaurants
@@ -186,6 +180,7 @@ export async function getUserListByManager(
       role_id: true,
       active: true,
       last_login: true,
+      user_root_id: true,
       restaurants: {
         select: {
           id: true,
@@ -208,6 +203,7 @@ export async function getUserListByManager(
     userRoleId: user.role_id,
     active: user.active,
     lastLogin: user.last_login?.toISOString() || null,
+    userRootId: user.user_root_id,
   }));
 }
 
@@ -264,6 +260,7 @@ export async function getUserByEmail(email: string): Promise<UserDTO> {
         role_id: true,
         active: true,
         last_login: true,
+        user_root_id: true,
         restaurants: {
           select: {
             id: true,
@@ -285,6 +282,7 @@ export async function getUserByEmail(email: string): Promise<UserDTO> {
       userRoleId: user.role_id,
       active: user.active,
       lastLogin: user.last_login?.toISOString() || null,
+      userRootId: user.user_root_id,
     };
   } catch (error: any) {
     console.log(error);
@@ -292,14 +290,8 @@ export async function getUserByEmail(email: string): Promise<UserDTO> {
   }
 }
 
-export async function editUser(user: UpdateUserDTO) {
+export async function editUser(user: UpdateUserDTO): Promise<void> {
   try {
-    const session = await getSession();
-    if (!session) throw new Error("User not logged in");
-
-    const hasPermission = hasManageUsersPermission(session.user.role);
-    if (!hasPermission) throw new Error("User not authorized");
-
     const userToUpdate = await prisma.user.findUnique({
       where: {
         id: user.id,
@@ -312,7 +304,7 @@ export async function editUser(user: UpdateUserDTO) {
       where: {
         users: {
           some: {
-            id: session.user.id,
+            id: user.root_user_id || user.id,
           },
         },
         id: {
@@ -332,9 +324,8 @@ export async function editUser(user: UpdateUserDTO) {
         },
         data: {
           email: user.email,
-          first_name: user.firstName,
-          last_name: user.lastName,
-          user_role: user.role,
+          username: user.username,
+          role_id: user.userRoleId,
           password: await hashPassword(user.password),
           restaurants: {
             connect: restaurants.map((restaurant) => ({
@@ -350,9 +341,8 @@ export async function editUser(user: UpdateUserDTO) {
         },
         data: {
           email: user.email,
-          first_name: user.firstName,
-          last_name: user.lastName,
-          user_role: user.role,
+          username: user.username,
+          role_id: user.userRoleId,
           restaurants: {
             connect: restaurants.map((restaurant) => ({
               id: restaurant.id,

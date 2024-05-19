@@ -12,6 +12,7 @@ import Select from "@repo/ui/select";
 import type { UserDTO } from "@repo/common/models";
 import { createUser, editUser } from "@/actions/user.actions";
 import useForm from "@/hooks/use-form";
+import { useSession } from "next-auth/react";
 
 interface CreateEdutUserFormValues {
   id?: string;
@@ -59,29 +60,36 @@ export default function UserForm({
   user,
 }: UserFormProps): JSX.Element {
   const router = useRouter();
+  const session = useSession();
   const { values, handleChange, handleSubmit } =
     useForm<CreateEdutUserFormValues>({
       initialValues: getInitialValues(user),
       onSubmit: async (formValues) => {
         try {
+          if (!session.data?.user.id) {
+            throw new Error("No se ha podido obtener el id del usuario");
+          }
           if (!user) {
             await createUser({
               email: formValues.email,
-              firstName: formValues.username,
-              password: formValues.password,
-              role: formValues.role,
+              username: formValues.username,
+              userRoleId: formValues.role,
               restaurantIds: formValues.restaurantIds,
+              password: formValues.password,
+              root_user_id: !session.data?.user.userRootId
+                ? session.data?.user.id
+                : session.data?.user.userRootId,
             });
           } else {
             await editUser({
               id: user.id,
               email: formValues.email,
-              firstName: formValues.username,
-              lastName: formValues.lastName,
+              username: formValues.username,
               password: formValues.password,
-              role: formValues.role,
+              userRoleId: formValues.role,
               restaurantIds: formValues.restaurantIds,
               changePassword: formValues.password !== "",
+              root_user_id: user.userRootId,
             });
           }
           toast.success("Usuario creado correctamente");

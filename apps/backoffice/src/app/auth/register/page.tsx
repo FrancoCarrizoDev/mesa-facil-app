@@ -27,7 +27,7 @@ export default function Page(): JSX.Element {
       const newUser = await createRootUser({
         email: formValues.email,
         firstName: formValues.name,
-        lastName: formValues.lastName,
+        username: formValues.lastName,
         password: formValues.password,
         restaurantIds: [],
       });
