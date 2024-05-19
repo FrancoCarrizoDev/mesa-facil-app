@@ -24,7 +24,6 @@ model User {
   created_by    User?        @relation("UserCreatedBy", fields: [created_by_id], references: [id])
   createdUsers  User[]       @relation("UserCreatedBy")
 
-  @@index([role_id], name: "role_id")
   @@index([created_by_id], name: "created_by_id")
   @@map("user")
 }

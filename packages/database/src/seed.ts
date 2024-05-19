@@ -2,6 +2,7 @@ import { PrismaClient, Role, User } from "@prisma/client";
 import { hashPassword } from "@repo/common/bcrypt";
 import { faker } from "@faker-js/faker";
 import { uuid } from "uuidv4";
+import slugify from "slugify";
 
 const prisma = new PrismaClient();
 
@@ -58,71 +59,71 @@ const reservationStatus = [
   },
 ];
 
-// export const generateRestaurants = (numberRestaurants) => {
-//   const restaurants = [];
-//   for (let i = 0; i < numberRestaurants; i++) {
-//     const restaurantId = uuid();
-//     restaurants.push({
-//       id: restaurantId,
-//       name: faker.company.name(),
-//       slug: slugify(faker.company.name()),
-//       address: faker.location.secondaryAddress(),
-//       phone: faker.phone.number(),
-//       attention_schedule: [
-//         {
-//           id: uuid(),
-//           day_name: "Domingo",
-//           opening_hours: "08:00",
-//           ending_hours: "22:00",
-//           day_number: 0,
-//         },
-//         {
-//           id: uuid(),
-//           day_name: "Lunes",
-//           opening_hours: "08:00",
-//           ending_hours: "22:00",
-//           day_number: 1,
-//         },
-//         {
-//           id: uuid(),
-//           day_name: "Martes",
-//           opening_hours: "08:00",
-//           ending_hours: "22:00",
-//           day_number: 2,
-//         },
-//         {
-//           id: uuid(),
-//           day_name: "Miércoles",
-//           opening_hours: "08:00",
-//           ending_hours: "22:00",
-//           day_number: 3,
-//         },
-//         {
-//           id: uuid(),
-//           day_name: "Jueves",
-//           opening_hours: "08:00",
-//           ending_hours: "22:00",
-//           day_number: 4,
-//         },
-//         {
-//           id: uuid(),
-//           day_name: "Viernes",
-//           opening_hours: "08:00",
-//           ending_hours: "22:00",
-//           day_number: 5,
-//         },
-//         {
-//           id: uuid(),
-//           day_name: "Sábado",
-//           opening_hours: "08:00",
-//           ending_hours: "22:00",
-//           day_number: 6,
-//         },
-//       ],
-//     });
-//   }
-//   return restaurants;
-// };
+export const generateRestaurants = (numberRestaurants: number) => {
+  const restaurants = [];
+  for (let i = 0; i < numberRestaurants; i++) {
+    const restaurantId = uuid();
+    restaurants.push({
+      id: restaurantId,
+      name: faker.company.name(),
+      slug: slugify(faker.company.name()),
+      address: faker.location.secondaryAddress(),
+      phone: faker.phone.number(),
+      attention_schedule: [
+        {
+          id: uuid(),
+          day_name: "Domingo",
+          opening_hours: "08:00",
+          ending_hours: "22:00",
+          day_number: 0,
+        },
+        {
+          id: uuid(),
+          day_name: "Lunes",
+          opening_hours: "08:00",
+          ending_hours: "22:00",
+          day_number: 1,
+        },
+        {
+          id: uuid(),
+          day_name: "Martes",
+          opening_hours: "08:00",
+          ending_hours: "22:00",
+          day_number: 2,
+        },
+        {
+          id: uuid(),
+          day_name: "Miércoles",
+          opening_hours: "08:00",
+          ending_hours: "22:00",
+          day_number: 3,
+        },
+        {
+          id: uuid(),
+          day_name: "Jueves",
+          opening_hours: "08:00",
+          ending_hours: "22:00",
+          day_number: 4,
+        },
+        {
+          id: uuid(),
+          day_name: "Viernes",
+          opening_hours: "08:00",
+          ending_hours: "22:00",
+          day_number: 5,
+        },
+        {
+          id: uuid(),
+          day_name: "Sábado",
+          opening_hours: "08:00",
+          ending_hours: "22:00",
+          day_number: 6,
+        },
+      ],
+    });
+  }
+  return restaurants;
+};
 
 // export const generateDiners = (numberDiners) => {
 //   const diners = [];
@@ -161,7 +162,7 @@ const reservationStatus = [
 //   return reservations;
 // };
 
-const roles = [ADMIN_ROLE, MANAGER_ROLE, EMPLOYEE_ROLE];
+const ROLES = [ADMIN_ROLE, MANAGER_ROLE, EMPLOYEE_ROLE];
 // const restaurants = generateRestaurants(2);
 // const diners = generateDiners(400);
 // const reservations = generateReservations(1000);
@@ -183,43 +184,82 @@ const load = async () => {
     await prisma.role.deleteMany();
     console.log("Roles deleted data");
 
-    const rolesPromises = roles.map(async (role) => {
-      await prisma.role.create({
-        data: role,
+    const roles = await prisma.role.findMany();
+    if (roles.length > 0) {
+      console.log("Roles already created");
+      return;
+    } else {
+      const rolesPromises = ROLES.map(async (role) => {
+        await prisma.role.create({
+          data: role,
+        });
       });
-    });
 
-    await Promise.all(rolesPromises);
+      await Promise.all(rolesPromises);
+    }
 
     console.log("roles created data");
 
-    console.log("Admin created data");
+    const users = await prisma.user.findMany();
+    if (users.length > 0) {
+      console.log("Users already created");
+      return;
+    } else {
+      var adminUser = await createUser(ADMIN_ROLE.id);
+      var managerUser = await createUser(MANAGER_ROLE.id);
+      managerUser.created_by_id = adminUser.id;
+      var employeeUser = await createUser(EMPLOYEE_ROLE.id);
+      employeeUser.created_by_id = managerUser.id;
 
-    const managerUser = await createUser(MANAGER_ROLE.id);
-    const employeeUser = await createUser(EMPLOYEE_ROLE.id);
-    const adminUser = await createUser(ADMIN_ROLE.id);
-
-    await prisma.user.createMany({
-      data: [managerUser, employeeUser, adminUser],
-    });
+      await prisma.user.create({
+        data: adminUser,
+      });
+      await prisma.user.create({
+        data: managerUser,
+      });
+      await prisma.user.create({
+        data: employeeUser,
+      });
+    }
 
     console.log("Users created data");
 
-    // const restaurantsPromises = restaurants.map(async (restaurant) => {
-    //   await prisma.restaurant.create({
-    //     data: {
-    //       ...restaurant,
-    //       attention_schedule: {
-    //         createMany: {
-    //           data: restaurant.attention_schedule,
-    //         },
-    //       },
-    //     },
-    //   });
-    // });
+    const restaurants = await prisma.restaurant.findMany();
 
-    // await Promise.all(restaurantsPromises);
-    // console.log("Restaurants created data");
+    if (restaurants.length > 0) {
+      console.log("Restaurants already created");
+      return;
+    } else {
+      const restaurants = generateRestaurants(10);
+      const restaurantsPromises = restaurants.map(async (restaurant) => {
+        await prisma.restaurant.create({
+          data: {
+            ...restaurant,
+            attention_schedule: {
+              createMany: {
+                data: restaurant.attention_schedule,
+              },
+            },
+            users: {
+              connect: [
+                {
+                  id: adminUser.id,
+                },
+                {
+                  id: managerUser.id,
+                },
+                {
+                  id: employeeUser.id,
+                },
+              ],
+            },
+          },
+        });
+      });
+
+      await Promise.all(restaurantsPromises);
+      console.log("Restaurants created data");
+    }
 
     // const reservationStatusPromises = reservationStatus.map(async (status) => {
     //   await prisma.reservationStatus.create({

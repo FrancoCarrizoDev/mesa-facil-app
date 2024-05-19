@@ -1,4 +1,4 @@
-import { getUserList } from "@/actions/user.actions";
+import { getUserListByAdmin } from "@/actions/user.actions";
 import { hasManageUsersPermission } from "@/utils/permissions";
 import getSession from "@/utils/get-session";
 import Link from "@/components/Link/link";
@@ -10,16 +10,12 @@ import UsersClientPage from "./page.client";
 export default async function UsersPage() {
   const session = await getSession();
 
-  if (!session) {
-    return <div>Ups, no tienes permisos para ver esta página...</div>;
-  }
-
-  const hasPermission = hasManageUsersPermission(session?.user?.role || "USER");
+  const hasPermission = hasManageUsersPermission(session.user.roleId);
   if (!hasPermission) {
     return <div>Ups, no tienes permisos para ver esta página...</div>;
   }
 
-  const userList = await getUserList();
+  const userList = await getUserListByAdmin(session.user.id);
 
   return (
     <Section>
@@ -32,7 +28,7 @@ export default async function UsersPage() {
       <SectionBody>
         <UsersClientPage
           userList={userList}
-          userLoggedRole={session?.user.role}
+          userLoggedRole={session.user.roleId}
         />
       </SectionBody>
     </Section>

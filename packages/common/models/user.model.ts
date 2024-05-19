@@ -15,15 +15,14 @@ export interface UpdateUserDTO extends CreateUserDTO {
 
 export interface UserDTO {
   id: string;
-  provider: string;
   email: string;
-  firstName: string;
-  status: string;
-  lastName: string;
+  active: boolean;
+  username: string;
   restaurants: UserRestaurantDTO[];
+  userRoleId: number;
+  lastLogin: string | null;
   createdAt: string;
   updatedAt: string;
-  userRole: string;
 }
 
 export interface UserRestaurantDTO {

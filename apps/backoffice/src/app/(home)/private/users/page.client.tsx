@@ -9,44 +9,48 @@ import React from "react";
 import { editUserStatus } from "@/actions/user.actions";
 import { toast } from "react-toastify";
 import { hasEditUserPermission } from "@/utils/permissions";
+import { getRoleDisplayNameByRoleId } from "@repo/common/constants";
 
 export default function UsersClientPage({
   userList,
   userLoggedRole,
 }: {
   userList: UserDTO[];
-  userLoggedRole: string;
+  userLoggedRole: number;
 }) {
   const columns: TableColumn[] = [
-    { key: "firstName", header: "Nombre" },
-    { key: "lastName", header: "Apellido" },
+    { key: "username", header: "Usuario" },
     { key: "email", header: "Email" },
-    { key: "userRole", header: "Rol" },
-    { key: "status", header: "Estado de acceso" },
+    { key: "userRoleId", header: "Rol" },
+    { key: "active", header: "Estado de acceso" },
     { key: "createdAt", header: "Fecha Creación" },
     { key: "updatedAt", header: "Fecha Actualización" },
     { key: "restaurants", header: "Restaurantes" },
+    { key: "lastLogin", header: "Último acceso" },
     { key: "action", header: "Action" },
   ];
 
   const data: TableData[] = userList.map((user) => {
-    const cantEditUser = !hasEditUserPermission(userLoggedRole, user.userRole);
+    const cantEditUser = !hasEditUserPermission(
+      userLoggedRole,
+      user.userRoleId
+    );
 
     return {
       ...user,
-      lastName: user.lastName || "",
-      userRole: user.userRole,
+      userRoleId: getRoleDisplayNameByRoleId(user.userRoleId),
       createdAt: new Date(user.createdAt).toLocaleString("es-ES"),
       updatedAt: new Date(user.updatedAt).toLocaleString("es-ES"),
-      status: (
+      lastLogin: user.lastLogin
+        ? new Date(user.lastLogin).toLocaleString("es-ES")
+        : "-",
+      active: (
         <p
           className={`font-medium ${
-            user.status === USER_STATUS.ACTIVE
-              ? "text-green-600"
-              : "text-red-600"
+            user.active ? "text-green-600" : "text-red-600"
           }`}
         >
-          {user.status}
+          {user.active ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE}
         </p>
       ),
       restaurants: user.restaurants
@@ -64,7 +68,7 @@ export default function UsersClientPage({
             </Link>
           </div>
 
-          {user.status === USER_STATUS.ACTIVE ? (
+          {user.active ? (
             <Button
               variant="text"
               color={cantEditUser ? "disabled" : "danger"}

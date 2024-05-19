@@ -23,3 +23,16 @@ export const ROLES: Roles = {
     DISPLAY_NAME: "Empleado",
   },
 };
+
+export const getRoleDisplayNameByRoleId = (roleId: number): string => {
+  switch (roleId) {
+    case ROLES.ADMIN.id:
+      return ROLES.ADMIN.DISPLAY_NAME;
+    case ROLES.MANAGER.id:
+      return ROLES.MANAGER.DISPLAY_NAME;
+    case ROLES.EMPLOYEE.id:
+      return ROLES.EMPLOYEE.DISPLAY_NAME;
+    default:
+      return "Rol no encontrado";
+  }
+};
