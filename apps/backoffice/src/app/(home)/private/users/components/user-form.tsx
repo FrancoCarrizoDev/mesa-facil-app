@@ -1,17 +1,17 @@
 "use client";
 
 import { ROLES } from "@repo/common/constants";
-import useForm from "@/hooks/use-form";
-import Button from "@repo/ui/button";
-import Checkbox from "@repo/ui/checkbox";
-import Input from "@repo/ui/input";
-import Select from "@repo/ui/select";
-import { createUser, editUser } from "@/actions/user.actions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { UserDTO } from "@repo/common/models";
 import { useState } from "react";
+import Button from "@repo/ui/button";
+import Checkbox from "@repo/ui/checkbox";
 import GridListContainer from "@repo/ui/grid-list-container";
+import Input from "@repo/ui/input";
+import Select from "@repo/ui/select";
+import type { UserDTO } from "@repo/common/models";
+import { createUser, editUser } from "@/actions/user.actions";
+import useForm from "@/hooks/use-form";
 
 interface CreateEdutUserFormValues {
   id?: string;
@@ -21,6 +21,14 @@ interface CreateEdutUserFormValues {
   password2: string;
   role: number;
   restaurantIds: string[];
+}
+
+interface UserFormProps {
+  restaurantList: {
+    id: string;
+    name: string;
+  }[];
+  user?: UserDTO;
 }
 
 const getInitialValues = (user?: UserDTO): CreateEdutUserFormValues => {
@@ -49,13 +57,7 @@ const getInitialValues = (user?: UserDTO): CreateEdutUserFormValues => {
 export default function UserForm({
   restaurantList,
   user,
-}: {
-  restaurantList: {
-    id: string;
-    name: string;
-  }[];
-  user?: UserDTO;
-}) {
+}: UserFormProps): JSX.Element {
   const router = useRouter();
   const { values, handleChange, handleSubmit } =
     useForm<CreateEdutUserFormValues>({
@@ -154,11 +156,11 @@ export default function UserForm({
               value={values.password2}
             />
           </div>
-          {user && (
+          {user ? (
             <div className="mb-6">
               <Checkbox
-                id="passwordChange"
                 checked={changePassword}
+                id="passwordChange"
                 onChange={(e) => {
                   setChangePassword(e.target.checked);
                 }}
@@ -166,7 +168,7 @@ export default function UserForm({
                 Cambiar contraseña
               </Checkbox>
             </div>
-          )}
+          ) : null}
         </div>
         <div className="w-full">
           <div className="mb-6">
@@ -189,9 +191,9 @@ export default function UserForm({
               <GridListContainer>
                 {restaurantList.map(({ id, name }) => (
                   <Checkbox
-                    key={id}
-                    id={id}
                     checked={values.restaurantIds.includes(id)}
+                    id={id}
+                    key={id}
                     onChange={(e) => {
                       const isChecked = e.target.checked;
                       if (isChecked) {
@@ -217,10 +219,10 @@ export default function UserForm({
       </div>
       <div className="flex justify-center gap-6">
         <Button
-          type="button"
           onClick={() => {
             router.push("/private/users");
           }}
+          type="button"
         >
           Cancelar
         </Button>
