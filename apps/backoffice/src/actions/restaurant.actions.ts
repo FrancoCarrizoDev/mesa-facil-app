@@ -162,7 +162,9 @@ export async function getRestaurantBySlug(
   }
 }
 
-export async function getRestaurantListToUserAssing(): Promise<
+export async function getRestaurantListToUserAssing(
+  userLoggedId: string
+): Promise<
   {
     id: string;
     name: string;
@@ -173,7 +175,7 @@ export async function getRestaurantListToUserAssing(): Promise<
       where: {
         users: {
           some: {
-            // id: session.user.id,
+            id: userLoggedId,
           },
         },
       },

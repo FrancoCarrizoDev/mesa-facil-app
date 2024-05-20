@@ -2,20 +2,21 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
+import { redirect } from "next/navigation";
 import getSession from "@/utils/get-session";
 import { canManageUsers } from "@/utils/permissions";
 import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";
 import UserForm from "../components/user-form";
 
-export default async function Create() {
+export default async function Create(): Promise<JSX.Element> {
   const session = await getSession();
-  const hasPermissionInPage = canManageUsers(session?.user.role || "EMPLOYEE");
+  const hasPermissionInPage = canManageUsers(session.user.roleId);
 
   if (!hasPermissionInPage) {
-    return <h1>Acceso denegado - No tienes permisos</h1>;
+    return redirect("/unauthorized");
   }
 
-  const restaurantList = await getRestaurantListToUserAssing();
+  const restaurantList = await getRestaurantListToUserAssing(session.user.id);
 
   return (
     <Section>

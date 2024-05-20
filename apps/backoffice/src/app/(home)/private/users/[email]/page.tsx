@@ -2,25 +2,21 @@ import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
-import UserForm from "../components/user-form";
+import { notFound, redirect } from "next/navigation";
 import { canEditUser } from "@/utils/permissions";
 import { getRestaurantListToUserAssing } from "@/actions/restaurant.actions";
 import { getUserByEmail } from "@/actions/user.actions";
-import { notFound } from "next/navigation";
 import getSession from "@/utils/get-session";
+import UserForm from "../components/user-form";
+
+interface UserPageProps {
+  params: { email: string };
+}
 
 export default async function UserPage({
   params,
-}: {
-  params: { email: string };
-}) {
+}: UserPageProps): Promise<JSX.Element> {
   const session = await getSession();
-
-  if (!session) {
-    return <div>Ups, no tienes permisos para ver esta página...</div>;
-  }
-
-  console.log({ params });
 
   const userToEdit = await getUserByEmail(decodeURIComponent(params.email));
 
@@ -34,10 +30,10 @@ export default async function UserPage({
   );
 
   if (!hasPermissionInPage) {
-    return <h1>Acceso denegado - No tienes permisos</h1>;
+    return redirect("/unauthorized");
   }
 
-  const restaurantList = await getRestaurantListToUserAssing();
+  const restaurantList = await getRestaurantListToUserAssing(session.user.id);
 
   return (
     <Section>
