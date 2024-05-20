@@ -1,3 +1,9 @@
+import Section from "@repo/ui/section";
+import SectionBody from "@repo/ui/section-body";
+import SectionTitle from "@repo/ui/section-title";
+import { redirect } from "next/navigation";
+import type { UserDTO } from "@repo/common/models";
+import { ROLES } from "@repo/common/constants";
 import {
   getUserListByAdmin,
   getUserListByManager,
@@ -5,23 +11,19 @@ import {
 import { canManageUsers } from "@/utils/permissions";
 import getSession from "@/utils/get-session";
 import Link from "@/components/Link/link";
-import Section from "@repo/ui/section";
-import SectionBody from "@repo/ui/section-body";
-import SectionTitle from "@repo/ui/section-title";
 import UsersClientPage from "./page.client";
-import { UserDTO } from "@repo/common/models";
 
-export default async function UsersPage() {
+export default async function UsersPage(): Promise<JSX.Element> {
   const session = await getSession();
 
   const hasPermission = canManageUsers(session.user.roleId);
 
   if (!hasPermission) {
-    return <div>Ups, no tienes permisos para ver esta página...</div>;
+    return redirect("/unauthorized");
   }
 
   let userList: UserDTO[] = [];
-  if (session.user.roleId === 1) {
+  if (session.user.roleId === ROLES.ADMIN.ID) {
     userList = await getUserListByAdmin(session.user.id);
   } else {
     userList = await getUserListByManager(
@@ -34,7 +36,7 @@ export default async function UsersPage() {
     <Section>
       <div className="flex justify-between items-center">
         <SectionTitle>Mis Usuarios</SectionTitle>
-        <Link underline="hover" href="/private/users/create">
+        <Link href="/private/users/create" underline="hover">
           Nuevo Usuario
         </Link>
       </div>
