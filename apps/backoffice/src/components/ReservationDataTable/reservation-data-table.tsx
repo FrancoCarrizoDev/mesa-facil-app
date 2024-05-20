@@ -34,6 +34,7 @@ import useSearchReservation, {
 interface Props {
   paginatedReservation: PaginationDTO<ReservationDTO[]>;
   reservationParamsProps: ReservationParamsProps;
+  restaurantSlug: string;
 }
 
 const columns: TableColumn[] = [
@@ -103,6 +104,7 @@ const reservationStatusSelectItems = [
 export default function ReservationDataTable({
   paginatedReservation,
   reservationParamsProps,
+  restaurantSlug,
 }: Props): JSX.Element {
   const {
     filters,
@@ -195,13 +197,15 @@ export default function ReservationDataTable({
           action: (
             <div className="flex items-center">
               <div className="flex w-full  items-center gap-3">
-                <Link href={`./reservations/${reservation.id}`}>Editar</Link>
+                <Link href={`${restaurantSlug}/reservations/${reservation.id}`}>
+                  Editar
+                </Link>
               </div>
             </div>
           ),
         };
       }),
-    [reservationParamsProps]
+    [paginatedReservation.data, restaurantSlug, openDialog]
   );
 
   return (
@@ -209,14 +213,15 @@ export default function ReservationDataTable({
       <div className="flex items-baseline gap-3 mb-3">
         <Input
           label="Buscar"
-          placeholder="Buscar por nombre o email"
           onChange={(e) => onChangeTerm(e.target.value)}
+          placeholder="Buscar por nombre o email"
           value={filters.term}
         />
         <Select
           label="Estado"
           onChange={(e) => onChangeStatus(e.target.value)}
           value={filters.status?.toString() || "0"}
+          size="small"
           options={[
             { value: "all", label: "Todos" },
             { value: "pending", label: "Pendiente" },
@@ -224,7 +229,6 @@ export default function ReservationDataTable({
             { value: "canceled", label: "Cancelado" },
             { value: "rejected", label: "Rechadaza" },
           ]}
-          size="small"
         />
         <InputDatePicker
           label="Desde"

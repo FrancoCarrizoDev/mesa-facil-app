@@ -45,9 +45,6 @@ export default async function RestaurantPage({
           >
             Crear reserva
           </Link>
-          <Link href={`/private/restaurants/${params.slug}/reservations`}>
-            Reservas
-          </Link>
           <Link href={`/private/restaurants/${params.slug}/reviews`}>
             Reseñas
           </Link>
@@ -69,6 +66,7 @@ export default async function RestaurantPage({
             dateTo: searchParams.dateTo ? new Date(searchParams.dateTo) : null,
             term: searchParams.term || "",
           }}
+          restaurantSlug={params.slug}
         />
       </SectionBody>
     </Section>
