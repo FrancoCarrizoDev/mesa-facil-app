@@ -4,7 +4,8 @@ import useDebounce from "./useDebounce";
 
 export interface ReservationParamsProps {
   status: string;
-  date: Date | null;
+  dateFrom: Date | null;
+  dateTo: Date | null;
   term: string;
   page: number;
   pageSize: number;
@@ -16,24 +17,30 @@ export default function useSearchReservation(params: ReservationParamsProps) {
   const termDebounce = useDebounce(filters, 1000);
   const pathname = usePathname();
 
-  const onChangeStatus = (status: string) => {
+  const onChangeStatus = (status: string): void => {
     setFilters({ ...filters, status });
   };
 
-  const onChangeDate = (date: Date | null) => {
-    setFilters({ ...filters, date });
+  const onChangeDateFrom = (date: Date | null): void => {
+    setFilters({ ...filters, dateFrom: date });
   };
 
-  const onChangeTerm = (term: string) => {
+  const onChangeDateTo = (date: Date | null): void => {
+    setFilters({ ...filters, dateTo: date });
+  };
+
+  const onChangeTerm = (term: string): void => {
     setFilters({ ...filters, term });
   };
 
   const isDebouncing =
     termDebounce.status !== filters.status ||
-    termDebounce.date !== filters.date ||
+    termDebounce.dateFrom !== filters.dateFrom ||
     termDebounce.term !== filters.term ||
     termDebounce.page !== filters.page ||
-    termDebounce.pageSize !== filters.pageSize;
+    termDebounce.pageSize !== filters.pageSize ||
+    termDebounce.dateTo !== filters.dateTo;
+
   useEffect(() => {
     const query = new URLSearchParams();
 
@@ -41,8 +48,12 @@ export default function useSearchReservation(params: ReservationParamsProps) {
       query.set("status", termDebounce.status.toString());
     }
 
-    if (termDebounce.date) {
-      query.set("date", termDebounce.date.toISOString());
+    if (termDebounce.dateFrom) {
+      query.set("dateFrom", termDebounce.dateFrom.toISOString());
+    }
+
+    if (termDebounce.dateTo) {
+      query.set("dateTo", termDebounce.dateTo.toISOString());
     }
 
     query.set("term", termDebounce.term.toString());
@@ -57,8 +68,9 @@ export default function useSearchReservation(params: ReservationParamsProps) {
   return {
     filters,
     onChangeStatus,
-    onChangeDate,
+    onChangeDateFrom,
     onChangeTerm,
     isDebouncing,
+    onChangeDateTo,
   };
 }

@@ -69,14 +69,7 @@ export async function getReservationList(
   }
   const status = getReservationStatusBySearchKeyLabel(searchParams.status);
 
-  console.log({
-    gte: searchParams.date
-      ? new Date(searchParams.date).toISOString()
-      : undefined,
-    lte: searchParams.date
-      ? addDays(new Date(searchParams.date), 1).toISOString()
-      : undefined,
-  });
+  console.log({ searchParams });
 
   try {
     const submission = await prisma.$transaction([
@@ -107,6 +100,14 @@ export async function getReservationList(
             ],
           },
           status_id: status ? status : undefined,
+          date: {
+            gte: searchParams.dateFrom
+              ? new Date(searchParams.dateFrom).toISOString()
+              : undefined,
+            lte: searchParams.dateTo
+              ? addDays(new Date(searchParams.dateTo), 1).toISOString()
+              : undefined,
+          },
         },
         include: {
           diner: true,
@@ -116,6 +117,9 @@ export async function getReservationList(
             ? 0
             : (searchParams.page - 1) * searchParams.pageSize,
         take: searchParams.pageSize,
+        orderBy: {
+          date: "asc",
+        },
       }),
       prisma.reservation.count({
         where: {
@@ -144,6 +148,14 @@ export async function getReservationList(
             ],
           },
           status_id: status ? status : undefined,
+          date: {
+            gte: searchParams.dateFrom
+              ? new Date(searchParams.dateFrom).toISOString()
+              : undefined,
+            lte: searchParams.dateTo
+              ? addDays(new Date(searchParams.dateTo), 1).toISOString()
+              : undefined,
+          },
         },
       }),
     ]);

@@ -10,7 +10,8 @@ import ReservationDataTable from "@/components/ReservationDataTable/reservation-
 
 export interface SearchReservationParams {
   readonly status: string;
-  date?: string;
+  dateFrom: string | null;
+  dateTo: string | null;
   readonly term?: string;
   readonly page: number;
   readonly pageSize: number;
@@ -23,12 +24,20 @@ interface Props {
   readonly searchParams: SearchReservationParams;
 }
 
-export default async function ReservationPage({ params, searchParams }: Props) {
+export default async function ReservationPage({
+  params,
+  searchParams,
+}: Props): Promise<JSX.Element> {
   const restaurantSlug = params.slug;
   await ensureLoggedUserBelongsToRestaurant(restaurantSlug);
+  console.log({
+    searchParams,
+  });
+
   const reservationList = await getReservationList(restaurantSlug, {
     status: searchParams.status,
-    date: searchParams.date,
+    dateFrom: searchParams.dateFrom,
+    dateTo: searchParams.dateTo,
     term: searchParams.term || "",
     page: Number(searchParams.page) || 1,
     pageSize: Number(searchParams.pageSize) || 10,
@@ -39,8 +48,8 @@ export default async function ReservationPage({ params, searchParams }: Props) {
       <div className="flex justify-between items-center">
         <SectionTitle>Reservas</SectionTitle>
         <Link
-          underline="hover"
           href={`/private/restaurants/${params.slug}/reservations/create`}
+          underline="hover"
         >
           Crear reserva
         </Link>
@@ -52,7 +61,10 @@ export default async function ReservationPage({ params, searchParams }: Props) {
             page: Number(searchParams.page) || 1,
             pageSize: Number(searchParams.pageSize) || 10,
             status: searchParams.status,
-            date: searchParams.date ? new Date(searchParams.date) : null,
+            dateFrom: searchParams.dateFrom
+              ? new Date(searchParams.dateFrom)
+              : null,
+            dateTo: searchParams.dateTo ? new Date(searchParams.dateTo) : null,
             term: searchParams.term || "",
           }}
         />

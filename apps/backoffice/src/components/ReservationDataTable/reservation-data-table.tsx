@@ -103,15 +103,22 @@ const reservationStatusSelectItems = [
 export default function ReservationDataTable({
   paginatedReservation,
   reservationParamsProps,
-}: Props) {
-  const { filters, onChangeDate, onChangeStatus, onChangeTerm, isDebouncing } =
-    useSearchReservation({
-      page: reservationParamsProps.page,
-      pageSize: reservationParamsProps.pageSize,
-      status: reservationParamsProps.status,
-      date: reservationParamsProps.date,
-      term: reservationParamsProps.term,
-    });
+}: Props): JSX.Element {
+  const {
+    filters,
+    onChangeDateFrom,
+    onChangeStatus,
+    onChangeTerm,
+    isDebouncing,
+    onChangeDateTo,
+  } = useSearchReservation({
+    page: reservationParamsProps.page,
+    pageSize: reservationParamsProps.pageSize,
+    status: reservationParamsProps.status,
+    dateFrom: reservationParamsProps.dateFrom,
+    dateTo: reservationParamsProps.dateTo,
+    term: reservationParamsProps.term,
+  });
   const { openDialog } = useContext(DialogContext);
 
   const tableData: TableData[] = useMemo(
@@ -220,10 +227,19 @@ export default function ReservationDataTable({
           size="small"
         />
         <InputDatePicker
-          label="Fecha"
+          label="Desde"
           placeholderText="Buscar por fecha"
-          onChange={(date) => onChangeDate(date)}
-          selectedDate={filters.date}
+          onChange={(date) => onChangeDateFrom(date)}
+          selectedDate={filters.dateFrom}
+          required={false}
+          error={false}
+          dateFormat="dd/MM/yyyy"
+        />
+        <InputDatePicker
+          label="Hasta"
+          placeholderText="Buscar por fecha"
+          onChange={(date) => onChangeDateTo(date)}
+          selectedDate={filters.dateTo}
           required={false}
           error={false}
           dateFormat="dd/MM/yyyy"

@@ -83,14 +83,6 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
     async jwt({ token, user, account }) {
-      console.log({
-        jwt: {
-          token,
-          user,
-          account,
-        },
-      });
-
       if (user) {
         const adminDB = await prisma.admin.findUnique({
           where: {
@@ -121,7 +113,6 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
-        console.log({ session });
         session.user.id = token.id;
         session.user.role = token.role;
         session.user.admin_id = token.admin_id;

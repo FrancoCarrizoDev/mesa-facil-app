@@ -92,7 +92,7 @@ model Reservation {
   attention_schedule_id String            @db.Uuid
   diner                 Diner             @relation(fields: [diner_id], references: [id])
   diner_id              String
-  date                  String
+  date                  DateTime
   people_quantity       Int
   message               String?
   table_number          Int?

@@ -12,6 +12,7 @@ export const getReservationSearchParams = (
     pageSize: Number(searchParams.pageSize) || DEFAULT_PAGE_SIZE,
     status: searchParams.status ?? DEFAULT_STATUS,
     term: searchParams.term ?? "",
-    date: searchParams.date ?? new Date().toISOString(),
+    dateFrom: searchParams.dateFrom ?? new Date().toISOString(),
+    dateTo: searchParams.dateTo ?? new Date().toISOString(),
   };
 };

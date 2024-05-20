@@ -12,8 +12,6 @@ export default async function PrivateNavbar(): Promise<JSX.Element> {
     ? false
     : canManageUsers(session?.user.roleId);
 
-  console.log({ session });
-
   if (session) {
     return (
       <nav className="flex items-baseline gap-3">

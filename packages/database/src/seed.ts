@@ -149,7 +149,7 @@ export const generateReservations = (numberReservations: number) => {
       attention_schedule_id:
         restaurants[Math.floor(Math.random() * restaurants.length)]
           .attention_schedule[faker.number.int({ min: 0, max: 6 })].id,
-      date: faker.date.future().toISOString(),
+      date: faker.date.future(),
       diner_id: diners[Math.floor(Math.random() * diners.length)].id,
       people_quantity: faker.number.int({ min: 1, max: 10 }),
       message: faker.lorem.sentence(),

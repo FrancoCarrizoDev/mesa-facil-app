@@ -71,7 +71,7 @@ CREATE TABLE "reservation" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "attention_schedule_id" UUID NOT NULL,
     "diner_id" TEXT NOT NULL,
-    "date" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
     "people_quantity" INTEGER NOT NULL,
     "message" TEXT,
     "table_number" INTEGER,

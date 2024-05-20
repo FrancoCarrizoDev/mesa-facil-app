@@ -22,9 +22,14 @@ export default async function RestaurantPage({
 }: Props): Promise<JSX.Element> {
   const restaurant = await getRestaurantBySlug(params.slug);
 
-  searchParams.date = new Date().toISOString();
+  searchParams.dateFrom = searchParams.dateFrom
+    ? searchParams.dateFrom
+    : new Date().toISOString();
+  searchParams.dateTo = searchParams.dateTo
+    ? searchParams.dateTo
+    : new Date().toISOString();
   const reservationSearchParams = getReservationSearchParams(searchParams);
-  console.log({ params });
+
   const reservationList = await getReservationList(
     params.slug,
     reservationSearchParams
@@ -58,7 +63,10 @@ export default async function RestaurantPage({
             page: Number(searchParams.page) || 1,
             pageSize: Number(searchParams.pageSize) || 10,
             status: searchParams.status,
-            date: searchParams.date ? new Date(searchParams.date) : null,
+            dateFrom: searchParams.dateFrom
+              ? new Date(searchParams.dateFrom)
+              : null,
+            dateTo: searchParams.dateTo ? new Date(searchParams.dateTo) : null,
             term: searchParams.term || "",
           }}
         />
