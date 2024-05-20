@@ -24,8 +24,7 @@ export default async function RestaurantPage({
 
   searchParams.date = new Date().toISOString();
   const reservationSearchParams = getReservationSearchParams(searchParams);
-
-  console.log({ reservationSearchParams });
+  console.log({ params });
   const reservationList = await getReservationList(
     params.slug,
     reservationSearchParams

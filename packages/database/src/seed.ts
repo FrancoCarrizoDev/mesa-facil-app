@@ -125,47 +125,47 @@ export const generateRestaurants = (numberRestaurants: number) => {
   return restaurants;
 };
 
-// export const generateDiners = (numberDiners) => {
-//   const diners = [];
-//   for (let i = 0; i < numberDiners; i++) {
-//     diners.push({
-//       id: uuid(),
-//       first_name: faker.person.firstName(),
-//       last_name: faker.person.lastName(),
-//       email: faker.internet.email(),
-//       phone: faker.phone.number(),
-//       sub: faker.number.int({ min: 1000000, max: 9999999 }).toString(),
-//       birthday: faker.date.birthdate().toISOString(),
-//     });
-//   }
-//   return diners;
-// };
+export const generateDiners = (numberDiners: number) => {
+  const diners = [];
+  for (let i = 0; i < numberDiners; i++) {
+    diners.push({
+      id: uuid(),
+      first_name: faker.person.firstName(),
+      last_name: faker.person.lastName(),
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+      sub: faker.number.int({ min: 1000000, max: 9999999 }).toString(),
+      birthday: faker.date.birthdate().toISOString(),
+    });
+  }
+  return diners;
+};
 
-// export const generateReservations = (numberReservations) => {
-//   const reservations = [];
-//   for (let i = 0; i < numberReservations; i++) {
-//     reservations.push({
-//       id: uuid(),
-//       attention_schedule_id:
-//         restaurants[Math.floor(Math.random() * restaurants.length)]
-//           .attention_schedule[faker.number.int({ min: 0, max: 6 })].id,
-//       date: faker.date.future().toISOString(),
-//       diner_id: diners[Math.floor(Math.random() * diners.length)].id,
-//       people_quantity: faker.number.int({ min: 1, max: 10 }),
-//       message: faker.lorem.sentence(),
-//       status_id:
-//         reservationStatus[
-//           faker.number.int({ min: 0, max: reservationStatus.length - 1 })
-//         ].id,
-//     });
-//   }
-//   return reservations;
-// };
+export const generateReservations = (numberReservations: number) => {
+  const reservations = [];
+  for (let i = 0; i < numberReservations; i++) {
+    reservations.push({
+      id: uuid(),
+      attention_schedule_id:
+        restaurants[Math.floor(Math.random() * restaurants.length)]
+          .attention_schedule[faker.number.int({ min: 0, max: 6 })].id,
+      date: faker.date.future().toISOString(),
+      diner_id: diners[Math.floor(Math.random() * diners.length)].id,
+      people_quantity: faker.number.int({ min: 1, max: 10 }),
+      message: faker.lorem.sentence(),
+      status_id:
+        reservationStatus[
+          faker.number.int({ min: 0, max: reservationStatus.length - 1 })
+        ].id,
+    });
+  }
+  return reservations;
+};
 
 const ROLES = [ADMIN_ROLE, MANAGER_ROLE, EMPLOYEE_ROLE];
-// const restaurants = generateRestaurants(2);
-// const diners = generateDiners(400);
-// const reservations = generateReservations(1000);
+const restaurants = generateRestaurants(10);
+const diners = generateDiners(400);
+const reservations = generateReservations(1000);
 
 const load = async () => {
   try {
@@ -224,13 +224,12 @@ const load = async () => {
 
     console.log("Users created data");
 
-    const restaurants = await prisma.restaurant.findMany();
+    const restaurantsDB = await prisma.restaurant.findMany();
 
-    if (restaurants.length > 0) {
+    if (restaurantsDB.length > 0) {
       console.log("Restaurants already created");
       return;
     } else {
-      const restaurants = generateRestaurants(10);
       const restaurantsPromises = restaurants.map(async (restaurant) => {
         await prisma.restaurant.create({
           data: {
@@ -261,32 +260,32 @@ const load = async () => {
       console.log("Restaurants created data");
     }
 
-    // const reservationStatusPromises = reservationStatus.map(async (status) => {
-    //   await prisma.reservationStatus.create({
-    //     data: status,
-    //   });
-    // });
+    const reservationStatusPromises = reservationStatus.map(async (status) => {
+      await prisma.reservationStatus.create({
+        data: status,
+      });
+    });
 
-    // await Promise.all(reservationStatusPromises);
-    // console.log("ReservationStatus created data");
+    await Promise.all(reservationStatusPromises);
+    console.log("ReservationStatus created data");
 
-    // const dinersPromises = diners.map(async (diner) => {
-    //   await prisma.diner.create({
-    //     data: diner,
-    //   });
-    // });
+    const dinersPromises = diners.map(async (diner) => {
+      await prisma.diner.create({
+        data: diner,
+      });
+    });
 
-    // await Promise.all(dinersPromises);
+    await Promise.all(dinersPromises);
 
-    // console.log("Diners created data");
+    console.log("Diners created data");
 
-    // const reservationsPromises = reservations.map(async (reservation) => {
-    //   await prisma.reservation.create({
-    //     data: reservation,
-    //   });
-    // });
+    const reservationsPromises = reservations.map(async (reservation) => {
+      await prisma.reservation.create({
+        data: reservation,
+      });
+    });
 
-    // await Promise.all(reservationsPromises);
+    await Promise.all(reservationsPromises);
   } catch (e) {
     console.error(e);
   } finally {

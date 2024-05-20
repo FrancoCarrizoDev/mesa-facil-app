@@ -70,7 +70,12 @@ export async function getReservationList(
   const status = getReservationStatusBySearchKeyLabel(searchParams.status);
 
   console.log({
-    searchParams,
+    gte: searchParams.date
+      ? new Date(searchParams.date).toISOString()
+      : undefined,
+    lte: searchParams.date
+      ? addDays(new Date(searchParams.date), 1).toISOString()
+      : undefined,
   });
 
   try {
@@ -102,12 +107,6 @@ export async function getReservationList(
             ],
           },
           status_id: status ? status : undefined,
-          date: {
-            gte: searchParams.date,
-            lte: searchParams.date
-              ? addDays(new Date(searchParams.date), 1).toISOString()
-              : undefined,
-          },
         },
         include: {
           diner: true,
@@ -145,12 +144,6 @@ export async function getReservationList(
             ],
           },
           status_id: status ? status : undefined,
-          date: {
-            gte: searchParams.date,
-            lte: searchParams.date
-              ? addDays(new Date(searchParams.date), 1).toISOString()
-              : undefined,
-          },
         },
       }),
     ]);
