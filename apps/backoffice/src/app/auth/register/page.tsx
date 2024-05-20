@@ -11,35 +11,32 @@ import SectionTitle from "@repo/ui/section-title";
 import SectionBody from "@repo/ui/section-body";
 import Image from "next/image";
 import Link from "@/components/Link/link";
+import { ROLES } from "@repo/common/constants";
 
 export default function Page(): JSX.Element {
   const router = useRouter();
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
-      name: "",
-      lastName: "",
+      username: "",
       email: "",
       password: "",
       password2: "",
       acceptTerms: false,
     },
     onSubmit: async (formValues) => {
-      const newUser = await createRootUser({
+      await createRootUser({
         email: formValues.email,
-        firstName: formValues.name,
-        username: formValues.lastName,
+        username: formValues.username,
         password: formValues.password,
-        restaurantIds: [],
+        userRoleId: ROLES.ADMIN.ID,
       });
 
-      if (newUser) {
-        await signIn("credentials", {
-          email: formValues.email,
-          password: formValues.password,
-          redirect: false,
-        });
-        router.push("/private/restaurants");
-      }
+      await signIn("credentials", {
+        email: formValues.email,
+        password: formValues.password,
+        redirect: false,
+      });
+      router.push("/private/restaurants");
     },
   });
 
@@ -57,11 +54,11 @@ export default function Page(): JSX.Element {
                   label="Nombre"
                   onChange={(e) => {
                     handleChange({
-                      name: e.target.value,
+                      username: e.target.value,
                     });
                   }}
                   type="text"
-                  value={values.name}
+                  value={values.username}
                 />
               </div>
               <div className="mb-6">

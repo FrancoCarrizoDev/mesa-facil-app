@@ -1,23 +1,27 @@
 "use client";
-import Link from "@/components/Link/link";
-import { USER_STATUS, UserDTO } from "@repo/common/models";
-import Button from "@repo/ui/button";
-import DataTable, { TableColumn, TableData } from "@repo/ui/data-table";
-import { Tooltip } from "react-tooltip";
 
-import React from "react";
-import { editUserStatus } from "@/actions/user.actions";
-import { toast } from "react-toastify";
-import { canEditUser } from "@/utils/permissions";
 import { getRoleDisplayNameByRoleId } from "@repo/common/constants";
+import { toast } from "react-toastify";
+import { Tooltip } from "react-tooltip";
+import { USER_STATUS, type UserDTO } from "@repo/common/models";
+import Button from "@repo/ui/button";
+import DataTable, {
+  type TableColumn,
+  type TableData,
+} from "@repo/ui/data-table";
+import { canEditUser } from "@/utils/permissions";
+import { editUserStatus } from "@/actions/user.actions";
+import Link from "@/components/Link/link";
+
+interface UsersClientPageProps {
+  userList: UserDTO[];
+  userLoggedRole: number;
+}
 
 export default function UsersClientPage({
   userList,
   userLoggedRole,
-}: {
-  userList: UserDTO[];
-  userLoggedRole: number;
-}) {
+}: UsersClientPageProps): JSX.Element {
   const columns: TableColumn[] = [
     { key: "username", header: "Usuario" },
     { key: "email", header: "Email" },
@@ -35,6 +39,7 @@ export default function UsersClientPage({
 
     return {
       ...user,
+      userRootId: user.userRootId || "-",
       userRoleId: getRoleDisplayNameByRoleId(user.userRoleId),
       createdAt: new Date(user.createdAt).toLocaleString("es-ES"),
       updatedAt: new Date(user.updatedAt).toLocaleString("es-ES"),
@@ -58,8 +63,8 @@ export default function UsersClientPage({
           <div className="flex items-center gap-1 min-w-[60px]">
             <Link
               disabled={cantEditUser}
-              underline="hover"
               href={`/private/users/${user.email}`}
+              underline="hover"
             >
               Editar
             </Link>
@@ -67,8 +72,8 @@ export default function UsersClientPage({
 
           {user.active ? (
             <Button
-              variant="text"
               color={cantEditUser ? "disabled" : "danger"}
+              disabled={cantEditUser}
               onClick={async () => {
                 await editUserStatus({
                   id: user.id,
@@ -78,14 +83,14 @@ export default function UsersClientPage({
                   toast.success("Usuario bloqueado con éxito");
                 }, 0);
               }}
-              disabled={cantEditUser}
+              variant="text"
             >
               Bloquear
             </Button>
           ) : (
             <Button
-              variant="text"
               color={cantEditUser ? "disabled" : "tertiary"}
+              disabled={cantEditUser}
               onClick={async () => {
                 await editUserStatus({
                   id: user.id,
@@ -95,12 +100,12 @@ export default function UsersClientPage({
                   toast.success("Usuario desbloqueado con éxito");
                 }, 0);
               }}
-              disabled={cantEditUser}
+              variant="text"
             >
               Desbloquear
             </Button>
           )}
-          {cantEditUser && <p id="my-anchor-element">❔</p>}
+          {cantEditUser ? <p id="my-anchor-element">❔</p> : null}
         </div>
       ),
     };

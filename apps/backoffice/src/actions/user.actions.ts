@@ -1,44 +1,38 @@
 "use server";
 
 import {
-  CreateUserDTO,
+  type CreateUserDTO,
   USER_STATUS,
-  UpdateUserDTO,
-  UserDTO,
+  type UpdateUserDTO,
+  type UserDTO,
 } from "@repo/common/models";
 import prisma from "database";
 import { hashPassword } from "@repo/common/bcrypt";
-import uuid from "@repo/common/uuid";
-import { ROLES } from "@repo/common/constants";
-import getSession from "@/utils/get-session";
-import { canManageUsers } from "@/utils/permissions";
+import { generateUUID } from "@repo/common/uuid";
 import { revalidatePath } from "next/cache";
 
-export async function createRootUser(user: CreateUserDTO) {
-  // try {
-  //   const alreadyExists = await prisma.admin.findUnique({
-  //     where: {
-  //       email: user.email,
-  //     },
-  //   });
-  //   if (alreadyExists) {
-  //     throw new Error("User already exists");
-  //   }
-  //   const newUser = await prisma.admin.create({
-  //     data: {
-  //       id: uuid(),
-  //       email: user.email,
-  //       password: await hashPassword(user.password),
-  //       first_name: user.firstName,
-  //       last_name: user.lastName,
-  //       provider: "credentials",
-  //       role_id: ROLES.ADMIN.id,
-  //     },
-  //   });
-  //   return newUser;
-  // } catch (error) {
-  //   console.log(error);
-  // }
+export async function createRootUser(user: CreateUserDTO): Promise<void> {
+  try {
+    const alreadyExists = await prisma.user.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
+    if (alreadyExists) {
+      throw new Error("User already exists");
+    }
+    await prisma.user.create({
+      data: {
+        id: generateUUID(),
+        email: user.email,
+        password: await hashPassword(user.password),
+        username: user.username,
+        role_id: user.userRoleId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function createUser(user: CreateUserDTO): Promise<void> {
@@ -64,12 +58,12 @@ export async function createUser(user: CreateUserDTO): Promise<void> {
         },
       },
     });
-    if (restaurants.length !== user.restaurantIds.length) {
+    if (restaurants.length !== user.restaurantIds?.length) {
       throw new Error("Restaurant not found");
     }
     await prisma.user.create({
       data: {
-        id: uuid(),
+        id: generateUUID(),
         email: user.email,
         password: await hashPassword(user.password),
         username: user.username,
@@ -90,8 +84,6 @@ export async function createUser(user: CreateUserDTO): Promise<void> {
 
 export async function getUserListByAdmin(userId: string): Promise<UserDTO[]> {
   try {
-    // if the user is a root user, return all users with root id
-
     const users = await prisma.user.findMany({
       where: {
         OR: [
@@ -137,8 +129,6 @@ export async function getUserListByAdmin(userId: string): Promise<UserDTO[]> {
       lastLogin: user.last_login?.toISOString() || null,
       userRootId: user.user_root_id,
     }));
-
-    // if the user is a manager, return all users with the same restaurants
   } catch (error: any) {
     console.log(error);
     throw new Error(error.message);
@@ -207,20 +197,16 @@ export async function getUserListByManager(
   }));
 }
 
+interface EditUserStatusParams {
+  id: string;
+  status: (typeof USER_STATUS)[keyof typeof USER_STATUS];
+}
+
 export async function editUserStatus({
   id,
   status,
-}: {
-  id: string;
-  status: (typeof USER_STATUS)[keyof typeof USER_STATUS];
-}) {
+}: EditUserStatusParams): Promise<void> {
   try {
-    const session = await getSession();
-    if (!session) throw new Error("User not logged in");
-
-    const hasPermission = canManageUsers(session.user.role);
-    if (!hasPermission) throw new Error("User not authorized");
-
     const user = await prisma.user.findUnique({
       where: {
         id,
@@ -313,7 +299,7 @@ export async function editUser(user: UpdateUserDTO): Promise<void> {
       },
     });
 
-    if (restaurants.length !== user.restaurantIds.length) {
+    if (restaurants.length !== user.restaurantIds?.length) {
       throw new Error("Restaurant not found");
     }
 

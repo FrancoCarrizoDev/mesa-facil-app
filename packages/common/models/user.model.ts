@@ -3,8 +3,8 @@ export interface CreateUserDTO {
   password: string;
   username: string;
   userRoleId: number;
-  restaurantIds: string[];
-  root_user_id: string | null;
+  restaurantIds?: string[];
+  root_user_id?: string;
 }
 
 export interface UpdateUserDTO extends CreateUserDTO {
