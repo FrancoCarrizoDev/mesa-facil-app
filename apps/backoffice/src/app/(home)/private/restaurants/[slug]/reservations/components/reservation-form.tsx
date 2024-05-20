@@ -17,6 +17,7 @@ import useForm from "@/hooks/use-form";
 import useSearchDiner from "@/hooks/useSearchDiner";
 import { subYears } from "@repo/common/date";
 import Select from "@repo/ui/select";
+import { useRouter } from "next/navigation";
 
 interface ReservationFormProps {
   restaurantData: RestaurantDTO;
@@ -31,6 +32,11 @@ export default function ReservationForm({
     useDinerReservation({
       restaurant: restaurantData,
     });
+  const router = useRouter();
+
+  const goToBack = (): void => {
+    router.push(`/private/restaurants/${restaurantData.slug}`);
+  };
 
   const { values, errors, handleChange, handleSubmit, handleReset } = useForm<{
     date: Date | null;
@@ -146,11 +152,11 @@ export default function ReservationForm({
     label: `${diner.firstName} ${diner.lastName}`,
   }));
 
-  const onDinerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onDinerChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setDinerTerm(e.target.value);
   };
 
-  const findAttendSchedule = (date: Date | null) => {
+  const findAttendSchedule = (date: Date | null): string | null | undefined => {
     if (!date) return null;
 
     const attentionSchedule = restaurant.attentionSchedule.find((schedule) => {
@@ -201,35 +207,35 @@ export default function ReservationForm({
           <div className="w-full flex flex-col">
             <div className="mb-6">
               <InputDatePicker
-                selectedDate={values.date}
+                error={Boolean(errors.date)}
+                filterDate={(date) => !hashClosedDays[date.getDay()]}
+                filterTime={filterTimes}
+                label="Fecha"
+                maxDate={maxDate}
+                minDate={minDate}
                 onChange={(date) => {
                   handleChange({
-                    date: date,
+                    date,
                     attentionScheduleId: findAttendSchedule(date),
                   });
                 }}
                 placeholderText="Fecha de la reserva"
-                minDate={minDate}
-                maxDate={maxDate}
-                filterDate={(date) => !hashClosedDays[date.getDay()]}
-                filterTime={filterTimes}
-                label="Fecha"
                 required
-                error={Boolean(errors.date)}
+                selectedDate={values.date}
                 showTimeSelect
               />
             </div>
             <div className="mb-6">
               <Autocomplete
+                displayProperty="email"
                 items={mapDinerItems}
+                label="Email"
                 onChange={onDinerChange}
                 onSelect={onDinerSelect}
-                value={dinerTerm}
-                displayProperty="email"
-                selectKey={"email"}
-                label="Email"
                 placeholder="Buscar por email"
                 required
+                selectKey="email"
+                value={dinerTerm}
               />
             </div>
             <div className="mb-6">
@@ -240,10 +246,10 @@ export default function ReservationForm({
                     peopleQuantity: e.target.value,
                   });
                 }}
-                type="text"
                 placeholder="Ingrese la cantidad de personas"
-                value={values.peopleQuantity || ""}
                 required
+                type="text"
+                value={values.peopleQuantity || ""}
               />
             </div>
             <div className="mb-6">
@@ -254,10 +260,10 @@ export default function ReservationForm({
                     message: e.target.value,
                   });
                 }}
-                type="text"
                 placeholder="Algo que debamos tener en cuenta?"
-                value={values.message || ""}
                 required
+                type="text"
+                value={values.message || ""}
               />
             </div>
             <div className="mb-6">
@@ -268,92 +274,97 @@ export default function ReservationForm({
                     reservationStatusId: parseInt(e.target.value),
                   });
                 }}
-                value={values.reservationStatusId}
                 options={[
                   { value: "1", label: "Pendiente" },
                   { value: "2", label: "Confirmado" },
                   { value: "3", label: "Cancelado" },
                   { value: "4", label: "Rechazado" },
                 ]}
-                size="small"
                 required
+                size="small"
+                value={values.reservationStatusId}
               />
             </div>
           </div>
           <div className="w-full  flex flex-col">
             <div className="mb-6">
               <Input
+                disabled={Boolean(values.dinerId)}
                 label="Nombre"
                 onChange={(e) => {
                   handleChange({
                     firstName: e.target.value,
                   });
                 }}
-                type="text"
                 placeholder="Ingrese el nombre"
-                value={values.firstName}
                 required
-                disabled={Boolean(values.dinerId)}
+                type="text"
+                value={values.firstName}
               />
             </div>
             <div className="mb-6">
               <Input
+                disabled={Boolean(values.dinerId)}
                 label="Apellido"
                 onChange={(e) => {
                   handleChange({
                     lastName: e.target.value,
                   });
                 }}
-                type="text"
                 placeholder="Ingrese el apellido"
-                value={values.lastName!}
                 required
-                disabled={Boolean(values.dinerId)}
+                type="text"
+                value={values.lastName!}
               />
             </div>
             <div className="mb-6">
               <Input
+                disabled={Boolean(values.dinerId)}
                 label="Teléfono"
                 onChange={(e) => {
                   handleChange({
                     phone: e.target.value,
                   });
                 }}
-                type="text"
                 placeholder="Ingrese el número de teléfono"
-                value={values.phone!}
                 required
-                disabled={Boolean(values.dinerId)}
+                type="text"
+                value={values.phone!}
               />
             </div>
             <div className="mb-6">
               <InputDatePicker
-                selectedDate={values.birthday}
+                dateFormat="dd/MM/yyyy"
+                disabled={Boolean(values.dinerId)}
+                dropdownMode="select"
+                error={Boolean(errors.birthday)}
+                label="Fecha de cumpleaños"
+                maxDate={subYears(new Date(), 18)}
                 onChange={(date) => {
                   handleChange({
                     birthday: date,
                   });
                 }}
-                placeholderText="Fecha de cumpleaños"
-                label="Fecha de cumpleaños"
-                required
-                error={Boolean(errors.birthday)}
-                dateFormat="dd/MM/yyyy"
                 peekNextMonth
+                placeholderText="Fecha de cumpleaños"
+                required
+                selectedDate={values.birthday}
                 showMonthDropdown
                 showYearDropdown
-                dropdownMode="select"
-                maxDate={subYears(new Date(), 18)}
-                disabled={Boolean(values.dinerId)}
               />
             </div>
           </div>
         </div>
         <div className="mb-6 flex gap-3 justify-center items-center">
-          <Button variant="outlined" color="tertiary" size="md">
+          <Button
+            color="tertiary"
+            onClick={goToBack}
+            size="md"
+            variant="outlined"
+          >
             Volver
           </Button>
-          <Button type="submit" size="md">
+          <Button size="md" type="submit">
             Reservar
           </Button>
         </div>

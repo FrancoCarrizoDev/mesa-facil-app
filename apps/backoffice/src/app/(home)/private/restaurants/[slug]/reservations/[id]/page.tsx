@@ -1,9 +1,8 @@
-import { getReservationById } from "@/actions/reservation.actions";
-import { getRestaurantBySlug } from "@/actions/restaurant.actions";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
-import React from "react";
+import { getReservationById } from "@/actions/reservation.actions";
+import { getRestaurantBySlug } from "@/actions/restaurant.actions";
 import ReservationForm from "../components/reservation-form";
 
 interface Props {
@@ -13,7 +12,9 @@ interface Props {
   };
 }
 
-export default async function ReservationPage({ params }: Props) {
+export default async function ReservationPage({
+  params,
+}: Props): Promise<JSX.Element> {
   const reservation = await getReservationById(params.id);
   const restaurant = await getRestaurantBySlug(params.slug);
 
@@ -22,8 +23,8 @@ export default async function ReservationPage({ params }: Props) {
       <SectionTitle>{`${reservation.diner.firstName} ${reservation.diner.lastName}`}</SectionTitle>
       <SectionBody>
         <ReservationForm
-          restaurantData={restaurant}
           reservationData={reservation}
+          restaurantData={restaurant}
         />
       </SectionBody>
     </Section>
