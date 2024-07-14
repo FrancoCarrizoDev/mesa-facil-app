@@ -2,7 +2,6 @@
 
 import prisma from "database";
 import { RestaurantDTO } from "@repo/common/models";
-import { authOptions } from "src/utils/auth-options";
 import { generateUUID } from "@repo/common/uuid";
 import { slugifyString } from "@repo/common/slugify";
 import { revalidatePath } from "next/cache";

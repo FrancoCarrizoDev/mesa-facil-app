@@ -20,6 +20,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials): Promise<any> {
         if (!credentials) return null;
+        console.log({ credentials });
         const existsUser = await prisma.user.findFirst({
           where: {
             OR: [
@@ -99,7 +100,6 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log();
       if (token) {
         session.user.id = token.id;
         session.user.email = token.email;

@@ -10,16 +10,24 @@ import prisma from "database";
 import { hashPassword } from "@repo/common/bcrypt";
 import { generateUUID } from "@repo/common/uuid";
 import { revalidatePath } from "next/cache";
+import { ROLES } from "@repo/common/constants";
 
 export async function createRootUser(user: CreateUserDTO): Promise<void> {
   try {
-    const alreadyExists = await prisma.user.findUnique({
+    const alreadyExists = await prisma.user.findFirst({
       where: {
-        email: user.email,
+        OR: [
+          {
+            email: user.email,
+          },
+          {
+            username: user.username,
+          },
+        ],
       },
     });
     if (alreadyExists) {
-      throw new Error("User already exists");
+      throw new Error("Username or email already exists");
     }
     await prisma.user.create({
       data: {
@@ -27,7 +35,7 @@ export async function createRootUser(user: CreateUserDTO): Promise<void> {
         email: user.email,
         password: await hashPassword(user.password),
         username: user.username,
-        role_id: user.userRoleId,
+        role_id: ROLES.ADMIN.ID,
       },
     });
   } catch (error) {

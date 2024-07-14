@@ -2,7 +2,7 @@
 
 import getSession from "@/utils/get-session";
 import type { DinerDTO } from "@repo/common/models";
-import uuid from "@repo/common/uuid";
+import { generateUUID } from "@repo/common/uuid";
 import prisma from "database";
 
 export async function getDinerByEmail(email: string): Promise<DinerDTO[]> {
@@ -53,7 +53,7 @@ export async function createDiner(diner: DinerDTO): Promise<DinerDTO> {
   try {
     const newDiner = await prisma.diner.create({
       data: {
-        id: uuid(),
+        id: generateUUID(),
         first_name: diner.firstName,
         last_name: diner.lastName,
         phone: diner.phone,

@@ -10,7 +10,7 @@ import { addDays } from "@repo/common/date";
 import { revalidatePath } from "next/cache";
 import { notFound } from "next/navigation";
 import type { SearchReservationParams } from "src/app/(home)/private/restaurants/[slug]/reservations/page";
-import uuid from "@repo/common/uuid";
+import { generateUUID } from "@repo/common/uuid";
 import { PaginationDTO } from "@repo/common/models";
 import prisma from "database";
 
@@ -41,7 +41,7 @@ export async function createReserve(
   try {
     await prisma.reservation.create({
       data: {
-        id: uuid(),
+        id: generateUUID(),
         attention_schedule_id: reserve.attentionScheduleId,
         date: new Date(reserve.date).toISOString(),
         diner_id: reserve.dinerId,

@@ -2,7 +2,7 @@ export interface CreateUserDTO {
   email: string;
   password: string;
   username: string;
-  userRoleId: number;
+  userRoleId?: number;
   restaurantIds?: string[];
   root_user_id?: string;
 }

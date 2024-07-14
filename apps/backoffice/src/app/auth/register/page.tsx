@@ -4,14 +4,13 @@ import { useRouter } from "next/navigation";
 import Button from "@repo/ui/button";
 import Checkbox from "@repo/ui/checkbox";
 import Input from "@repo/ui/input";
-import useForm from "@/hooks/use-form";
-import { createRootUser } from "@/actions/user.actions";
 import Section from "@repo/ui/section";
 import SectionTitle from "@repo/ui/section-title";
 import SectionBody from "@repo/ui/section-body";
 import Image from "next/image";
+import useForm from "@/hooks/use-form";
+import { createRootUser } from "@/actions/user.actions";
 import Link from "@/components/Link/link";
-import { ROLES } from "@repo/common/constants";
 
 export default function Page(): JSX.Element {
   const router = useRouter();
@@ -28,11 +27,10 @@ export default function Page(): JSX.Element {
         email: formValues.email,
         username: formValues.username,
         password: formValues.password,
-        userRoleId: ROLES.ADMIN.ID,
       });
 
       await signIn("credentials", {
-        email: formValues.email,
+        term: formValues.email,
         password: formValues.password,
         redirect: false,
       });
@@ -59,18 +57,6 @@ export default function Page(): JSX.Element {
                   }}
                   type="text"
                   value={values.username}
-                />
-              </div>
-              <div className="mb-6">
-                <Input
-                  label="Apellido"
-                  onChange={(e) => {
-                    handleChange({
-                      lastName: e.target.value,
-                    });
-                  }}
-                  type="text"
-                  value={values.lastName}
                 />
               </div>
               <div className="mb-6">
@@ -134,29 +120,6 @@ export default function Page(): JSX.Element {
               <div className=" mx-auto">
                 <Button type="submit" size="sm">
                   Registrarse
-                </Button>
-              </div>
-              <div className=" mx-auto mt-3">
-                <Button
-                  onClick={() =>
-                    signIn("google", {
-                      callbackUrl:
-                        process.env.NEXT_PUBLIC_BASE_URL +
-                        "/private/restaurants",
-                    })
-                  }
-                  color="secondary"
-                  size="sm"
-                >
-                  <div className="flex justify-center items-center gap-3">
-                    Registrarme con google
-                    <Image
-                      src="/google-icon.png"
-                      width={30}
-                      height={30}
-                      alt="google-icon"
-                    />
-                  </div>
                 </Button>
               </div>
             </form>
