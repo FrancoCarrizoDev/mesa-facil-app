@@ -8,7 +8,7 @@ export default function ReservationStatusLabel({
   label: string;
 }): JSX.Element {
   const statusColor = {
-    pending: "ui-text-yellow-500",
+    pending: "ui-text-gray-500",
     confirm: "ui-text-green-500",
     reject: "ui-text-red-500",
     cancel: "ui-text-orange-500",

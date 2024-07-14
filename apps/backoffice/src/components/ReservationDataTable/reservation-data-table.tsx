@@ -62,7 +62,7 @@ const reservationStatusSelectItems = [
   {
     label: "Pendiente",
     value: ReservationStatusEnum.PENDING,
-    icon: <StopwatchIcon className="text-yellow-500" />,
+    icon: <StopwatchIcon className="text-gray-500" />,
     dialog: {
       title: "Volver reserva a pendiente",
       description: (dinerFullName: string) =>

@@ -15,10 +15,16 @@ export default async function PrivateNavbar(): Promise<JSX.Element> {
   if (session) {
     return (
       <nav className="flex items-baseline gap-3">
-        <Link href="/private">Inicio</Link>
-        <Link href="/private/restaurants">Mis Restaurantes</Link>
+        <Link color="white" href="/private">
+          Inicio
+        </Link>
+        <Link color="white" href="/private/restaurants">
+          Mis Restaurantes
+        </Link>
         {canShowUsersMenuLink && (
-          <Link href="/private/users">Mis Usuarios</Link>
+          <Link color="white" href="/private/users">
+            Mis Usuarios
+          </Link>
         )}
         {session.user?.username && (
           <Avatar label={getAvatarLabel(session.user.username)} />
@@ -32,10 +38,14 @@ export default async function PrivateNavbar(): Promise<JSX.Element> {
     <nav>
       <ul className="flex items-center gap-3">
         <li>
-          <Link href="/auth/login">Ingresar</Link>
+          <Link color="white" href="/auth/login">
+            Ingresar
+          </Link>
         </li>
         <li>
-          <Link href="/auth/register">Registrarte</Link>
+          <Link color="white" href="/auth/register">
+            Registrarte
+          </Link>
         </li>
       </ul>
     </nav>

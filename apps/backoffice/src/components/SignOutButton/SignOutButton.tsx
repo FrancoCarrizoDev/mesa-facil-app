@@ -8,7 +8,7 @@ export default function SignOutButton() {
     <Button
       size="sm"
       variant="text"
-      color="tertiary"
+      color="white"
       onClick={() =>
         signOut({
           callbackUrl: process.env.NEXT_PUBLIC_BASE_URL + "/auth/login",

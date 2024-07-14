@@ -10,11 +10,11 @@ export default function RestaurantCard({
   canEdit,
 }: RestaurantDTO & { canEdit: boolean }) {
   return (
-    <div className="max-w-sm p-6 rounded-lg shadow bg-gray-800 border-gray-700 h-full flex flex-col  ">
+    <div className="max-w-sm p-6 rounded-lg shadow bg-gray-100 border-gray-500 h-full flex flex-col  ">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-1 ">
           <a href="/#">
-            <h5 className="text-md font-semibold tracking-tight text-gray-900 dark:text-white">
+            <h5 className="text-md font-semibold tracking-tight text-gray-700">
               {name}
             </h5>
           </a>
@@ -25,7 +25,7 @@ export default function RestaurantCard({
           </Link>
         ) : null}
       </div>
-      <div className="min-h-[150px] mb-3 font-normal text-xs text-gray-500 dark:text-gray-400">
+      <div className="min-h-[150px] mb-3 font-normal text-xs text-gray-600 ">
         <p className="mb-1">
           <span className="font-bold">Horario de atención</span>
         </p>
@@ -46,7 +46,7 @@ export default function RestaurantCard({
           );
         })}
       </div>
-      <div className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+      <div className="mb-3 text-xs text-gray-600 ">
         <p>
           <span className="font-bold">Dirección:</span> {address}
         </p>
@@ -54,11 +54,11 @@ export default function RestaurantCard({
           <span className="font-bold">Teléfono:</span> {phone}
         </p>
       </div>
-      <div className="mt-auto flex justify-around">
-        <Link color="secondary" href={`/private/restaurants/${slug}`}>
+      <div className="mt-auto flex justify-around ">
+        <Link color="primary" href={`/private/restaurants/${slug}`}>
           Gestionar
         </Link>
-        <Link color="secondary" href={`/reserve/${slug}`}>
+        <Link color="primary" href={`/reserve/${slug}`}>
           Ver sitio
         </Link>
       </div>

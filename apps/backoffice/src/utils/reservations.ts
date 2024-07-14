@@ -20,7 +20,7 @@ export function getReservationStatusLabelColorById(
 ): string {
   switch (reservationStatus) {
     case 1:
-      return "text-yellow-500";
+      return "text-gray-500";
     case 2:
       return "text-green-500";
     case 3:

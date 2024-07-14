@@ -9,7 +9,7 @@ interface RestaurantListProps {
 
 export default function RestaurantList({ restaurants }: RestaurantListProps) {
   return (
-    <div className="p-5 bg-yellow-200 rounded-md">
+    <div className="p-5 bg-gray-200 rounded-md">
       {restaurants.length === 0 && (
         <p>
           No tienes restaurantes cargandos.{" "}

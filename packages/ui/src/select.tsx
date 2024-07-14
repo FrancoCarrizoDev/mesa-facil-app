@@ -38,7 +38,7 @@ export default function Select({
       </label>
       <select
         id={label}
-        className={`ui-bg-white ui-border ui-border-yellow-200 ui-p-2 ui-text-yellow-950 ui-rounded-md ui-block ui-w-full ${sizeClasses[size]}`}
+        className={`ui-bg-white ui-border ui-border-gray-200 ui-p-2 ui-text-gray-950 ui-rounded-md ui-block ui-w-full ${sizeClasses[size]}`}
         required={required}
         onChange={onChange}
         value={value}

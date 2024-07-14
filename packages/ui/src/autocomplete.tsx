@@ -63,7 +63,7 @@ export default function Autocomplete<T>({
       <div className="relative">
         <input
           autoComplete="new-password"
-          className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400"
+          className="ui-block ui-w-full  ui-py-1 ui-px-2 ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-gray-400"
           onBlur={() => {
             setTimeout(() => {
               setShowList(false);
@@ -82,7 +82,7 @@ export default function Autocomplete<T>({
           value={value}
         />
         {showList ? (
-          <ul className="ui-bg-white ui-absolute ui-z-10 ui-min-w-[240px] ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-yellow-400">
+          <ul className="ui-bg-white ui-absolute ui-z-10 ui-min-w-[240px] ui-text-gray-900 ui-transition-all  ui-rounded-lg  ui-border ui-border-gray-200  ui-sm:text-xs focus:ui-transition-all focus:ui-outline focus:ui-outline-gray-400">
             {items.length ? (
               items.map((item) => (
                 <li

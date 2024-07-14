@@ -4,7 +4,13 @@ export interface ButtonProps {
   children: ReactNode;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
-  color?: "primary" | "secondary" | "tertiary" | "danger" | "disabled";
+  color?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "danger"
+    | "disabled"
+    | "white";
   variant?: "contained" | "outlined" | "text";
   rounded?: "none" | "sm" | "md" | "lg" | "full" | "pill";
   size?: "sm" | "md" | "lg";
@@ -18,17 +24,19 @@ const SIZES = {
 };
 
 const VARIANTS = {
-  contained: "ui-bg-yellow-600",
-  outlined: "ui-bg-transparent ui-border ui-border-yellow-600",
+  contained:
+    "ui-bg-blue-700 ui-border-blue-700 ui-text-white hover:ui-bg-blue-800 hover:ui-border-blue-800 hover:ui-text-white active:ui-bg-blue-900 active:ui-border-blue-900",
+  outlined: "ui-bg-transparent ui-border ui-border-gray-600",
   text: "ui-bg-transparent",
 };
 
 const COLORS = {
   primary: "ui-text-white",
   secondary: "ui-text-white",
-  tertiary: "ui-text-yellow-600",
+  tertiary: "ui-text-gray-600",
   danger: "ui-text-red-600",
   disabled: "ui-text-gray-300",
+  white: "ui-text-white",
 };
 
 const ROUNDED = {
