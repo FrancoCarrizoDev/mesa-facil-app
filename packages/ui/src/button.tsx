@@ -25,7 +25,7 @@ const SIZES = {
 
 const VARIANTS = {
   contained:
-    "ui-bg-blue-700 ui-border-blue-700 ui-text-white hover:ui-bg-blue-800 hover:ui-border-blue-800 hover:ui-text-white active:ui-bg-blue-900 active:ui-border-blue-900",
+    "ui-bg-gray-800 ui-border-gray-800 ui-text-white hover:ui-bg-gray-700 ui-transition-all hover:ui-border-gray-700 active:ui-bg-gray-900 active:ui-border-gray-900",
   outlined: "ui-bg-transparent ui-border ui-border-gray-600",
   text: "ui-bg-transparent",
 };
@@ -33,7 +33,7 @@ const VARIANTS = {
 const COLORS = {
   primary: "ui-text-white",
   secondary: "ui-text-white",
-  tertiary: "ui-text-gray-600",
+  tertiary: "ui-text-gray-900 hover:ui-text-gray-800",
   danger: "ui-text-red-600",
   disabled: "ui-text-gray-300",
   white: "ui-text-white",

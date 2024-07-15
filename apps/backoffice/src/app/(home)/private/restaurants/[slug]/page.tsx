@@ -4,7 +4,6 @@ import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import React from "react";
 import Link from "@/components/Link/link";
-import { SearchReservationParams } from "./reservations/page";
 import { getReservationSearchParams } from "@/utils/search-params";
 import { getReservationList } from "@/actions/reservation.actions";
 import ReservationDataTable from "@/components/ReservationDataTable/reservation-data-table";
@@ -13,7 +12,14 @@ interface Props {
   readonly params: {
     slug: string;
   };
-  searchParams: SearchReservationParams;
+  searchParams: {
+    page?: string;
+    pageSize?: string;
+    status?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    term?: string;
+  };
 }
 
 export default async function RestaurantPage({
@@ -59,7 +65,7 @@ export default async function RestaurantPage({
           reservationParamsProps={{
             page: Number(searchParams.page) || 1,
             pageSize: Number(searchParams.pageSize) || 10,
-            status: searchParams.status,
+            status: searchParams.status || "",
             dateFrom: searchParams.dateFrom
               ? new Date(searchParams.dateFrom)
               : null,

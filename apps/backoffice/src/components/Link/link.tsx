@@ -8,6 +8,7 @@ export default function Link({
   underline = "none",
   disabled = false,
   weight = "semibold",
+  size = "sm",
 }: LinkProps): JSX.Element {
   const colors = {
     primary: "text-gray-700 hover:text-primary-800",
@@ -28,11 +29,17 @@ export default function Link({
     extrabold: "font-extrabold",
   };
 
+  const sizes = {
+    sm: "text-sm",
+    md: "text-md",
+    lg: "text-lg",
+  };
+
   return (
     <NextLink
       className={`text-sm ${weights[weight]} ${colors[color]} ${
         underlineClasses[underline]
-      } ${disabled ? "pointer-events-none text-gray-300" : ""} `}
+      } ${disabled ? "pointer-events-none text-gray-300" : ""} ${sizes[size]} `}
       href={href}
     >
       {children}

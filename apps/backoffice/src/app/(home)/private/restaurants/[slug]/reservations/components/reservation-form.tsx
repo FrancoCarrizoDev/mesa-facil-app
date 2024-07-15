@@ -35,7 +35,7 @@ export default function ReservationForm({
   const router = useRouter();
 
   const goToBack = (): void => {
-    router.push(`/private/restaurants/${restaurantData.slug}`);
+    router.back();
   };
 
   const { values, errors, handleChange, handleSubmit, handleReset } = useForm<{
@@ -365,7 +365,7 @@ export default function ReservationForm({
             Volver
           </Button>
           <Button size="md" type="submit">
-            Reservar
+            {reservationData?.id ? "Editar" : "Reservar"}
           </Button>
         </div>
       </form>

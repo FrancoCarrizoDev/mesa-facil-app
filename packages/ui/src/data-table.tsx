@@ -59,7 +59,7 @@ export default function DataTable({
     <div className="w-full ui-bg-white ui-pb-3 ui-shadow-md ui-sm:rounded-lg ">
       <div className=" ui-w-full ui-relative ui-overflow-x-auto ui-max-h-[calc(100vh-350px)] ">
         <table className="ui-w-full ui-text-sm ui-text-left rtl:ui-text-right ui-text-gray-500 ">
-          <thead className="ui-text-xs ui-text-gray-700 ui-uppercase ui-bg-gray-50">
+          <thead className="ui-text-xs ui-text-white ui-uppercase ui-bg-gray-800">
             <tr>
               {columns.map((column) => (
                 <th key={column.key} scope="col" className="ui-px-4 ui-py-3">

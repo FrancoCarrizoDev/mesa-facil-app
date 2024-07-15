@@ -16,22 +16,20 @@ export default function Layout({
   return (
     <div>
       <DialogProvider>
-        <ToastifyProvider>
-          <HeaderContainer>
-            <BrandTitle />
-            <Suspense fallback={<div>Cargando...</div>}>
-              <PrivateNavbar />
-            </Suspense>
-          </HeaderContainer>
-          <DialogProviderComponent>
-            <div className="p-5">
-              <div className="mb-1">
-                <Breadcrums />
-              </div>
+        <DialogProviderComponent>
+          <ToastifyProvider>
+            <HeaderContainer>
+              <BrandTitle />
+              <Suspense fallback={<div>Cargando...</div>}>
+                <PrivateNavbar />
+              </Suspense>
+            </HeaderContainer>
+            <div className="px-5 py-3">
+              <Breadcrums />
               {children}
             </div>
-          </DialogProviderComponent>
-        </ToastifyProvider>
+          </ToastifyProvider>
+        </DialogProviderComponent>
       </DialogProvider>
     </div>
   );

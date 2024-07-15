@@ -140,11 +140,7 @@ export default function ReservationDataTable({
             </p>
           ),
           tableNumber: <p>{reservation.tableNumber || "SIN/DATOS"}</p>,
-          message: (
-            <p className="text-balance" style={{ height: "inherit" }}>
-              {reservation.message || "SIN/DATOS"}
-            </p>
-          ),
+          message: <p>{reservation.message || "SIN/DATOS"}</p>,
           statusId: (
             <CustomDropdownMenu
               items={reservationStatusSelectItems.map((status) => {

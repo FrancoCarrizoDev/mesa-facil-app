@@ -5,4 +5,5 @@ export interface LinkProps {
   underline?: "hover" | "none" | "always";
   disabled?: boolean;
   weight?: "normal" | "bold" | "semibold" | "extrabold";
+  size?: "sm" | "md" | "lg";
 }

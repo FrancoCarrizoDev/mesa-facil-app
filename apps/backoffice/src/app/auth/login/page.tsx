@@ -25,7 +25,7 @@ export default function Page(): JSX.Element {
       });
 
       if (res?.ok) {
-        router.push("/private/restaurants");
+        router.push("/private");
         router.refresh();
       }
 
