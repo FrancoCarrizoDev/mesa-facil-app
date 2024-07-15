@@ -146,7 +146,7 @@ export default function ReservationDataTable({
               items={reservationStatusSelectItems.map((status) => {
                 return {
                   label: (
-                    <div className="w-full flex items-center justify-between">
+                    <div className="w-full flex items-center justify-between ">
                       <p className="min-w-[60px] font-medium">{status.label}</p>
                       <span>{status.icon}</span>
                     </div>

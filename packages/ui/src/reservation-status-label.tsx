@@ -8,11 +8,11 @@ export default function ReservationStatusLabel({
   label: string;
 }): JSX.Element {
   const statusColor = {
-    pending: "ui-text-gray-500",
-    confirm: "ui-text-green-500",
-    reject: "ui-text-red-500",
-    cancel: "ui-text-orange-500",
+    pending: "ui-text-yellow-600",
+    confirm: "ui-text-green-600",
+    reject: "ui-text-red-600",
+    cancel: "ui-text-orange-600",
   };
 
-  return <p className={`${statusColor[status]} font-semibold`}>{label}</p>;
+  return <p className={`${statusColor[status]} ui-font-semibold`}>{label}</p>;
 }

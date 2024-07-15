@@ -32,7 +32,8 @@
     "./icons/question-icon": "./src/icons/question-icon.tsx",
     "./dialog-header": "./src/dialog-header.tsx",
     "./dialog-buttons": "./src/dialog-buttons.tsx",
-    "./input-date-picker": "./src/input-date-picker.tsx"
+    "./input-date-picker": "./src/input-date-picker.tsx",
+    "./icons/exclamation-icon": "./src/icons/exclamation-icon.tsx"
   },
   "license": "MIT",
   "scripts": {
