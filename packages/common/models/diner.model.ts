@@ -1,4 +1,4 @@
-import { CreateReservationDTO } from "./reservation.model";
+import { type CreateReservationDTO } from "./reservation.model";
 
 export interface DinerDTO {
   id: string;

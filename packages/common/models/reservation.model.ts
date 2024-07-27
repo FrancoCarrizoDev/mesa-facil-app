@@ -1,4 +1,4 @@
-import { DinerDTO } from "./diner.model";
+import { type DinerDTO } from "./diner.model";
 
 export interface CreateReservationDTO {
   readonly attentionScheduleId: string;
@@ -21,8 +21,6 @@ export interface ReservationDTO {
   readonly createdAt: Date;
   readonly updatedAt: Date;
 }
-
-export interface ReservationListItemDTO {}
 
 export enum ReservationStatusEnum {
   PENDING = 1,

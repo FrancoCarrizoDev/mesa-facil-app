@@ -22,54 +22,15 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials) return null;
-
-        let existsUser: any = await prisma.admin.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        });
-
-        if (!existsUser) {
-          existsUser = await prisma.user.findUnique({
-            where: {
-              username: credentials.email,
-            },
-          });
-        }
-
-        if (!existsUser) throw new Error("Invalid email or password");
-
-        if (existsUser.provider === "google" || !existsUser.password) {
-          throw new Error(
-            "El usuario se registro con Google, por favor inicie sesión con Google"
-          );
-        }
-
-        const isValidPassword = await comparePasswords(
-          credentials.password,
-          existsUser.password
-        );
-
-        if (isValidPassword)
-          return {
-            id: existsUser.id,
-            name: existsUser.first_name,
-            email: existsUser.email,
-            role: existsUser.role_id,
-            admin_id: existsUser.admin_id,
-          };
-
-        throw new Error("Invalid password");
+        return null;
       },
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_SECRET || "",
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_S || "",
     }),
   ],
   pages: {
-    signIn: "/auth/login",
-    signOut: "/auth/signout",
     error: "/auth/error",
   },
   session: {
@@ -82,109 +43,28 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXT_PUBLIC_SECRET,
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (user) {
-        const adminDB = await prisma.admin.findUnique({
-          where: {
-            id: user.id,
-          },
-        });
-
-        if (adminDB) {
-          token.id = adminDB.id;
-          token.role = adminDB.role_id;
-          token.admin_id = adminDB.id;
-        }
-
-        if (!adminDB) {
-          const userDB = await prisma.user.findUnique({
-            where: {
-              id: user.id,
-            },
-          });
-
-          if (!userDB) return {};
-          token.id = userDB.id;
-          token.role = userDB.role_id;
-          token.admin_id = userDB.admin_id;
-        }
-      }
-      return token;
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      if (session.user) {
-        session.user.id = token.id;
-        session.user.role = token.role;
-        session.user.admin_id = token.admin_id;
-      }
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
+    async session({ session, user, token }) {
+      // Send properties to the client, like an access_token and user id from a provider.
 
       return session;
     },
-    async signIn({ user, account, profile }) {
-      // console.log({
-      //   signIn: {
-      //     user,
-      //     account,
-      //     profile,
-      //   },
-      // });
-
-      if (account?.provider === "credentials") return true;
-
-      if (!user.email)
-        throw new Error(
-          "No se pudo obtener el email de Google, por favor intente de nuevo."
-        );
-
-      const iprofile = profile as {
-        email?: string;
-        given_name?: string;
-        name?: string;
-        family_name?: string;
-        sub?: string;
-      };
-
-      const userDB = await prisma.admin.findUnique({
-        where: {
-          email: user.email || "",
-        },
-      });
-
-      if (!userDB) {
-        await prisma.admin.create({
-          data: {
-            email: iprofile?.email || "",
-            first_name: iprofile?.given_name || "",
-            last_name: iprofile?.family_name || null,
-            password: null,
-            id: iprofile.sub!,
-            provider: "google",
-            role_id: ROLES.ADMIN.id,
-          },
-        });
-        return true;
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.sub = profile?.sub;
+        token.id = user?.id;
       }
-
-      if (userDB?.password) {
-        throw new Error(
-          encodeURI(
-            "El usuario ya existe, pero se registro con usuario y contraseña, por favor inicie sesión con su usuario y contraseña."
-          )
-        );
-      }
-
-      await prisma.admin.update({
-        where: {
-          email: user.email,
-        },
-        data: {
-          last_login: new Date(),
-          // TODO refactor after
-          id: iprofile.sub!,
-        },
-      });
-
-      return true;
+      return token;
     },
   },
 };

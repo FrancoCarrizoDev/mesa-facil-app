@@ -5,7 +5,9 @@ import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/providers/session-provider";
 import { authOptions } from "@/utils/auth-options";
-
+import HeaderContainer from "@/components/HeaderContainer/HeaderContainer";
+import { ChildrenFCProps } from "@repo/common/models";
+import { BrandTitle } from "@repo/ui/brand-title";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -15,14 +17,17 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}): Promise<JSX.Element> {
+}: ChildrenFCProps): Promise<JSX.Element> {
   const session = await getServerSession(authOptions);
   return (
     <html lang="es">
       <SessionProvider session={session}>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <HeaderContainer>
+            <BrandTitle />
+          </HeaderContainer>
+          {children}
+        </body>
       </SessionProvider>
     </html>
   );

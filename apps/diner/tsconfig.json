@@ -4,11 +4,15 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/providers/*": ["./src/providers/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"],
       "@/utils/*": ["./src/utils/*"],
-    },
+      "@/actions/*": ["./src/actions/*"],
+      "@/models/*": ["./src/models/*"],
+      "@/constants/*": ["./src/constants/*"],
+      "@/providers/*": ["./src/providers/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  
   "exclude": ["node_modules"]
 }

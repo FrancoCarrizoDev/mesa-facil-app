@@ -1,5 +1,3 @@
-
-
 export interface HeaderContainerProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
