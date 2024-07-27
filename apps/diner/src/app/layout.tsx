@@ -8,6 +8,8 @@ import { authOptions } from "@/utils/auth-options";
 import HeaderContainer from "@/components/HeaderContainer/HeaderContainer";
 import { ChildrenFCProps } from "@repo/common/models";
 import { BrandTitle } from "@repo/ui/brand-title";
+import PrivateNavbar from "@/components/PrivateNavbar/PrivateNavbar";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,6 +27,7 @@ export default async function RootLayout({
         <body className={inter.className}>
           <HeaderContainer>
             <BrandTitle />
+            {session ? <PrivateNavbar session={session} /> : null}
           </HeaderContainer>
           {children}
         </body>

@@ -6,5 +6,4 @@ export interface LinkProps {
   disabled?: boolean;
   weight?: "normal" | "bold" | "semibold" | "extrabold";
   size?: "sm" | "md" | "lg";
-  LinkComponent?: React.ElementType;
 }

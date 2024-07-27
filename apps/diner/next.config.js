@@ -18,5 +18,4 @@ module.exports = {
       },
     ],
   },
-  transpilePackages: ["@repo/ui", "database"],
 };

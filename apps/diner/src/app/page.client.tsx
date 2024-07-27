@@ -1,9 +1,12 @@
 "use client";
 import React from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { type Session } from "next-auth";
-
-export default function PageClient({ session }: { session: Session }) {
+export default function PageClient({
+  session,
+}: {
+  session: Session;
+}): JSX.Element {
   console.log({ session });
   return (
     <div>

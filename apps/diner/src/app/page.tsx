@@ -1,5 +1,6 @@
-import PageClient from "./page.client";
 import getSession from "@/utils/get-session";
+import PageClient from "./page.client";
+
 export default async function Page(): Promise<JSX.Element> {
   const session = await getSession();
 

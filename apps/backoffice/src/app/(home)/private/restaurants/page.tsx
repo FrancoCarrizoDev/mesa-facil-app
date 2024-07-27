@@ -1,14 +1,13 @@
-import { getRestaurantsByUserId } from "@/actions/restaurant.actions";
-import { redirect } from "next/navigation";
-import getSession from "@/utils/get-session";
-import GridListContainer from "@repo/ui/grid-list-container";
-import Link from "@/components/Link/link";
 import React from "react";
-import RestaurantCard from "./components/restaurant-card";
+import GridListContainer from "@repo/ui/grid-list-container";
 import Section from "@repo/ui/section";
 import SectionBody from "@repo/ui/section-body";
 import SectionTitle from "@repo/ui/section-title";
 import { canCreateRestaurant } from "@/utils/permissions";
+import { getRestaurantsByUserId } from "@/actions/restaurant.actions";
+import getSession from "@/utils/get-session";
+import Link from "@/components/Link/link";
+import RestaurantCard from "./components/restaurant-card";
 
 export default async function RestauranstPage(): Promise<JSX.Element> {
   const session = await getSession();
