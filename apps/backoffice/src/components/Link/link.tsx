@@ -14,6 +14,7 @@ export default function Link({
     primary: "text-gray-700 hover:text-primary-800",
     secondary: "text-gray-100 hover:text-gray-50",
     white: "text-white hover:text-gray-50",
+    disabled: "text-gray-100",
   };
 
   const underlineClasses = {

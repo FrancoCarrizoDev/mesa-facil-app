@@ -8,16 +8,19 @@ import Link from "@/components/Link/link";
 import useForm from "@/hooks/use-form";
 import Image from "next/image";
 import styles from "./styles.module.css";
+import useLoading from "@/hooks/useLoading";
 
 export default function Page(): JSX.Element {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const { loading, setLoading } = useLoading();
   const { values, handleChange, handleSubmit } = useForm({
     initialValues: {
       term: "",
       password: "",
     },
     onSubmit: async (formValues) => {
+      setLoading(true);
       const res = await signIn("credentials", {
         term: formValues.term,
         password: formValues.password,
@@ -31,6 +34,7 @@ export default function Page(): JSX.Element {
 
       if (res?.error) {
         setError(res.error);
+        setLoading(false);
       }
     },
   });
@@ -75,7 +79,7 @@ export default function Page(): JSX.Element {
           </p>
           {error && <div className="text-red-500 text-sm mb-6 ">{error}</div>}
           <div className="flex flex-col gap-3">
-            <Button type="submit" size="md">
+            <Button type="submit" size="md" disabled={loading}>
               Ingresar
             </Button>
           </div>

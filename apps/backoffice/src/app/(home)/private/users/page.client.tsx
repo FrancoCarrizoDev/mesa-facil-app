@@ -55,9 +55,11 @@ export default function UsersClientPage({
           {user.active ? USER_STATUS.ACTIVE : USER_STATUS.INACTIVE}
         </p>
       ),
-      restaurants: user.restaurants
-        .map((restaurant) => restaurant.name)
-        .join(", "),
+      restaurants: (
+        <p className="text-xs font-bold">
+          {user.restaurants.map((restaurant) => restaurant.name).join(", ")}
+        </p>
+      ),
       action: (
         <div className="flex items-center">
           <div className="flex items-center gap-1 min-w-[60px]">
@@ -65,6 +67,7 @@ export default function UsersClientPage({
               disabled={cantEditUser}
               href={`/private/users/${user.email}`}
               underline="hover"
+              color={cantEditUser ? "disabled" : "primary"}
             >
               Editar
             </Link>
