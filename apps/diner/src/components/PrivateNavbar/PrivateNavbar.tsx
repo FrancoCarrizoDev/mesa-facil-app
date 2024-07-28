@@ -1,5 +1,7 @@
+"use client";
 import Link from "@repo/ui/link";
-import { Session } from "next-auth";
+import { type Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 
@@ -10,7 +12,10 @@ export default function PrivateNavbar({
 }): JSX.Element {
   return (
     <div className="flex items-center gap-5">
-      <Link color="secondary" href="/diner/reservations">
+      <Link color="secondary" href="/">
+        Inicio
+      </Link>
+      <Link color="secondary" href="/my-reservations">
         Mis Reservas
       </Link>
       <Image
@@ -20,6 +25,13 @@ export default function PrivateNavbar({
         src={session.user?.image || "/profile.png"}
         width={32}
       />
+      <button
+        className="text-white text-sm font-semibold"
+        onClick={() => signOut({ callbackUrl: "/" })}
+        type="button"
+      >
+        Cerrar Sesión
+      </button>
     </div>
   );
 }

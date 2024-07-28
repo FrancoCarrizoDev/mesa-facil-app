@@ -13,7 +13,15 @@ export default function PageClient({
       {session ? (
         <>
           Signed in as {session?.user?.email} <br />
-          <button onClick={() => signOut()}>Sign out</button>
+          <button
+            onClick={() =>
+              signOut({
+                callbackUrl: "/",
+              })
+            }
+          >
+            Sign out
+          </button>
         </>
       ) : (
         <>
